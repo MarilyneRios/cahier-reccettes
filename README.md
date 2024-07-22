@@ -56,6 +56,7 @@ JWT_SECRET="votre clé de cryptage"
 ## MongoDb
 
 Créer une BDD pour votre App.
+----------------------------------------------------------------------------------------------------------------------
 
 # réglage côté client
 
@@ -92,11 +93,10 @@ VITE_FIREBASE_APPID=...
 > votre email
 - Sauvegardez les modifications.
 - Dans les paramètres, allez à ‘Association de comptes utilisateur’. Dans l’onglet ‘Domaine autorisé’, ‘localhost’ est par défaut. **Notez que lorsque vous déploierez l’application, vous devrez ajouter l’URL**.
-/////////////////////////////////////////////
 
 3. Storage Firebase :
 
-- Construire ou créer un espace de stockage sur Firebase.
+- Build ou créer un espace de stockage sur Firebase.
 
 - storage
 
@@ -142,7 +142,7 @@ Le type de contenu du fichier correspond à une image.
 Récupérer les images dans notre App
 
 => Pour récupérer les images dans votre application, vous devrez utiliser les API appropriées fournies par Firebase.
-------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
 
 
 ## Render
