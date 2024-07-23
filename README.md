@@ -183,3 +183,26 @@ tester 5 min après le temps que tout soit disponible en ligne
 > Domaines autorisés
 
 > Ajouter un domaine# Auth-React-Bootstrap-RTK-Query
+
+
+### Test thunderClient : 
+
+{ "username": "user2", "email":"user2@email.com", "password": "user2@email.com" }
+
+//////////////////////////////////////////////////////////////////////////////////
+
+### Changement titre 
+
+1. index.html
+
+2. Header.jsx
+
+3. Modification du Home et About
+
+
+# Ajout de RTK query
+
+https://redux-toolkit.js.org/rtk-query/usage/queries
+
+
+https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced

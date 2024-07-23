@@ -21,8 +21,8 @@ const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
 // Servir les fichiers statiques du dossier 'client/dist'
-//app.use(express.static(path.join(__dirname, '/client/dist')));
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
+app.use(express.static(path.join(__dirname, '/client/dist')));
+//app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 
 // Gérer toutes les autres routes en renvoyant 'index.html'

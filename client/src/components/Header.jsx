@@ -34,7 +34,7 @@ function Header() {
           }}
         />
         <Navbar.Brand as={Link} to="/" className="text-dark fs-4">
-          Auth React-Bootstrap
+        Mern-Auth-Bootstrap-RTK-Query
         </Navbar.Brand>
 
         {/** Btns or profile picture on small screens */}
@@ -87,7 +87,7 @@ function Header() {
           <div className="d-flex justify-content-center flex-grow-1">
             <Nav className="mx-auto mb-2 mb-lg-0">
               <Nav.Link as={Link} to="/" className="my-auto text-dark">
-                Home
+              Accueil
               </Nav.Link>
               <Nav.Link as={Link} to="/about" className="my-auto text-dark">
                 A propos
