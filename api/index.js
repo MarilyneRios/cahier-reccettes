@@ -21,7 +21,9 @@ const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
 // Servir les fichiers statiques du dossier 'client/dist'
-app.use(express.static(path.join(__dirname, '/client/dist')));
+//app.use(express.static(path.join(__dirname, '/client/dist')));
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
 
 // Gérer toutes les autres routes en renvoyant 'index.html'
 app.get('*', (req, res) => {
@@ -54,3 +56,19 @@ app.listen(port, () => {
 });
 
 
+/**
+ * Les diverse Routes api
+ * 
+ * Auth : api/auth/
+  router.get('/', display); => GET : api/auth - Vérifier la connexion
+  router.post('/signup', signup); => POST : api/auth/signup - enregistrer un user 
+  router.post('/signin', signin); => POST : api/auth/signin - Authentifier un user et obtenir un token
+  router.get('/signout', signout); => GET : api/auth/signout - Déconnexion et nettoyer les cookies
+  router.post('/google', google); => POST : api/auth/google - S' Authentifier avec google
+
+ * Private :  api/user/
+ 
+  router.get('/', display); => GET: api/user/` GET : api/user- Vérifier la connexion
+  router.post('/update/:id', verifyToken, updateUser); => POST : api/user/update/${currentUser._id}` - obtenir le profil du user
+  router.delete('/delete/:id', verifyToken, deleteUser); => DELETE: api/user/delete/${currentUser._id}` - Modifier le profile d'un user
+ */
