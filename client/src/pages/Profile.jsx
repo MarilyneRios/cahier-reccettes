@@ -124,6 +124,13 @@ export default function Profile() {
       setLocalError("Les mots de passe ne correspondent pas !");
       return;
     }
+  
+    const updatedData = { ...formData };
+    if (!updatedData.password) {
+      delete updatedData.password;
+      delete updatedData.passwordConfirm;
+    }
+  
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
@@ -131,7 +138,7 @@ export default function Profile() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedData),
       });
       const data = await res.json();
       if (data.success === false) {
@@ -144,6 +151,7 @@ export default function Profile() {
       dispatch(updateUserFailure(error));
     }
   };
+  
 
   // Supprimer un compte User
   const handleDeleteAccount = async () => {

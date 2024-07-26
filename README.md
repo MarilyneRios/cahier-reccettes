@@ -204,5 +204,6 @@ tester 5 min après le temps que tout soit disponible en ligne
 
 https://redux-toolkit.js.org/rtk-query/usage/queries
 
+https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics
 
 https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced
