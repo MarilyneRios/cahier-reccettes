@@ -13,7 +13,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { RingLoader } from "react-spinners"; // Import the spinner
+import { RingLoader } from "react-spinners"; 
 import {
   updateUserStart,
   updateUserSuccess,
@@ -125,8 +125,11 @@ export default function Profile() {
       return;
     }
   
+    // Créez une copie de l'objet formData 
     const updatedData = { ...formData };
+    // Vérifiez si le champ 'password' est vide
     if (!updatedData.password) {
+      // Si le champ 'password' est vide, supprimez les propriétés 'password' et 'passwordConfirm'
       delete updatedData.password;
       delete updatedData.passwordConfirm;
     }

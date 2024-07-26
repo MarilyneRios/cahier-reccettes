@@ -17,9 +17,12 @@ export const updateUser = async (req, res, next) => {
   }
 
   try {
+    // créer un objet updatedFields pour stocker les champs mis à jour
     const updatedFields = {};
 
+    // Vérifiez si le champ 'username' est présent dans la requête
     if (req.body.username) {
+      // Si oui, ajoutez la valeur du champ 'username' à updatedFields
       updatedFields.username = req.body.username;
     }
     if (req.body.email) {
@@ -32,12 +35,16 @@ export const updateUser = async (req, res, next) => {
       updatedFields.profilePicture = req.body.profilePicture;
     }
 
+    // met à jour updatedUser
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
+      // Utilisez $set pour mettre à jour les champs spécifiés
       { $set: updatedFields },
       { new: true }
     );
 
+    
+    // Excluez le mot de passe du document mis à jour
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
   } catch (error) {
