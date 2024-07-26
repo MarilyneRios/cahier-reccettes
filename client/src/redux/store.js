@@ -3,11 +3,12 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // importation les reducers
 import userReducer from "./userSlice.js"; 
+import { apiSlice } from './apiSlice.js';
 
 
 const rootReducer = combineReducers({
   user: userReducer,
-  
+  [apiSlice.reducerPath]: apiSlice.reducer,
   // Ajoutez les autres reducers ici
 });
 
@@ -21,10 +22,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false, }).concat(apiSlice.middleware), 
     devTools:true
 });
 

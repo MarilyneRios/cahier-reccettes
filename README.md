@@ -210,7 +210,7 @@ https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced
 
 ## store.js
 
-1. ajout de devTools :
+Ajout de devTools :
 
 https://developer.chrome.com/docs/devtools?hl=fr
 
@@ -354,4 +354,112 @@ export const apiSlice = createApi({
 });
 ````
 
-### 
+### store.js
+
+Intégrer apiSlice:
+
+- importation des reducers pour user et apiSlice.
+
+- Combinez les reducers dans rootReducer, en incluant le apiSlice.reducer avec sa clé spécifique. C'est à dire : Combiner tous vos reducers en un seul root reducer (le user reducer et le apiSlice reducer).
+
+- Ajouter le middleware de apiSlice.
+````
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+// importation les reducers
+import userReducer from "./userSlice.js"; 
+import { apiSlice } from './apiSlice.js';
+
+
+const rootReducer = combineReducers({
+  user: userReducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
+  // Ajoutez les autres reducers ici
+});
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false, }).concat(apiSlice.middleware), 
+    devTools:true
+});
+
+export const persistor = persistStore(store);
+````
+
+### usersApiSlice.js
+
+Nous aurons tous les pendpoints pour lier le frontend avec le backend  en utilisant createApi de Redux Toolkit Query,.
+
+````
+import { apiSlice } from './apiSlice';
+
+// l’URL de base pour les appels d’API liés à l'authentification
+const AUTH_URL = '/api/auth';
+// l’URL de base pour les appels d’API liés aux utilisateurs
+const USERS_URL = '/api/user';
+
+export const userApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    signIn: builder.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/signin`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    signUp: builder.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/signup`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    signOut: builder.mutation({
+      query: () => ({
+        url: `${AUTH_URL}/signout`,
+        method: 'GET',
+      }),
+    }),
+    googleSignIn: builder.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/google`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `${USERS_URL}/update/${id}`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `${USERS_URL}/delete/${id}`,
+        method: 'DELETE',
+      }),
+    }),
+  }),
+});
+
+// attention par convention le nom est "use+Nom+Mutation"
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useSignOutMutation,
+  useGoogleSignInMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} = userApiSlice;
+
+````
