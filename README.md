@@ -207,3 +207,151 @@ https://redux-toolkit.js.org/rtk-query/usage/queries
 https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics
 
 https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced
+
+## store.js
+
+1. ajout de devTools :
+
+https://developer.chrome.com/docs/devtools?hl=fr
+
+https://developer.chrome.com/docs/devtools/tips?hl=fr
+
+````
+devTools:true
+````
+
+````
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+// importation les reducers
+import userReducer from "./userSlice.js"; 
+
+
+const rootReducer = combineReducers({
+  user: userReducer,
+  
+  // Ajoutez les autres reducers ici
+});
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+    devTools:true
+});
+
+export const persistor = persistStore(store);
+````
+
+## userSlice.js
+
+````
+// userSlice.js
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  currentUser: null,
+  loading: false,
+  error: false,
+};
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    signInStart: (state) => {
+      state.loading = true;
+    },
+    signInSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = false;
+    },
+    signInFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    signOut: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = false;
+    },
+    updateUserStart: (state) => {
+      state.loading = true;
+    },
+    updateUserSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = false;
+    },
+    updateUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteUserStart: (state) => {
+      state.loading = true;
+    },
+    deleteUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = false;
+    },
+    deleteUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  },
+});
+
+export const {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  signOut,
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+} = userSlice.actions;
+
+export default userSlice.reducer;
+````
+
+## apiSlice.js
+
+ Pour définir une base pour les requêtes HTTP, avec les types de tags pour le cache et prépare l'endroit où vous ajouterez les endpoints de votre API.
+
+
+- **fetchBaseQuery** : Une fonction de Redux Toolkit Query pour effectuer des requêtes HTTP de base (GET, POST, PUT, DELETE...).
+
+- **createApi** : Une fonction pour créer une API slice  avec des endpoints définis pour effectuer des requêtes.
+
+- **baseQuery** : Déclare la base de la requête en utilisant fetchBaseQuery.
+
+- **baseUrl** : Définit l'URL de base pour toutes les requêtes
+````
+import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
+
+const baseQuery = fetchBaseQuery({ baseUrl: '' });
+
+export const apiSlice = createApi({
+  baseQuery,
+  tagTypes: ['User'],
+  endpoints: (builder) => ({}),
+});
+````
+
+### 

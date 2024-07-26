@@ -4,10 +4,8 @@ import storage from 'redux-persist/lib/storage';
 // importation les reducers
 import userReducer from "./userSlice.js"; 
 
-
 const rootReducer = combineReducers({
   user: userReducer,
-  
   // Ajoutez les autres reducers ici
 });
 
@@ -25,7 +23,6 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }),
-    devTools:true
 });
 
 export const persistor = persistStore(store);
