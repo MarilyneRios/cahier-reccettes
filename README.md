@@ -463,3 +463,110 @@ export const {
 } = userApiSlice;
 
 ````
+
+## fonctionnalité avec RTK Query
+
+### SignIn.jsx
+
+````
+//.....
+// Importation de useSignInMutation:
+import { useSignInMutation } from "../redux/usersApiSlice";
+
+export default function SignIn() {
+  // les états
+  const [formData, setFormData] = useState({});
+  const [visiblePassword, setVisiblePassword] = useState(false);
+
+  // Accès à l'état de chargement et d'erreur depuis Redux
+  const { loading, error } = useSelector((state) => state.user);
+
+  // hook de navigation
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Déclaration RTK Query du hook useSignInMutation pour sign-in
+  const [signIn] = useSignInMutation();
+  
+  // Gérer les modifications d'entrée et mettre à jour l'état des données du formulaire
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // Gérer la soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //s'assurer que les champs soient remplis
+    if (!formData.email || !formData.password) {
+      dispatch(signInFailure("Veuillez remplir tous les champs."));
+      return;
+    }
+
+    try {
+      dispatch(signInStart());
+      // Vérifie si signIn est une fonction avant de l'appeler
+      if (typeof signIn === 'function') {
+        // Effectue la mutation de connexion à l'aide de la requête RTK
+        console.log("Envoi des données de connexion:", formData);
+        const res = await signIn(formData).unwrap();
+        console.log("Réponse de la mutation:", res);
+
+        // Recherche d'erreurs dans la réponse
+        if (res.success === false) {
+          const errorMessage = translateErrorMessage(res.message);
+          console.log("Message d'erreur traduit:", errorMessage);
+          dispatch(signInFailure(errorMessage));
+          return;
+        }
+
+        // dispatch l'action de réussite avec les données de réponse
+        dispatch(signInSuccess(res));
+
+        // Navigate to Home.jsx si connexion réussie avec sign-in
+        navigate("/");
+      } else {
+        console.log("signIn n'est pas une fonction:", signIn);
+        dispatch(signInFailure("Erreur interne, veuillez réessayer."));
+      }
+    } catch (error) {
+      console.log("Erreur lors de la connexion:", error);
+      dispatch(signInFailure("Le mot de passe ou l'email est incorrect, veuillez réessayer.")); // Message générique
+    }
+  };
+  
+  // Fonction pour traduire les messages d'erreur
+  const translateErrorMessage = (message) => {
+    const errorTranslations = {
+      "Invalid email or password": "Email ou mot de passe invalide",
+      "User not found": "Utilisateur non trouvé",
+      "wrong credentials":"Le mot de passe ou l'email est incorrect",
+    };
+    return errorTranslations[message] || "Une erreur est survenue, veuillez réessayer.";
+  };
+  //......
+}
+
+````
+
+> J'ai oublié de mettre les [] et j'ai rencontré une erreur:
+
+**const [signIn] = useSignInMutation();** Bien mettre les **[]** sinon vous avez une erreur qui indique que **signIn n'est pas une fonction**.
+
+- C'est pour cela que j'ai ajouté une vérification avant d'appeler signIn :
+
+````
+if (typeof signIn === 'function') {
+  // Appel de signIn et traitement de la réponse
+} else {
+  console.log("signIn n'est pas une fonction:", signIn);
+  dispatch(signInFailure("Erreur interne, veuillez réessayer."));
+}
+````
+- des console.log pour trouver d'où venait l'erreur :
+
+````
+console.log("Envoi des données de connexion:", formData);
+const res = await signIn(formData).unwrap();
+console.log("Réponse de la mutation:", res);
+
+````

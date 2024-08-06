@@ -6,52 +6,71 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { signInStart, signInSuccess, signInFailure } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
+// Importation de useSignInMutation:
+import { useSignInMutation } from "../redux/usersApiSlice";
 
 export default function SignIn() {
+  // les états
   const [formData, setFormData] = useState({});
   const [visiblePassword, setVisiblePassword] = useState(false);
 
+  // Accès à l'état de chargement et d'erreur depuis Redux
   const { loading, error } = useSelector((state) => state.user);
 
+  // hook de navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Déclaration RTK Query du hook useSignInMutation pour sign-in
+  const [signIn] = useSignInMutation();
+  
+  // Gérer les modifications d'entrée et mettre à jour l'état des données du formulaire
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  // Gérer la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    //s'assurer que les champs soient remplis
     if (!formData.email || !formData.password) {
       dispatch(signInFailure("Veuillez remplir tous les champs."));
       return;
     }
-  
+
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const data = await res.json();
-  
-      if (data.success === false) {
-        const errorMessage = translateErrorMessage(data.message); // Utiliser une fonction de traduction
-        dispatch(signInFailure(errorMessage));
-        return;
+      // Vérifie si signIn est une fonction avant de l'appeler
+      if (typeof signIn === 'function') {
+        // Effectue la mutation de connexion à l'aide de la requête RTK
+        console.log("Envoi des données de connexion:", formData);
+        const res = await signIn(formData).unwrap();
+        console.log("Réponse de la mutation:", res);
+
+        // Recherche d'erreurs dans la réponse
+        if (res.success === false) {
+          const errorMessage = translateErrorMessage(res.message);
+          console.log("Message d'erreur traduit:", errorMessage);
+          dispatch(signInFailure(errorMessage));
+          return;
+        }
+
+        // dispatch l'action de réussite avec les données de réponse
+        dispatch(signInSuccess(res));
+
+        // Navigate to Home.jsx si connexion réussie avec sign-in
+        navigate("/");
+      } else {
+        console.log("signIn n'est pas une fonction:", signIn);
+        dispatch(signInFailure("Erreur interne, veuillez réessayer."));
       }
-  
-      dispatch(signInSuccess(data));
-      navigate("/");
     } catch (error) {
+      console.log("Erreur lors de la connexion:", error);
       dispatch(signInFailure("Le mot de passe ou l'email est incorrect, veuillez réessayer.")); // Message générique
     }
   };
   
+  // Fonction pour traduire les messages d'erreur
   const translateErrorMessage = (message) => {
     const errorTranslations = {
       "Invalid email or password": "Email ou mot de passe invalide",
