@@ -570,3 +570,59 @@ const res = await signIn(formData).unwrap();
 console.log("Réponse de la mutation:", res);
 
 ````
+
+### Profile.jsx
+
+#### bug signout
+
+````
+router.post('/signout', signout);
+
+````
+
+au lieu de 
+
+````
+router.get('/signout', signout);
+
+````
+#### fonction signOut
+
+1. retirer le dispatch signOut de "../redux/userSlice";
+
+2. modifier coanst handleSignout
+
+````
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout');
+     // dispatch(signOut())
+    } catch (error) {
+      console.log(error);
+    }
+  };
+````
+
+3. Modifier usersApiSlice.js
+
+````
+  signOut: builder.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/signout`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+````    
+
+4. Modifier userSlice.js
+
+supprimer :
+
+````
+  signOut: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = false;
+  },
+````

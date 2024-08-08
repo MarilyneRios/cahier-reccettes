@@ -9,7 +9,7 @@ router.get('/', display);
 router.post('/signup', signup);
 router.post('/signin', signin);
 
-router.get('/signout', signout);
+router.post('/signout', signout);
 
 router.post('/google', google);
 

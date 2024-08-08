@@ -22,9 +22,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     signOut: builder.mutation({
-      query: () => ({
+      query: (data) => ({
         url: `${AUTH_URL}/signout`,
-        method: 'GET',
+        method: 'POST',
+        body: data,
       }),
     }),
     googleSignIn: builder.mutation({

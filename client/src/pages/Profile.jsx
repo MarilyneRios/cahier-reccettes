@@ -21,8 +21,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
-  signOut
 } from "../redux/userSlice";
+// Importation de useSignInMutation:
+import { useSignOutMutation } from "../redux/usersApiSlice";
 
 export default function Profile() {
   const { currentUser, loading } = useSelector((state) => state.user);
@@ -90,8 +91,12 @@ export default function Profile() {
     );
   };
 
+  // hook de navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Déclaration RTK Query du hook useSignInMutation pour sign-in
+  const [signOut, { isLoading, isError, isSuccess }] = useSignOutMutation();
  
   const fileRef = useRef(null);
 
@@ -177,12 +182,27 @@ export default function Profile() {
 
   const handleSignOut = async () => {
     try {
-      await fetch('/api/auth/signout');
-      dispatch(signOut())
+      // await fetch('/api/auth/signout');
+     await signOut().unwrap();
+      navigate('/');
     } catch (error) {
-      console.log(error);
+      console.error("Erreur lors de la déconnexion:", error);
     }
   };
+ /*
+const handleSignOut = async () => {
+  try {
+    await signOut().unwrap();
+    dispatch(signOut());
+    navigate('/');
+  } catch (error) {
+    if (error.originalStatus === 200 && error.status === 'PARSING_ERROR') {
+      console.error("Le serveur a renvoyé du HTML au lieu de JSON. Veuillez vérifier l'API.");
+    } else {
+      console.error("Erreur lors de la déconnexion:", error);
+    }
+  }
+};*/
 
   const { username, email, password, passwordConfirm } = formData;
 

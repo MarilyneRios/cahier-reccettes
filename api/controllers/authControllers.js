@@ -4,6 +4,7 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const display = (req, res) => {
+  console.log('display request received');
   res.json({
     message: "hello world on api/authRoutes and authControllers",
   });
@@ -11,8 +12,16 @@ export const display = (req, res) => {
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
+
+  // Vérifier la présence du mot de passe dans la requête
+  if (!password) {
+    return res.status(400).json({ message: "Le mot de passe est requis" });
+  }
+
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({ username, email, password: hashedPassword });
+
   try {
     await newUser.save();
     res.status(201).json({ message: "Inscription réussie" });
@@ -90,6 +99,7 @@ export const google = async (req, res, next) => {
 
 
 export const signout = (req, res) => {
+ // console.log('Signout request received');
   res.clearCookie('access_token').status(200).json('Signout success!');
 }
 
