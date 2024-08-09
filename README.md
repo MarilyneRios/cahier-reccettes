@@ -626,3 +626,79 @@ supprimer :
       state.error = false;
   },
 ````
+
+#### fonction signUp
+
+1. importation
+
+````
+// Importation de useSignInMutation:
+import { useSignUpMutation } from "../redux/usersApiSlice";
+````
+
+2. Déclaration RTK Query du hook useSignInMutation pour sign-up
+````
+ const [signUp] = useSignUpMutation();
+````
+
+3. La mutation pour signUp via RTK dans handleSubmit
+
+````
+try {
+      // Active l'état de chargement
+      setLoading(true);
+      // Réinitialise le message d'erreur pour éliminer les messages précédents.
+      setError("");
+      
+      // Vérifie si `signUp` est bien une fonction, puis tente de l'exécuter.
+      if (typeof signUp === "function") {
+        // La mutation pour l'inscription via RTK Query et ".unwrap();" => attend la réponse
+        const res = await signUp(formData).unwrap();
+        // Déasctive l'état de chargement
+        setLoading(false);
+
+        // Si échec de l'inscription
+        if (res.success === false) {
+          setError("Le Pseudo ou l'email est déjà utilisé!");
+          return;
+        }
+        
+        // Redirige vers SignIn.jsx si une inscription réussie
+        navigate("/sign-in");
+      }
+    }
+````
+
+4. Amélioration : 
+
+> email valide
+
+````
+ const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(email);
+  };
+````
+
+-> dans handleSubmit:
+
+ Si l'adresse email est dans un format valide.
+
+````
+  if (!validateEmail(formData.email)) {
+      setError("Veuillez entrer une adresse email valide.");
+      return;
+    }
+
+````
+
+> les champs obligatoires
+
+````
+    if (!formData.username || !formData.email || !formData.password || !passwordConfirm) {
+      setError("Veuillez remplir tous les champs.");
+      return;
+    }
+````
+
+

@@ -3,6 +3,8 @@ import { Link, useNavigate  } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+// Importation de useSignInMutation:
+import { useSignUpMutation } from "../redux/usersApiSlice";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -23,37 +25,67 @@ export default function SignUp() {
       setFormData({ ...formData, [id]: value });
     }
   };
+
+  // hook de navigation
   const navigate = useNavigate();
   //console.log(formData)
 
+  // Déclaration RTK Query du hook useSignInMutation pour sign-up
+  const [signUp] = useSignUpMutation();
+
+  // email conforme
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Si tous les champs obligatoires sont remplis.
+    if (!formData.username || !formData.email || !formData.password || !passwordConfirm) {
+      setError("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    // Si l'adresse email est dans un format valide.
+    if (!validateEmail(formData.email)) {
+      setError("Veuillez entrer une adresse email valide.");
+      return;
+    }
+
+    // Si les mots de passe saisis sont identiques.
     if (formData.password !== passwordConfirm) {
       setError("Les mots de passe ne correspondent pas !");
       return;
     }
 
     try {
+      // Active l'état de chargement
       setLoading(true);
-      setError(false);
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      //console.log(data);
-      setLoading(false);
-      if (data.success === false) {
-        setError(true);
-        return;
+      // Réinitialise le message d'erreur pour éliminer les messages précédents.
+      setError("");
+      
+      // Vérifie si `signUp` est bien une fonction, puis tente de l'exécuter.
+      if (typeof signUp === "function") {
+        // La mutation pour signUp via RTK Query et ".unwrap();" => attend la réponse
+        const res = await signUp(formData).unwrap();
+        // Déasctive l'état de chargement
+        setLoading(false);
+
+        // Si échec de l'inscription
+        if (res.success === false) {
+          setError("Le Pseudo ou l'email est déjà utilisé!");
+          return;
+        }
+        
+        // Redirige vers SignIn.jsx si une inscription réussie
+        navigate("/sign-in");
       }
-      navigate("/sign-in");
     } catch (error) {
+      // Gestion des erreurs en cas d'échec
       setLoading(false);
-      setError(true);
+      setError("Une erreur s'est produite lors de l'inscription.");
     }
   };
 
