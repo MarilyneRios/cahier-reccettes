@@ -12,7 +12,7 @@ export default function OAuth(  {label}) {
   const navigate = useNavigate();
 
   // Déclaration RTK Query du hook useGoogleSignInMutation pour GoogleSignIn
-  const [GoogleSignIn] = useGoogleSignInMutation();
+  const [googleSignIn] = useGoogleSignInMutation();
 
   const handleGoogleClick = async () => {
     try {
@@ -24,7 +24,8 @@ export default function OAuth(  {label}) {
         // Affichage de la fenêtre pop-up pour l'authentification Google
         const result = await signInWithPopup(auth, provider);
        // Envoi des données utilisateur au serveur backend         
-        const res = await fetch('/api/auth/google', {
+       /*
+       const res = await fetch('/api/auth/google', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -37,9 +38,20 @@ export default function OAuth(  {label}) {
         });
         // Réponse en JSON
         const data = await res.json();
-       // console.log(data);
+        */
+
+        // Envoi des user data au serveur avec RTK Query
+        const { name, email, photoURL } = result.user;
+        const res = await googleSignIn({
+          name,
+          email,
+          photo: photoURL,
+        }).unwrap();
+
+
+       
         // Dispatch de l'action signInSuccess avec les données utilisateur
-        dispatch(signInSuccess(data));
+        dispatch(signInSuccess(res));
         // Navigation vers la page home
         navigate('/');
        

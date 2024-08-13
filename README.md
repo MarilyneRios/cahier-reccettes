@@ -881,3 +881,86 @@ import {
 
 4. test et vérification dans mongoDB
 
+
+### fonction handleGoogleClick
+
+1. import
+
+````
+// Importation de useSignInMutation:
+import { useGoogleSignInMutation} from "../redux/usersApiSlice";
+````
+
+2.  // Déclaration RTK Query du hook useGoogleSignInMutation pour GoogleSignIn
+
+````
+  const [googleSignIn] = useGoogleSignInMutation();
+````
+
+3. handleGoogleClick
+
+De :
+
+````
+       const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: result.user.displayName,
+            email: result.user.email,
+            photo: result.user.photoURL,
+          }),
+        });
+        // Réponse en JSON
+        const data = await res.json();
+
+        // Dispatch de l'action signInSuccess avec les données utilisateur
+        dispatch(signInSuccess(data));
+````
+A : 
+
+````
+  const { name, email, photoURL } = result.user;
+        const res = await googleSignIn({
+          name,
+          email,
+          photo: photoURL,
+        }).unwrap();
+
+    // Dispatch de l'action signInSuccess avec les données utilisateur
+        dispatch(signInSuccess(res));       
+````
+
+````
+const handleGoogleClick = async () => {
+    try {
+        // Création d'une instance de fournisseur d'authentification Google
+        const provider = new GoogleAuthProvider();
+        // Récupération de l'instance d'authentification Firebase
+        const auth = getAuth(app);
+
+        // Affichage de la fenêtre pop-up pour l'authentification Google
+        const result = await signInWithPopup(auth, provider);
+       // Envoi des données utilisateur au serveur backend         
+   
+
+        // Envoi des user data au serveur avec RTK Query
+        const { name, email, photoURL } = result.user;
+        const res = await googleSignIn({
+          name,
+          email,
+          photo: photoURL,
+        }).unwrap();
+    
+        // Dispatch de l'action signInSuccess avec les données utilisateur
+        dispatch(signInSuccess(res));
+        // Navigation vers la page home
+        navigate('/');
+       
+    } catch (error) {
+        console.log('connexion avec google impossible', error);
+    }
+  };
+  ````
