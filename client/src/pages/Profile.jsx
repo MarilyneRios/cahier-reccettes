@@ -26,6 +26,7 @@ import {
 import {
   useSignOutMutation,
   useDeleteUserMutation,
+  useUpdateUserMutation,
 } from "../redux/usersApiSlice";
 
 export default function Profile() {
@@ -104,6 +105,7 @@ export default function Profile() {
   // Déclaration RTK Query du hook useSignInMutation pour sign-in
   const [signOut, { isLoading, isError, isSuccess }] = useSignOutMutation();
   const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
 
   const fileRef = useRef(null);
 
@@ -132,6 +134,7 @@ export default function Profile() {
   // Fonction de soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.passwordConfirm) {
       setLocalError("Les mots de passe ne correspondent pas !");
       return;
@@ -139,6 +142,7 @@ export default function Profile() {
 
     // Créez une copie de l'objet formData
     const updatedData = { ...formData };
+
     // Vérifiez si le champ 'password' est vide
     if (!updatedData.password) {
       // Si le champ 'password' est vide, supprimez les propriétés 'password' et 'passwordConfirm'
@@ -148,19 +152,20 @@ export default function Profile() {
 
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(updateUserFailure(data));
+  
+         // La mutation pour updateUser via RTK Query et ".unwrap();"
+         const res = await updateUser({
+          id: currentUser._id,
+          // Mettre à jour les données à mettre à jour
+          data: updatedData, 
+        }).unwrap();
+
+  
+      if (res.success === false) {
+        dispatch(updateUserFailure(res));
         return;
       }
-      dispatch(updateUserSuccess(data));
+      dispatch(updateUserSuccess(res));
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error));
@@ -179,7 +184,7 @@ export default function Profile() {
       //console.log("ID de l'utilisateur :", currentUser._id);
       //console.log("Token JWT :", currentUser.accessToken);
 
-      // La mutation pour signUp via RTK Query et ".unwrap();"
+      // La mutation pour deleteUser via RTK Query et ".unwrap();"
       const res = await deleteUser({
         id: currentUser._id,
         // token JWT du user dans header sinon erreur 401 Unauthorized

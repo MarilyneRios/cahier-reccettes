@@ -466,6 +466,20 @@ export const {
 
 ## fonctionnalité avec RTK Query
 
+
+ps: Lorsque tu utilises RTK Query pour effectuer des appels API avec des mutations.
+**pas besoin** d'utiliser **await res.json()**. 
+
+- **RTK Query gère déjà la conversion** de la réponse de l'API **en JSON**. 
+
+> RTK Query retourne directement les données JSON sous forme d'objet JavaScript avec **.unwrap()**.
+Cela simplifie le code en évitant la nécessité de convertir la réponse en JSON manuellement et de gérer les erreurs de conversion.
+
+> Gestion des Erreurs :
+  **.unwrap()** lance **une exception si la requête échoue**, ce qui te permet de gérer les erreurs dans le bloc **catch**.
+
+> Cela rend ton code plus propre et réduit les risques d'erreurs liées à la manipulation des réponses HTTP.
+
 ### SignIn.jsx
 
 ````
@@ -752,6 +766,20 @@ export const apiSlice = createApi({
 2. Profile.jsx 
 
 ````
+// Importation de useSignInMutation:
+import {
+  useSignOutMutation,
+  useDeleteUserMutation,
+} from "../redux/usersApiSlice";
+````
+
+````
+  // Déclaration RTK Query du hook useSignInMutation pour sign-in
+  const [signOut, { isLoading, isError, isSuccess }] = useSignOutMutation();
+  const [deleteUser] = useDeleteUserMutation();
+````  
+
+````
  // Supprimer un compte User
   const handleDeleteAccount = async () => {
     try {
@@ -795,3 +823,61 @@ export const apiSlice = createApi({
 ````
 
 3. vérification des suppression de compte dans MongoDB
+
+### fonction update dans Profile.jsx
+
+1. 
+
+````
+// Importation de useSignInMutation:
+import {
+  useSignOutMutation,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
+} from "../redux/usersApiSlice";
+````
+
+2. 
+
+````
+  // Déclaration RTK Query du hook useSignInMutation pour sign-in
+  const [signOut, { isLoading, isError, isSuccess }] = useSignOutMutation();
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
+````
+
+3. handleSubmit
+
+````
+// Fonction de soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+  //.....
+
+    try {
+      dispatch(updateUserStart());
+  
+         // La mutation pour updateUser via RTK Query et ".unwrap();"
+         const res = await updateUser({
+          id: currentUser._id,
+          // Mettre à jour les données à mettre à jour
+          data: updatedData, 
+        }).unwrap();
+
+  
+      if (res.success === false) {
+        dispatch(updateUserFailure(res));
+        return;
+      }
+      dispatch(updateUserSuccess(res));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error));
+    }
+  };
+
+````
+
+4. test et vérification dans mongoDB
+
