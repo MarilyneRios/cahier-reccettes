@@ -702,3 +702,96 @@ try {
 ````
 
 
+#### fonction delete dans Profile.jsx
+
+> La difficulté rencontrée pendant la passation de fetch à RTK Query fut l'ajustement des configurations nécessaires pour s'assurer que le **token JWT est correctement inclus dans les en-têtes des requêtes** et la **gestion des erreurs associées**.
+
+> Token dans state redux ?
+
+````
+  const { currentUser, loading } = useSelector((state) => state.user);
+  //console.log("Token JWT:", currentUser?.accessToken);
+  //réponse : Token JWT: undefined
+````
+
+1. apiSlice.js
+
+Configurer fetchBaseQuery avec le token JWT pour inclure le token dans l'en-tête Authorization.
+
+La fonction baseQueryWithAuth récupère le token JWT à partir du state de Redux et l'ajoute dans les en-têtes des requêtes. Cela permet d'assurer que toutes les requêtes nécessitant une authentification sont correctement autorisées.
+
+````
+import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: '' // ou met ici ta baseUrl si tu as besoin d'une valeur par défaut
+});
+
+const baseQueryWithAuth = async (args, api, extraOptions) => {
+  const token = api.getState().user.currentUser?.accessToken;
+  const result = await baseQuery({
+    ...args,
+    headers: {
+      ...args.headers,
+      Authorization: token ? `Bearer ${token}` : '',
+    },
+  }, api, extraOptions);
+  return result;
+};
+
+export const apiSlice = createApi({
+  reducerPath: 'api',
+  baseQuery: baseQueryWithAuth,
+  tagTypes: ['User'],
+  endpoints: (builder) => ({}),
+});
+
+````
+
+
+2. Profile.jsx 
+
+````
+ // Supprimer un compte User
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+
+      // Savoir où cela commence dans la console
+      //console.log("Début de la suppression de l'utilisateur");
+
+      // Vérifier les datas envoyées à la mutation RTK Query
+      //console.log("ID de l'utilisateur :", currentUser._id);
+      //console.log("Token JWT :", currentUser.accessToken);
+
+      // La mutation pour signUp via RTK Query et ".unwrap();"
+      const res = await deleteUser({
+        id: currentUser._id,
+        // token JWT du user dans header sinon erreur 401 Unauthorized
+        headers: {
+          Authorization: `Bearer ${currentUser.accessToken}`,
+        },
+      }).unwrap();
+
+      // Voir la réponse de l'API
+      //console.log("Réponse de l'API après la suppression :", res);
+
+      // Vérification de la réponse
+      if (res.success === false) {
+       // console.log("Échec de la suppression de l'utilisateur :", res);
+        dispatch(deleteUserFailure(res));
+        return;
+      }
+
+      // Si tout est ok, succès de la suppression
+      //console.log("Suppression de l'utilisateur réussie :", res);
+      dispatch(deleteUserSuccess(res));
+      navigate("/");
+    } catch (error) {
+     // console.error("Erreur lors de la suppression de l'utilisateur :", error);
+      dispatch(deleteUserFailure(error));
+    }
+  };
+````
+
+3. vérification des suppression de compte dans MongoDB

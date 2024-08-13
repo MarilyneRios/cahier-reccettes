@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Image } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
@@ -13,7 +13,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { RingLoader } from "react-spinners"; 
+import { RingLoader } from "react-spinners";
 import {
   updateUserStart,
   updateUserSuccess,
@@ -23,10 +23,16 @@ import {
   deleteUserFailure,
 } from "../redux/userSlice";
 // Importation de useSignInMutation:
-import { useSignOutMutation } from "../redux/usersApiSlice";
+import {
+  useSignOutMutation,
+  useDeleteUserMutation,
+} from "../redux/usersApiSlice";
 
 export default function Profile() {
   const { currentUser, loading } = useSelector((state) => state.user);
+  //console.log("Token JWT:", currentUser?.accessToken);
+  //réponse : Token JWT: undefined
+
   const [formData, setFormData] = useState({
     username: currentUser.username,
     email: currentUser.email,
@@ -42,7 +48,7 @@ export default function Profile() {
   // états pour upload images
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
- // console.log(imagePercent);
+  // console.log(imagePercent);
   const [imageError, setImageError] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
@@ -97,7 +103,8 @@ export default function Profile() {
 
   // Déclaration RTK Query du hook useSignInMutation pour sign-in
   const [signOut, { isLoading, isError, isSuccess }] = useSignOutMutation();
- 
+  const [deleteUser] = useDeleteUserMutation();
+
   const fileRef = useRef(null);
 
   // Fonction de gestion du changement de valeur des champs du formulaire
@@ -105,7 +112,7 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setLocalError("");
   };
-  console.log(formData)
+  console.log(formData);
 
   // Fonction de validation de fichier (si erreur)
   const validateFile = (file) => {
@@ -129,8 +136,8 @@ export default function Profile() {
       setLocalError("Les mots de passe ne correspondent pas !");
       return;
     }
-  
-    // Créez une copie de l'objet formData 
+
+    // Créez une copie de l'objet formData
     const updatedData = { ...formData };
     // Vérifiez si le champ 'password' est vide
     if (!updatedData.password) {
@@ -138,7 +145,7 @@ export default function Profile() {
       delete updatedData.password;
       delete updatedData.passwordConfirm;
     }
-  
+
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
@@ -159,50 +166,56 @@ export default function Profile() {
       dispatch(updateUserFailure(error));
     }
   };
-  
 
   // Supprimer un compte User
   const handleDeleteAccount = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
-        if (data.success === false) {
-        dispatch(deleteUserFailure(data));
+
+      // Savoir où cela commence dans la console
+      //console.log("Début de la suppression de l'utilisateur");
+
+      // Vérifier les datas envoyées à la mutation RTK Query
+      //console.log("ID de l'utilisateur :", currentUser._id);
+      //console.log("Token JWT :", currentUser.accessToken);
+
+      // La mutation pour signUp via RTK Query et ".unwrap();"
+      const res = await deleteUser({
+        id: currentUser._id,
+        // token JWT du user dans header sinon erreur 401 Unauthorized
+        headers: {
+          Authorization: `Bearer ${currentUser.accessToken}`,
+        },
+      }).unwrap();
+
+      // Voir la réponse de l'API
+      //console.log("Réponse de l'API après la suppression :", res);
+
+      // Vérification de la réponse
+      if (res.success === false) {
+        //console.log("Échec de la suppression de l'utilisateur :", res);
+        dispatch(deleteUserFailure(res));
         return;
       }
-      dispatch(deleteUserSuccess(data));
-      navigate("/"); 
+
+      // Si tout est ok, succès de la suppression
+      //console.log("Suppression de l'utilisateur réussie :", res);
+      dispatch(deleteUserSuccess(res));
+      navigate("/");
     } catch (error) {
+     // console.error("Erreur lors de la suppression de l'utilisateur :", error);
       dispatch(deleteUserFailure(error));
     }
   };
 
   const handleSignOut = async () => {
     try {
-      // await fetch('/api/auth/signout');
-     await signOut().unwrap();
-      navigate('/');
+      await signOut().unwrap();
+      navigate("/");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
     }
   };
- /*
-const handleSignOut = async () => {
-  try {
-    await signOut().unwrap();
-    dispatch(signOut());
-    navigate('/');
-  } catch (error) {
-    if (error.originalStatus === 200 && error.status === 'PARSING_ERROR') {
-      console.error("Le serveur a renvoyé du HTML au lieu de JSON. Veuillez vérifier l'API.");
-    } else {
-      console.error("Erreur lors de la déconnexion:", error);
-    }
-  }
-};*/
 
   const { username, email, password, passwordConfirm } = formData;
 
@@ -210,7 +223,6 @@ const handleSignOut = async () => {
     <FormContainer>
       <h1 className="d-flex justify-content-center text-dark">Profil</h1>
       <Form onSubmit={handleSubmit}>
-      
         {/* Image de profil */}
         <Form.Group className="my-2 d-flex justify-content-center">
           <div
@@ -354,16 +366,23 @@ const handleSignOut = async () => {
           className="my-3 w-100"
           disabled={loading}
         >
-           {loading ? 'Loading...' : 'Enregistrer'}
+          {loading ? "Loading..." : "Enregistrer"}
         </Button>
         <div className="d-flex justify-content-between mt-3">
-          <span className="btn text-danger " onClick={handleDeleteAccount} ><FaTrashAlt /> Supprimer le compte</span>
-          <span className="btn text-danger " onClick={handleSignOut} ><FaUnlock /> Déconnexion</span>
+          <span className="btn text-danger " onClick={handleDeleteAccount}>
+            <FaTrashAlt /> Supprimer le compte
+          </span>
+          <span className="btn text-danger " onClick={handleSignOut}>
+            <FaUnlock /> Déconnexion
+          </span>
         </div>
         <div>
-          <p className="text-danger mt-5">{localError && "Quelque chose ne va pas !"}</p>
+          <p className="text-danger mt-5">
+            {localError && "Quelque chose ne va pas !"}
+          </p>
           <p className="text-success mt-5">
-            {updateSuccess && "Les modifications sont mises à jour avec succès !"}
+            {updateSuccess &&
+              "Les modifications sont mises à jour avec succès !"}
           </p>
         </div>
       </Form>

@@ -18,7 +18,6 @@ export const signup = async (req, res, next) => {
     return res.status(400).json({ message: "Le mot de passe est requis" });
   }
 
-
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({ username, email, password: hashedPassword });
 
@@ -102,4 +101,3 @@ export const signout = (req, res) => {
  // console.log('Signout request received');
   res.clearCookie('access_token').status(200).json('Signout success!');
 }
-
