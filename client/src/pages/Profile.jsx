@@ -21,6 +21,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutSuccess,
 } from "../redux/userSlice";
 // Importation de useSignInMutation:
 import {
@@ -152,15 +153,14 @@ export default function Profile() {
 
     try {
       dispatch(updateUserStart());
-  
-         // La mutation pour updateUser via RTK Query et ".unwrap();"
-         const res = await updateUser({
-          id: currentUser._id,
-          // Mettre à jour les données à mettre à jour
-          data: updatedData, 
-        }).unwrap();
 
-  
+      // La mutation pour updateUser via RTK Query et ".unwrap();"
+      const res = await updateUser({
+        id: currentUser._id,
+        // Mettre à jour les données à mettre à jour
+        data: updatedData,
+      }).unwrap();
+
       if (res.success === false) {
         dispatch(updateUserFailure(res));
         return;
@@ -208,7 +208,7 @@ export default function Profile() {
       dispatch(deleteUserSuccess(res));
       navigate("/");
     } catch (error) {
-     // console.error("Erreur lors de la suppression de l'utilisateur :", error);
+      // console.error("Erreur lors de la suppression de l'utilisateur :", error);
       dispatch(deleteUserFailure(error));
     }
   };
@@ -216,6 +216,18 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       await signOut().unwrap();
+
+      // Dispatch l'action pour mettre à jour l'état et réinitialiser currentUser
+      dispatch(signOutSuccess());
+
+      // Log pour vérifier l'état des cookies après la déconnexion
+      const cookies = document.cookie;
+      if (cookies.includes("access_token")) {
+        console.log("Le cookie access_token est toujours présent:", cookies);
+      } else {
+        console.log("Le cookie access_token a été supprimé avec succès.");
+      }
+      
       navigate("/");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);

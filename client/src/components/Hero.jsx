@@ -4,25 +4,27 @@ import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 
 export default function Hero() {
   return (
-    <div className=" py-5">
+    <section  className=" py-5">
       <Container className="d-flex justify-content-center ">
         <Card className="p-5 d-flex flex-column align-items-center hero-card bg-light w-75 border border-dark ">
           <h1 className="text-center mb-4">
             {" "}
-            Bienvenue sur cette application MERN{" "}
+            Bienvenue sur Mon cahier de recettes
           </h1>
           <p className="text-center mb-4">
-            Bienvenue sur cette application MERN (MongoDB, Express, React,
-            Node.js) avec Bootstrap. Ceci est un modèle d&lsquo; application Web
-            full-stack construite avec des fonctionnalités
-            d&lsquo;authentification (JWT) qui peut vous servir de template
-            (starter) pour créer votre propre application avec RTK Query de
-            Redux.
+            Cette application de partage de recettes permet d&lsquo;avoir
+            facilement à nos recettes ainsi qu&lsquo;aux recettes des autres
+            utilisateurs.
           </p>
           <p className="text-center mb-4">
-            Elle permet aux utilisateurs de s&lsquo;inscrire, de se connecter et
-            de se déconnecter, et donne accès à itinéraires protégés uniquement
-            pour les utilisateurs authentifiés.
+            Après une inscription avec votre adresse e-mail, vous avez accès à
+            toutes les recettes stockées sur le site, avec la possibilité
+            d&apos;en ajouter aussi.
+          </p>
+          <p className="text-center mb-4">
+          Vous avez également la possibilité de placer vos recettes favorites
+            dans &quot;Mes favoris&quot;, afin de constituer votre propre cahier
+            de recettes virtuel.
           </p>
           <div className="d-flex">
             <Link to="/sign-in">
@@ -38,6 +40,6 @@ export default function Hero() {
           </div>
         </Card>
       </Container>
-    </div>
+    </section>
   );
 }

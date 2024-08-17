@@ -22,7 +22,6 @@ function Header() {
       className="border-bottom border-dark"
     >
       <Container fluid>
-        {/** Titre */}
         <Image
           src={Logo}
           className="rounded-circle mx-3 img-fluid"
@@ -34,10 +33,9 @@ function Header() {
           }}
         />
         <Navbar.Brand as={Link} to="/" className="text-dark fs-4">
-        Mern-Auth-Bootstrap-RTK-Query
+          Cahier de recettes
         </Navbar.Brand>
 
-        {/** Btns or profile picture on small screens */}
         <div className="d-lg-none d-flex align-items-center">
           {currentUser ? (
             <Link
@@ -79,7 +77,6 @@ function Header() {
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-        {/** Liens and buttons on large screens */}
         <Navbar.Collapse
           id="basic-navbar-nav"
           className="justify-content-between w-100"
@@ -87,7 +84,7 @@ function Header() {
           <div className="d-flex justify-content-center flex-grow-1">
             <Nav className="mx-auto mb-2 mb-lg-0">
               <Nav.Link as={Link} to="/" className="my-auto text-dark">
-              Accueil
+                Accueil
               </Nav.Link>
               <Nav.Link as={Link} to="/about" className="my-auto text-dark">
                 A propos

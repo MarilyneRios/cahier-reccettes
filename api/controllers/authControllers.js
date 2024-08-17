@@ -96,8 +96,34 @@ export const google = async (req, res, next) => {
   }
 };
 
-
+/*
 export const signout = (req, res) => {
- // console.log('Signout request received');
-  res.clearCookie('access_token').status(200).json('Signout success!');
+ console.log('Signout request received');
+ try {
+  
+  res.clearCookie('access_token'); 
+  res.status(200).json('Signout successful!');
+} catch (error) {
+  console.error('Error during logout:', error);
+  res.status(500).json('Logout failed');
+}
+}*/
+export const signout = (req, res) => {
+  console.log('Signout request received');
+  try {
+    res.clearCookie('access_token');
+    
+    // Log to verify that the cookies have been cleared
+    const cookiesAfterClear = req.cookies['access_token'];
+    if (!cookiesAfterClear) {
+      console.log('Cookies successfully cleared');
+    } else {
+      console.log('Cookies not cleared:', cookiesAfterClear);
+    }
+
+    res.status(200).json('Signout successful!');
+  } catch (error) {
+    console.error('Error during logout:', error);
+    res.status(500).json('Logout failed');
+  }
 }
