@@ -1,40 +1,40 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
+import { FaUserCircle, FaUserPlus } from "react-icons/fa";
+import "../App.css";
 
 export default function Hero() {
   return (
-    <section  className=" py-5">
-      <Container className="d-flex justify-content-center ">
-        <Card className="p-5 d-flex flex-column align-items-center hero-card bg-light w-75 border border-dark ">
-          <h1 className="text-center mb-4">
-            {" "}
-            Bienvenue sur Mon cahier de recettes
+    <section className="hero">
+      <Container className="d-flex justify-content-center align-items-center">
+        <Card
+          className="text-white p-5 d-flex flex-column align-items-center hero-card w-50"
+        >
+          <h1 className="card-title text-center mb-4 fst-italic">
+            Partage tes recettes préférées comme au bon vieux temps de nos grand-mères.
           </h1>
-          <p className="text-center mb-4">
-            Cette application de partage de recettes permet d&lsquo;avoir
-            facilement à nos recettes ainsi qu&lsquo;aux recettes des autres
-            utilisateurs.
+          <br></br>
+          <p className="text-center mb-4 fs-4">
+            Après votre inscription avec une adresse e-mail, vous aurez accès à
+            toutes les recettes disponibles sur le site, et pourrez également en
+            ajouter.
           </p>
-          <p className="text-center mb-4">
-            Après une inscription avec votre adresse e-mail, vous avez accès à
-            toutes les recettes stockées sur le site, avec la possibilité
-            d&apos;en ajouter aussi.
-          </p>
-          <p className="text-center mb-4">
-          Vous avez également la possibilité de placer vos recettes favorites
+          <br></br>
+          <p className="text-center mb-4 fs-4">
+            Vous avez également la possibilité de placer vos recettes favorites
             dans &quot;Mes favoris&quot;, afin de constituer votre propre cahier
             de recettes virtuel.
           </p>
+          <br></br>
           <div className="d-flex">
             <Link to="/sign-in">
-              <Button variant="outline-dark" className="me-3">
-                <FaSignInAlt /> Connexion
+              <Button variant="success" className="me-3">
+                <FaUserCircle size={26} aria-hidden="true" aria-label="Se connecter" /> Connexion
               </Button>
             </Link>
             <Link to="/sign-up">
-              <Button variant="success">
-                <FaSignOutAlt /> Inscription
+              <Button variant="secondary">
+                <FaUserPlus size={20} aria-hidden="true" aria-label="S'inscrire" /> Inscription
               </Button>
             </Link>
           </div>

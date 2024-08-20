@@ -1,46 +1,191 @@
 import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
+import { Navbar, Nav, Dropdown, Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";  // Import useLocation
 import { Image } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import Logo from "../assets/logoDevGreen.png";
+import { useSelector } from "react-redux";
+import "../App.css";
+
+// icons
+import { FaSignInAlt, FaUserCircle , FaSearch, FaHome, FaInfoCircle } from "react-icons/fa";
+import { FaCirclePlus, FaBookOpenReader } from "react-icons/fa6";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
-
-  const dispatch = useDispatch();
+  const location = useLocation();  // Use useLocation to get the current path
 
   return (
     <Navbar
       expand="lg"
       bg="light"
       variant="light"
-      data-bs-theme="light"
-      className="border-bottom border-dark"
+      className="bg-transparent"
     >
-      <Container fluid>
-        <Image
-          src={Logo}
-          className="rounded-circle mx-3 img-fluid"
-          alt="Logo"
-          style={{
-            height: "3rem",
-            width: "3rem",
-            objectFit: "cover",
-          }}
-        />
-        <Navbar.Brand as={Link} to="/" className="text-dark fs-4">
-          Cahier de recettes
+      <Container
+        fluid
+        className="d-flex justify-content-between align-items-center bg-opacity-custom m-0 p-0"
+      >
+        {/* Toggle button and dropdown on the left */}
+        <div className="d-flex align-items-center">
+          {/* Menu déroulant */}
+          <Dropdown>
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              className="ms-2"
+             
+            >
+              <RxHamburgerMenu />
+            </Dropdown.Toggle>
+
+            {/* Élargir le menu déroulant */}
+            <Dropdown.Menu className="custom-dropdown-menu">
+              <Dropdown.Item 
+                as={Link} 
+                to="/" 
+                className={`my-auto text-dark ${location.pathname === '/' && 'active active-header'}`}
+              >
+                <FaHome 
+                aria-hidden="true"
+                aria-label="Maison"
+                size={18}
+                className={`mx-2 text-dark`} />Accueil
+              </Dropdown.Item>
+
+              <Dropdown.Divider />
+
+              {/* Accordéon pour les catégories */}
+              <Accordion defaultActiveKey="0" >
+
+                <Accordion.Item eventKey="0"  style={{ backgroundColor: '#d4edda' }}>
+                  <Accordion.Header  >
+                    <FaSearch 
+                    aria-hidden="true"
+                    aria-label="Loupe"
+                    size={18}
+                    className={`mx-2 `}/> Rechercher une recette :
+                  </Accordion.Header>
+                  <Accordion.Body className="text-center">
+                    <input className="mx-auto rounded w-100 text-center"
+                    placeholder="Nom de la recette ou de l'auteur"/>
+                  </Accordion.Body>
+                </Accordion.Item>
+
+                <Accordion.Item eventKey="1" style={{ backgroundColor: '#d4edda' }}>
+                  <Accordion.Header  style={{ backgroundColor: '#d4edda' }}>
+                    <FaSearch 
+                    aria-hidden="true"
+                    aria-label="Loupe"
+                    size={18}
+                   
+                    className={`mx-2 `}/> Rechercher par catégorie :
+                  </Accordion.Header>
+                  <Accordion.Body      as={Link} 
+                to="/" className="AccordionBody">Toutes</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Apéritifs</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Boissons</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Entrées</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Salades</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Plats</Accordion.Body>
+                  <Accordion.Body     as={Link} 
+                to="/"  >Desserts</Accordion.Body>
+                  <Accordion.Body     as={Link} 
+                to="/"  >Autres...</Accordion.Body>
+                </Accordion.Item>
+             
+                <Accordion.Item eventKey="2" style={{ backgroundColor: '#d4edda' }}>
+                  <Accordion.Header>
+                    <FaSearch 
+                    aria-hidden="true"
+                    aria-label="Loupe"
+                    size={18}
+                    className={`mx-2 `}
+                    />Par régime alimentaire :
+                  </Accordion.Header>
+                  <Accordion.Body      as={Link} 
+                to="/" >Anti-cholestérol</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Diabétique</Accordion.Body>                
+                  <Accordion.Body      as={Link} 
+                to="/" >Sans gluten</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Traditionnelle</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Végétarien</Accordion.Body>
+                  <Accordion.Body     as={Link} 
+                to="/"  >Végane</Accordion.Body>
+                  <Accordion.Body      as={Link} 
+                to="/" >Autres...</Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+
+              <Dropdown.Divider />
+
+              <Dropdown.Item 
+                as={Link} 
+                to="/" 
+                className={`my-auto text-dark ${location.pathname === '/mon-cahier' && 'active'}`}
+              >
+                <FaBookOpenReader
+                  aria-hidden="true"
+                  aria-label="Mon cahier"
+                  size={18}
+                  className="mx-2"
+                />Mon cahier de recettes
+              </Dropdown.Item>
+
+              <Dropdown.Item 
+                as={Link} 
+                to="/" 
+                className={`my-auto text-dark ${location.pathname === '/ajouter-recette' && 'active'}`}
+              >
+                <FaCirclePlus
+                  aria-hidden="true"
+                  aria-label="ajouter une recette"
+                  size={18}
+                  className="mx-2"
+                />Ajouter une recette
+              </Dropdown.Item>
+
+              <Dropdown.Divider />
+
+              <Dropdown.Item
+                as={Link}
+                to="/about"
+                className={`my-auto text-dark ${location.pathname === '/about' && 'active'}`}
+              >
+                <FaInfoCircle 
+                aria-hidden="true"
+                aria-label="informations"
+                size={18}
+                className="mx-2" /> 
+                À propos de nous
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+
+        {/* Centered Brand */}
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="mx-auto text-center text-white fs-1 "
+        >
+          Mon cahier de recettes
         </Navbar.Brand>
 
-        <div className="d-lg-none d-flex align-items-center">
+        {/* Authentication buttons (Connexion/Inscription) */}
+        <div className="d-flex align-items-center">
           {currentUser ? (
             <Link
               to="/profile"
-              className="text-dark"
+              className="text-white"
               style={{ textDecoration: "none" }}
             >
               <Image
@@ -62,77 +207,15 @@ function Header() {
           ) : (
             <>
               <Nav.Link as={Link} to="/sign-in" className="p-0">
-                <Button variant="dark" className="mx-1">
-                  <FaSignInAlt /> Connexion
+                <Button variant="success" className="me-3 btn btn-success">
+                  <FaUserCircle size={26} aria-hidden="true" aria-label="Se connecter" />{" "}
+                  Connexion
                 </Button>
               </Nav.Link>
-              <Nav.Link as={Link} to="/sign-up" className="p-0">
-                <Button variant="outline-dark" className="mx-1">
-                  <FaSignOutAlt /> Inscription
-                </Button>
-              </Nav.Link>
+
             </>
           )}
         </div>
-
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
-        <Navbar.Collapse
-          id="basic-navbar-nav"
-          className="justify-content-between w-100"
-        >
-          <div className="d-flex justify-content-center flex-grow-1">
-            <Nav className="mx-auto mb-2 mb-lg-0">
-              <Nav.Link as={Link} to="/" className="my-auto text-dark">
-                Accueil
-              </Nav.Link>
-              <Nav.Link as={Link} to="/about" className="my-auto text-dark">
-                A propos
-              </Nav.Link>
-            </Nav>
-          </div>
-
-          <div className="d-none d-lg-flex align-items-center">
-            {currentUser ? (
-              <>
-                <Link
-                  to="/profile"
-                  className="text-dark"
-                  style={{ textDecoration: "none" }}
-                >
-                  <Image
-                    src={currentUser.profilePicture}
-                    alt="profile"
-                    roundedCircle
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "defaultProfilePicture.png";
-                    }}
-                    className="border border-dark"
-                    style={{
-                      height: "3.5rem",
-                      width: "3.5rem",
-                      objectFit: "cover",
-                    }}
-                  />
-                </Link>
-              </>
-            ) : (
-              <>
-                <Nav.Link as={Link} to="/sign-in" className="p-0">
-                  <Button variant="outline-dark" className="mx-1">
-                    <FaSignInAlt /> Connexion
-                  </Button>
-                </Nav.Link>
-                <Nav.Link as={Link} to="/sign-up" className="p-0">
-                  <Button variant="success" className="mx-1">
-                    <FaSignOutAlt /> Inscription
-                  </Button>
-                </Nav.Link>
-              </>
-            )}
-          </div>
-        </Navbar.Collapse>
       </Container>
     </Navbar>
   );

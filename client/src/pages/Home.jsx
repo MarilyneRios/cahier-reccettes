@@ -1,9 +1,12 @@
 import Hero from "../components/Hero";
+import "../App.css";
 
 export default function Home() {
   return (
-    <div>
-      <Hero />
-    </div>
+    <>
+      <section className=""></section>
+      <Hero/>
+      
+    </>
   );
 }

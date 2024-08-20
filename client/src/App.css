@@ -1,0 +1,72 @@
+/* App.css */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Tahoe Ligatures','Roboto', sans-serif;
+}
+
+/*background App*/
+
+.backgroundHome {
+    position: absolute;  
+    top: 100;
+    left: 0;
+    width: 100%;
+    height: 100vh; 
+    background-image: url('./assets/bg5short.jpg');  
+    background-size: cover;
+    background-position: center 0%;
+    background-repeat: no-repeat;
+    z-index: -1; 
+}
+
+/*//////////////////////////////////////////////////*/
+
+/*header */
+
+/*navbar*/
+
+.bg-opacity-custom {
+    background-color: rgba(0, 0, 0, 0.1); 
+    backdrop-filter: blur(5px);
+    position: relative;
+    z-index: 1
+}
+
+/*Largeur du menu*/
+.custom-dropdown-menu {
+  min-width: 300px;
+}
+/* Couleur de survol */
+.custom-dropdown-menu .dropdown-item:hover {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Couleur du lien actif */
+.custom-dropdown-menu .dropdown-item.active {
+  background-color: #28a745;
+  color: #fff;
+}
+.active-header {
+    background-color: #28a745;; 
+  }
+/*//////////////////////////////////////////////////*/
+
+/* Hero */
+
+  .hero {
+    height: 90vh; /* Assure que la section prend toute la hauteur de la vue */
+    display: flex;
+    align-items: center; /* Centre verticalement */
+    justify-content: center; /* Centre horizontalement */
+  }
+  
+  .hero-card {
+    background: rgba(0, 0, 0, 0.47); /* Fond blanc semi-transparent pour le card */
+    border-radius: 10px; /* Optionnel: ajoute des coins arrondis */
+  }
