@@ -4,7 +4,7 @@ import "../App.css";
 export default function Home() {
   return (
     <>
-      <section className=""></section>
+      
       <Hero/>
       
     </>

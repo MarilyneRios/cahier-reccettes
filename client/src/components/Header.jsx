@@ -24,7 +24,7 @@ function Header() {
     >
       <Container
         fluid
-        className="d-flex justify-content-between align-items-center bg-opacity-custom m-0 p-0"
+        className="d-flex justify-content-between align-items-center font-weight-light m-0 p-0"
       >
         {/* Toggle button and dropdown on the left */}
         <div className="d-flex align-items-center">
@@ -40,7 +40,7 @@ function Header() {
             </Dropdown.Toggle>
 
             {/* Élargir le menu déroulant */}
-            <Dropdown.Menu className="custom-dropdown-menu">
+            <Dropdown.Menu className="custom-dropdown-menu ">
               <Dropdown.Item 
                 as={Link} 
                 to="/" 
@@ -72,8 +72,8 @@ function Header() {
                   </Accordion.Body>
                 </Accordion.Item>
 
-                <Accordion.Item eventKey="1" style={{ backgroundColor: '#d4edda' }}>
-                  <Accordion.Header  style={{ backgroundColor: '#d4edda' }}>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header  >
                     <FaSearch 
                     aria-hidden="true"
                     aria-label="Loupe"
@@ -82,24 +82,31 @@ function Header() {
                     className={`mx-2 `}/> Rechercher par catégorie :
                   </Accordion.Header>
                   <Accordion.Body      as={Link} 
-                to="/" className="AccordionBody">Toutes</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+                to="/" className="accordionBody ">Toutes</Accordion.Body>
+
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Apéritifs</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Boissons</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Entrées</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Salades</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Plats</Accordion.Body>
-                  <Accordion.Body     as={Link} 
+
+                  <Accordion.Body     as={Link} className="accordionBody "
                 to="/"  >Desserts</Accordion.Body>
-                  <Accordion.Body     as={Link} 
+
+                  <Accordion.Body     as={Link} className="accordionBody "
                 to="/"  >Autres...</Accordion.Body>
                 </Accordion.Item>
              
-                <Accordion.Item eventKey="2" style={{ backgroundColor: '#d4edda' }}>
+                <Accordion.Item eventKey="2" >
                   <Accordion.Header>
                     <FaSearch 
                     aria-hidden="true"
@@ -108,19 +115,19 @@ function Header() {
                     className={`mx-2 `}
                     />Par régime alimentaire :
                   </Accordion.Header>
-                  <Accordion.Body      as={Link} 
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Anti-cholestérol</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Diabétique</Accordion.Body>                
-                  <Accordion.Body      as={Link} 
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Sans gluten</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Traditionnelle</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Végétarien</Accordion.Body>
-                  <Accordion.Body     as={Link} 
+                  <Accordion.Body     as={Link} className="accordionBody "
                 to="/"  >Végane</Accordion.Body>
-                  <Accordion.Body      as={Link} 
+                  <Accordion.Body      as={Link} className="accordionBody "
                 to="/" >Autres...</Accordion.Body>
                 </Accordion.Item>
               </Accordion>
@@ -175,7 +182,7 @@ function Header() {
         <Navbar.Brand
           as={Link}
           to="/"
-          className="mx-auto text-center text-white fs-1 "
+          className="mx-auto text-center textWithShadow fs-1  "
         >
           Mon cahier de recettes
         </Navbar.Brand>
@@ -209,7 +216,7 @@ function Header() {
               <Nav.Link as={Link} to="/sign-in" className="p-0">
                 <Button variant="success" className="me-3 btn btn-success">
                   <FaUserCircle size={26} aria-hidden="true" aria-label="Se connecter" />{" "}
-                  Connexion
+                  
                 </Button>
               </Nav.Link>
 

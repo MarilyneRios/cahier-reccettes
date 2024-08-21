@@ -5,10 +5,46 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Tahoe Ligatures','Roboto', sans-serif;
+.textWithShadow {
+  font-family: serif, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.textWithShadowH3 {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #fff; 
+
+  font-family: serif;
+}
+
+.textWithShadowH5 {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #fff; 
+  font-size: 1.4rem;
+  font-family: serif;
+}
+
+.textWithShadowP {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #fff; 
+  font-size: 1.2rem;
+  font-family: lato, sans-serif;
+  text-align: left;
+}
+
+h1, h2, h3 {
+  text-align: center;
+}
+
+p {
+  text-align: left;
+}
+
+blockquote {
+  text-align: center;
+}
 /*background App*/
 
 .backgroundHome {
@@ -22,6 +58,22 @@ body {
     background-position: center 0%;
     background-repeat: no-repeat;
     z-index: -1; 
+  
+}
+.backgroundHome::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25); 
+  z-index: 1; /* Assure que ce pseudo-élément reste derrière les autres contenus */
+}
+
+.container-relative {
+  position: relative;
+  z-index: 2; /* Met le contenu au-dessus de l'image et du fond semi-transparent */
 }
 
 /*//////////////////////////////////////////////////*/
@@ -40,33 +92,65 @@ body {
 /*Largeur du menu*/
 .custom-dropdown-menu {
   min-width: 300px;
+ 
 }
-/* Couleur de survol */
+/* Couleur des liens pdt survol */
 .custom-dropdown-menu .dropdown-item:hover {
   background-color: #d4edda;
   color: #155724;
 }
 
-/* Couleur du lien actif */
+/* Couleur des liens actif */
 .custom-dropdown-menu .dropdown-item.active {
   background-color: #28a745;
   color: #fff;
 }
 .active-header {
-    background-color: #28a745;; 
+    background-color: #28a745;
+   
   }
+
+  /* Accordéon */
+.accordionBody {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.accordionBody:hover {
+  background-color: #d4edda;
+  color: #155724;
+
+}
 /*//////////////////////////////////////////////////*/
 
 /* Hero */
 
   .hero {
-    height: 90vh; /* Assure que la section prend toute la hauteur de la vue */
+    height: 100vh; 
     display: flex;
-    align-items: center; /* Centre verticalement */
-    justify-content: center; /* Centre horizontalement */
+    align-items: center; 
+    justify-content: center; 
   }
   
   .hero-card {
-    background: rgba(0, 0, 0, 0.47); /* Fond blanc semi-transparent pour le card */
-    border-radius: 10px; /* Optionnel: ajoute des coins arrondis */
+    background: rgba(0, 0, 0, 0.35); 
+    border-radius: 10px; 
   }
+
+/*//////////////////////////////////////////////////*/
+
+/* about */
+
+.about {
+  height: 100vh; 
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+}
+
+.about-card {
+  background: rgba(0, 0, 0, 0.35); 
+  border-radius: 10px; 
+}

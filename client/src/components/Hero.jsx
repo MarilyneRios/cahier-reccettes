@@ -8,24 +8,14 @@ export default function Hero() {
     <section className="hero">
       <Container className="d-flex justify-content-center align-items-center">
         <Card
-          className="text-white p-5 d-flex flex-column align-items-center hero-card w-50"
+          className="text-white p-5 d-flex flex-column align-items-center w-75 hero-card"
         >
-          <h1 className="card-title text-center mb-4 fst-italic">
+          <h1 className="  mb-4  textWithShadow fst-italic" >
             Partage tes recettes préférées comme au bon vieux temps de nos grand-mères.
           </h1>
+
           <br></br>
-          <p className="text-center mb-4 fs-4">
-            Après votre inscription avec une adresse e-mail, vous aurez accès à
-            toutes les recettes disponibles sur le site, et pourrez également en
-            ajouter.
-          </p>
-          <br></br>
-          <p className="text-center mb-4 fs-4">
-            Vous avez également la possibilité de placer vos recettes favorites
-            dans &quot;Mes favoris&quot;, afin de constituer votre propre cahier
-            de recettes virtuel.
-          </p>
-          <br></br>
+
           <div className="d-flex">
             <Link to="/sign-in">
               <Button variant="success" className="me-3">

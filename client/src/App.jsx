@@ -6,9 +6,9 @@ import Header from './components/Header';
 const App = () => {
   return (
     <>
-      <section className='backgroundHome'></section>
+      <section className='backgroundHome '></section>
       <Header />
-        <Container fluid className="p-0">
+        <Container fluid className="p-0  container-relative">
         <Outlet />
       </Container>
     </>
