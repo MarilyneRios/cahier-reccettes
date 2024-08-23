@@ -77,17 +77,23 @@ const recipeSchema = new mongoose.Schema(
       ref: "User", // Reference au User model
       required: true,
     },
+    // Champ pour la note moyenne de la recette
+    // Calculé automatiquement à partir des notes individuelles des utilisateurs
     averageRating: {
       type: Number,
       default: 0,
       min: 0, // Minimum average rating of 0
       max: 10, // Maximum average rating of 10
     },
+     // Compteur des notes données par les utilisateurs
+    // Permet de suivre le nombre total de notes pour une recette
     ratingsCount: {
       type: Number,
       default: 0,
       min: 0, // Minimum ratings count of 0
     },
+    // Somme totale des notes reçues
+    // Utilisée pour calculer la note moyenne (averageRating)
     ratingsSum: {
       type: Number,
       default: 0,
@@ -99,17 +105,23 @@ const recipeSchema = new mongoose.Schema(
     ingredients: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Ingredient", // Références aux ingrédients
+        // Références à RecipeIngredientModel ce qui te permet de stocker des informations ingredientModel et RecipeIngredientModel
+        ref: "RecipeIngredient", 
       },
     ],
   },
   { timestamps: true } // Ajoute automatiquement les champs createdAt et updatedAt
 );
 
-// Ajouter un index sur le champ "name"
-recipeSchema.index({ name: 1 });
+
 
 // Création du Modèle recipe
 const Recipe = mongoose.model("Recipe", recipeSchema);
 
 export default Recipe;
+
+/*
+Lorsque tu veux récupérer une recette avec ses ingrédients,
+ tu feras des **populate** sur le champ ingredients 
+pour obtenir les détails complets des ingrédients associés à la recette, y compris les quantités et les unités.
+*/

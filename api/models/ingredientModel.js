@@ -17,7 +17,5 @@ const IngredientSchema = new Schema({
   }],
 });
 
-// Ajouter un index sur le champ "name"
-IngredientSchema.index({ name: 1 }); 
 
 export default mongoose.model('Ingredient', IngredientSchema);

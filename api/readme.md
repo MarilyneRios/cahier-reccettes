@@ -25,12 +25,58 @@ Cette API permet de gérer les recettes, les favoris et d'interagir avec les uti
 
 - GET /favoris : Afficher toutes les recettes favorites (version simplifiée).
 
--◦ DELETE /favoris/{id_recette} : Retirer une recette des favoris.
+- DELETE /favoris/{id_recette} : Retirer une recette des favoris.
 
 - POST /favoris/{id_recette} : Ajouter une recette aux favoris.
 
 
-3. Les droits d'accès :
+3. Requêtes principales de recherche
+
+- GET /recherche?ingredients={liste_ingredients} : Rechercher des recettes par ingrédients.
+
+- GET /recherche?nom={nom_recette}&auteur={nom_auteur} : Rechercher des recettes par nom de recette ou d'auteur.
+
+- GET /filtre?regime={type_regime} : Filtrer les recettes par régime alimentaire (végétarien, sans gluten, etc.).
+
+- GET /filtre?categorie={type_categorie} : Filtrer les recettes par catégorie (plats principaux, desserts, etc.).
+
+
+4. Requêtes sur les commentaires
+
+- GET /recettes/{id_recette}/commentaires : Afficher les commentaires d'une recette.
+
+- DELETE /commentaires/{id_commentaire} : Supprimer un commentaire (uniquement l'auteur).
+
+- PUT /commentaires/{id_commentaire} : Modifier un commentaire (uniquement l'auteur).
+
+- POST /recettes/{id_recette}/commentaires : Créer un commentaire pour une recette.
+
+- POST /commentaires/{id_commentaire}/reponses : Ajouter une réponse à un commentaire (nesting).
+
+
+5. Requêtes sur les notes
+
+- GET /recettes/{id_recette}/notes : Afficher la note d'une recette.
+
+- PUT /notes/{id_note} : Modifier une note (uniquement l'auteur).
+
+- POST /recettes/{id_recette}/notes : Donner une note à une recette.
+
+
+6. Les droits d'accès :
 
 Authentification avec un token JWT
 
+7. Format des données :  JSON
+
+8. Codes de retour:
+
+> 200 OK : Tout s'est bien passé, ta demande a été traitée avec succès.
+
+> 400 Bad Request : ta demande n'est pas claire ou contient des erreurs.
+
+> 401 Unauthorized : Tu n'as pas les autorisations nécessaires pour accéder à ce que tu demandes.
+
+> 404 Not Found : . La page ou l'information que tu cherches n'existe tout simplement pas sur le serveur.
+
+> 500 Internal Server Error:  Il y a eu un problème interne au serveur qui empêche de traiter ta demande.
