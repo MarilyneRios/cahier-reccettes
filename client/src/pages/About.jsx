@@ -22,22 +22,16 @@ export default function About() {
           <p className="mb-4  textWithShadowP">
             Faciliter l&apos;échange de recettes, autrefois on inscrivait les recttes sur un cahier. 
             Régulièrement, on le recopiait car les pages se déchirer ou se tâcher. 
-            
             Fini les feuilles volantes éparpillées et les recettes perdues !
             <br></br>
             Avec Mon Cahier de Recettes, vous pouvez stocker, partager et
             accéder à vos créations culinaires préférées en un seul endroit.
-          </p>
-
-          
-
-         
+          </p>       
 
           <h3 className="textWithShadowH3 ">Rejoignez-nous !</h3>
           <p className=" mb-4  textWithShadowP">
             Inscrivez-vous dès maintenant et faites partie de notre communauté
             gourmande. 
-           
           </p>
           <div className=" mb-4 ">
           <Link to="/sign-up">

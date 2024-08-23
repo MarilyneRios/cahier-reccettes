@@ -131,7 +131,9 @@ Récupérer les images dans notre App
 
 => Pour récupérer les images dans votre application, vous devrez utiliser les API appropriées fournies par Firebase.
 ----------------------------------------------------------------------------------------------------------------------
+## preparation client
 
+Dans le dossier client : **npm run build**
 
 ## Render
 

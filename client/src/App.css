@@ -12,10 +12,16 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.textWithShadowNavbarBrand {
+  font-family: serif, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 .textWithShadowH3 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   color: #fff; 
-
   font-family: serif;
 }
 
@@ -123,6 +129,19 @@ blockquote {
   color: #155724;
 
 }
+
+/* Navbar.Brand*/
+
+.link-navbarBrand {
+  color: white !important;
+  transition: color .3s ease-in-out;
+}
+
+.link-navbarBrand:hover{
+  color:  #28a745  !important;
+}
+
+
 /*//////////////////////////////////////////////////*/
 
 /* Hero */

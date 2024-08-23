@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import "../App.css";
 
 // icons
-import { FaSignInAlt, FaUserCircle , FaSearch, FaHome, FaInfoCircle } from "react-icons/fa";
+import {  FaUserCircle , FaSearch, FaHome, FaInfoCircle } from "react-icons/fa";
 import { FaCirclePlus, FaBookOpenReader } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 
@@ -182,7 +182,7 @@ function Header() {
         <Navbar.Brand
           as={Link}
           to="/"
-          className="mx-auto text-center textWithShadow fs-1  "
+          className="mx-auto text-center textWithShadowNavbarBrand fs-1 link-navbarBrand "
         >
           Mon cahier de recettes
         </Navbar.Brand>
