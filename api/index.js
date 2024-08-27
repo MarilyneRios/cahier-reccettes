@@ -1,8 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+// Iportantion des routes
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoute.js';
+import recipesRoutes from './routes/recipeRoute.js';
+import IngredientRoutes from './routes/ingredientRoute.js'
+//
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
@@ -25,11 +29,6 @@ app.use(express.static(path.join(__dirname, '/client/dist')));
 //app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 
-// Gérer toutes les autres routes en renvoyant 'index.html'
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-});
-
 // Middleware pour parser (convertir) le JSON
 app.use(express.json()); 
 // Middleware pour parser (convertir) cookies
@@ -38,6 +37,15 @@ app.use(cookieParser());
 //Routes de l'API pour les utilisateurs
 app.use('/api/user', userRoutes);  
 app.use('/api/auth', authRoutes);
+app.use('/api/recipes', recipesRoutes); 
+app.use('/api/ingredients', IngredientRoutes); 
+
+//attention si avant les routes pour affichage des routes get!!!!
+// Gérer toutes les autres routes en renvoyant 'index.html'
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+
 
 // Middleware de gestion des erreurs
 app.use((err, req, res, next) => {

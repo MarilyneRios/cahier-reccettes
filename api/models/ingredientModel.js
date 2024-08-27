@@ -15,6 +15,12 @@ const IngredientSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe'
   }],
+  user: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  }
+  
 });
 
 

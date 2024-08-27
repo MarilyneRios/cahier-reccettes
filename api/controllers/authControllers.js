@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
+// test
 export const display = (req, res) => {
   console.log('display request received');
   res.json({
@@ -10,6 +11,7 @@ export const display = (req, res) => {
   });
 };
 
+// création de profil
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
@@ -29,6 +31,7 @@ export const signup = async (req, res, next) => {
   }
 };
 
+//connexion classique
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -52,6 +55,7 @@ export const signin = async (req, res, next) => {
   }
 };
 
+//connexion avec compte google
 export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -108,6 +112,8 @@ export const signout = (req, res) => {
   res.status(500).json('Logout failed');
 }
 }*/
+
+// Déconnexion
 export const signout = (req, res) => {
   console.log('Signout request received');
   try {

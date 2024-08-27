@@ -65,7 +65,18 @@ Cette API permet de gérer les recettes, les favoris et d'interagir avec les uti
 
 6. Les droits d'accès :
 
-Authentification avec un token JWT
+Protection et Conformité
+
+**Authentification** : Seuls les utilisateurs authentifiés (ceux qui possèdent un token JWT valide) peuvent créer des annonces. Cela est assuré par le middleware verifyToken.
+
+**Vérification de l'Identité** : L'ID de l'utilisateur qui a fait la requête est automatiquement associé à l'annonce grâce au champ userRef. Cela permet de lier clairement chaque annonce à son créateur.
+
+**Protection contre les Attaques** : Les tokens JWT sont signés avec un secret (défini dans process.env.JWT_SECRET), ce qui empêche les utilisateurs malveillants de falsifier les tokens pour se faire passer pour quelqu'un d'autre.
+
+**Séparation des Rôles** : En utilisant userRef, le code s'assure que les utilisateurs ne peuvent interagir qu'avec leurs propres données (comme dans les contrôleurs de suppression et de mise à jour).
+
+
+
 
 7. Format des données :  JSON
 
@@ -80,3 +91,13 @@ Authentification avec un token JWT
 > 404 Not Found : . La page ou l'information que tu cherches n'existe tout simplement pas sur le serveur.
 
 > 500 Internal Server Error:  Il y a eu un problème interne au serveur qui empêche de traiter ta demande.
+
+
+////////////////////////////////////////////////////////////
+
+# Réflexion pour la sécurité?
+
+
+**express-validator** est comme un policier qui vérifie l'identité des personnes qui veulent entrer dans une pièce. Il s'assure que les informations qu'elles donnent sont correctes et complètes.
+
+**verifyUser** (ou un middleware similaire) est comme un gardien qui vérifie que tu as le bon badge pour entrer dans un bâtiment. Il s'assure que tu as le droit d'être là.

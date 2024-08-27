@@ -72,11 +72,6 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Reference au User model
-      required: true,
-    },
     // Champ pour la note moyenne de la recette
     // Calculé automatiquement à partir des notes individuelles des utilisateurs
     averageRating: {
@@ -109,6 +104,11 @@ const recipeSchema = new mongoose.Schema(
         ref: "RecipeIngredient", 
       },
     ],
+    //relation entre les recettes et le user
+    userRef: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true } // Ajoute automatiquement les champs createdAt et updatedAt
 );

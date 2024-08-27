@@ -1,3 +1,4 @@
+//userRoutes.js
 import express from 'express';
 import {display,  updateUser, deleteUser
 } from '../controllers/userController.js'
