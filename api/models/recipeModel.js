@@ -17,6 +17,23 @@ const InstructionSchema = new Schema({
   },
 });
 
+// Définition du sous-document Ingredient avec quantité et unité
+const RecipeIngredientSchema = new Schema({
+  ingredient: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Ingredient",
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true
+  },
+  unit: {
+    type: String,
+    required: true // Par exemple : "gr", "ml", etc.
+  }
+});
+
 // Définition du sous-document Comment
 const commentSchema = new mongoose.Schema({
   userId: {
@@ -96,14 +113,13 @@ const recipeSchema = new mongoose.Schema(
     instructions: [InstructionSchema], // Sous-document pour les instructions
     comments: [commentSchema], // Sous-document pour les comments
 
-    // Ingrédients liés via la collection RecipeIngredient
-    ingredients: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        // Références à RecipeIngredientModel ce qui te permet de stocker des informations ingredientModel et RecipeIngredientModel
-        ref: "RecipeIngredient", 
-      },
-    ],
+    // Ingrédients liés via un sous document avec quantité et unité
+    ingredients: [RecipeIngredientSchema], 
+    userRef: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
     //relation entre les recettes et le user
     userRef: {
       type: String,

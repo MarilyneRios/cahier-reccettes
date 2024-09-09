@@ -24,29 +24,79 @@ export const displayOneRecipes = async (req, res, next) => {};
 // @route   POST /api/recipes
 // @access  Private (token)
 export const createRecipe = async (req, res, next) => {
+  try {
+    const {
+        name,
+        country,
+        category,
+        regime,
+        makingTime,
+        cookingTime,
+        imageUrl,
+        instructions,
+        ingredients // Liste des ingrédients avec leurs quantités et unités
+    } = req.body;
 
-    // création de recette
-    const recipe = await Recipe.create({
-      name: req.body.name,
-      country: req.body.country,
-      category: req.body.category,
-      regime: req.body.regime,
-      ingredients: req.body.ingredients,
-      instructions: req.body.instructions,
-      makingTime: req.body.makingTime,
-      cookingTime: req.body.cookingTime,
-      comments: req.body.comments,
-      pseudo: req.body.pseudo,
-      imageUrl: req.body.imageUrl,
-      // relier la recette avec le user auth
-      userRef: req.user.id,
+    // Validation des données 
+    if (!name || !ingredients || ingredients.length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Le om de la recette  et au moins un ingrédient est nécessaire",
+            statusCode: 400
+        });
+    }
+
+    // Vérification de la validité des ingrédients
+    const ingredientEntries = [];
+    for (let ingredientData of ingredients) {
+        const { ingredientId, quantity, unit } = ingredientData;
+
+        // Vérifier que l'ingrédient existe dans la base de données
+        const ingredient = await Ingredient.findById(ingredientId);
+        if (!ingredient) {
+            return res.status(404).json({
+                success: false,
+                message: `Ingredient with id ${ingredientId} not found.`,
+                statusCode: 404
+            });
+        }
+
+        // Ajouter l'ingrédient avec quantité et unité à la liste des ingrédients
+        ingredientEntries.push({
+            ingredient: ingredient._id,
+            quantity,
+            unit
+        });
+    }
+
+    // Créer la recette avec les ingrédients
+    const newRecipe = new Recipe({
+        name,
+        country,
+        category,
+        regime,
+        makingTime,
+        cookingTime,
+        imageUrl,
+        instructions,
+        ingredients: ingredientEntries, // Ajoute la liste des ingrédients avec quantités et unités
+        userRef: req.user.id // Associe l'utilisateur authentifié à la recette
     });
 
-    // sauver la recette dans la database
-    await recipe.save();
-    // envoie un msg de réussite
-    res.status(201).json({ message: "Création de recette réussie", recipe });
-  
+    // Sauvegarder la recette dans la base de données
+    const savedRecipe = await newRecipe.save();
+
+    // Retourner la recette créée
+    res.status(201).json({
+        success: true,
+        data: savedRecipe,
+        message: "Recipe created successfully",
+        statusCode: 201
+    });
+} catch (error) {
+    console.error("Error occurred while creating recipe:", error);
+    next(error);
+}
 };
 
 // @desc    Update 1 recipe && signIn

@@ -118,3 +118,43 @@ export const deleteIngredient = async (req, res, next) => {
     next(error);
   }
 };
+
+
+// Recherche par nom
+
+export const searchIngredientByName = async (req, res, next) => {
+  try {
+    // Récupérer le paramètre 'name' depuis la requête (query string)
+    const searchTerm = req.query.name;
+
+    if (!searchTerm) {
+      return res.status(400).json({
+        success: false,
+        message: "The 'name' query parameter is required.",
+        statusCode: 400
+      });
+    }
+
+    // Recherche insensible à la casse
+    const searchRegex = new RegExp(searchTerm, 'i');
+
+    // Rechercher dans la base de données avec une correspondance sur le nom
+    const ingredients = await Ingredient.find({ name: { $regex: searchRegex } });
+
+    if (ingredients.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Ingredient not found",
+        statusCode: 404
+      });
+    }
+
+    // Retourner les ingrédients trouvés
+    res.status(200).json({ success: true, ingredients });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+//$regex = opérateur pour effectuer des recherches sur des chaînes de caractères
