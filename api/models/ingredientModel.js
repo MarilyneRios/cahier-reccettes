@@ -6,6 +6,7 @@ const IngredientSchema = new Schema({
   name: { 
     type: String, 
     required: true,
+    unique: true,
     index: true, //indexation du nom des ingrédients pour gain de temps
   },
   image: { 

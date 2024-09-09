@@ -1,6 +1,7 @@
 //importation models
 import User from "../models/userModel.js";
 import Recipe from "../models/recipeModel.js";
+import Ingredient from "../models/ingredientModel.js"
 // importation sécurité
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
@@ -86,12 +87,20 @@ export const createRecipe = async (req, res, next) => {
     // Sauvegarder la recette dans la base de données
     const savedRecipe = await newRecipe.save();
 
+     // Récupérer la recette avec les détails des ingrédients peuplés
+     const recipeWithDetails = await Recipe.findById(savedRecipe._id)
+     .populate({
+       path: 'ingredients.ingredient',
+       select: 'name'
+     })
+     .exec();
+
     // Retourner la recette créée
     res.status(201).json({
-        success: true,
-        data: savedRecipe,
-        message: "Recipe created successfully",
-        statusCode: 201
+      success: true,
+      data: recipeWithDetails,
+      message: "Recipe created successfully",
+      statusCode: 201
     });
 } catch (error) {
     console.error("Error occurred while creating recipe:", error);

@@ -110,7 +110,9 @@ const recipeSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+   
     instructions: [InstructionSchema], // Sous-document pour les instructions
+   
     comments: [commentSchema], // Sous-document pour les comments
 
     // Ingrédients liés via un sous document avec quantité et unité
@@ -120,11 +122,7 @@ const recipeSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
-    //relation entre les recettes et le user
-    userRef: {
-      type: String,
-      required: true,
-    },
+    
   },
   { timestamps: true } // Ajoute automatiquement les champs createdAt et updatedAt
 );
