@@ -14,7 +14,33 @@ import jwt from "jsonwebtoken";
 // @desc    recipes & display all recipes with piscture, title and autheur on Home
 // @route   GET /api/recipes/
 // @access  Public
-export const displayAllRecipes = async (req, res, next) => {};
+export const displayAllRecipes = async (req, res, next) => {
+    try {
+        // Nombre d'éléments par page
+        const pageSize = 6;
+        const page = Number(req.query.pageNumber) || 1;
+
+        // Trouver les recettes avec les champs partiels : name, country, category, regime, makingTime, cookingTime, imageUrl
+        const recipes = await Recipe.find({}, 'name country category regime makingTime cookingTime imageUrl userRef')           
+             .populate('userRef', 'username profilePicture') // Populer l'utilisateur avec son nom    
+            .skip(pageSize * (page - 1)) // Pagination
+            .limit(pageSize);
+
+        // Compter le nombre total de recettes pour la pagination
+        const count = await Recipe.countDocuments();
+
+        // Réponse avec les recettes et les infos de pagination
+        res.json({
+            recipes,
+            page,
+            pages: Math.ceil(count / pageSize),
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur du serveur' });
+    }
+};
+
 
 // @desc    recipes & display one recipe with all informations on ReadOneRecipe
 // @route   GET /api/recipes/:id
