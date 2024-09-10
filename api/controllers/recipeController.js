@@ -89,7 +89,7 @@ export const createRecipe = async (req, res, next) => {
     if (!name || !ingredients || ingredients.length === 0) {
         return res.status(400).json({
             success: false,
-            message: "Le om de la recette  et au moins un ingrédient est nécessaire",
+            message: "Ecrire au moins le nom de la recette  et un ingrédient !",
             statusCode: 400
         });
     }
@@ -155,31 +155,87 @@ export const createRecipe = async (req, res, next) => {
 }
 };
 
-// @desc    Update 1 recipe && signIn
-// @route   PUT /api/recipes/:id
+// @desc    Update 1 recipe
+// @route   POST /api/recipes/:id
 // @access  Private (token)
 export const updateRecipe = async (req, res, next) => {
+    console.log('Received request to update recipeId:', req.params.id);
+    const recipeId = req.params.id;
     try {
-        // Vérifier que le user est connecté et que l'utilisateur connecté correspond bien au propriétaire de la recette
-        const recipe = await Recipe.findById(req.params.id).populate('userRef', 'username profilePicture');
-    
-        // Vérifier si la recette existe
-        if (!recipe) {
-          return res.status(404).json({ message: "Recette non trouvée" });
-        }
-    
-        // Vérification de l'utilisateur (l'utilisateur doit être le propriétaire de la recette pour y accéder)
-        if (recipe.userRef._id.toString() !== req.user._id.toString()) {
-          return res.status(401).json({ message: "Vous n'avez pas l'autorisation d'accéder à cette recette" });
-        }
-    
-        // Réponse avec la recette entière
-        res.json({ recipe });
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erreur du serveur' });
+
+    // Vérifie si req.user est défini et contient id
+    if (!req.user || !req.user.id) {
+        console.error('User not authenticated or missing _id. req.user:', req.user);
+        return res.status(401).json({ message: "Vous n'êtes pas authentifié" });
+    }
+
+      // 1. Afficher le corps de la requête :
+      console.log('Request body:', req.body);
+  
+      //2. Trouver la recette par ID et populate 'userRef'
+      const recipe = await Recipe.findById(recipeId).populate('userRef', 'username profilePicture');
+     
+      // 3. Vérifier si la recette existe (et l'afficher) :
+      if (!recipe) {
+        console.error('Recipe not found for ID:', recipeId);
+        return res.status(404).json({ message: "Recette non trouvée" });
+      } else {
+        //console.log('Found recipe:', recipe); = OK
       }
-};
+  
+      // 4. Vérifier l'autorisation de l'utilisateur (et afficher les IDs des utilisateurs) :
+      if (!recipe.userRef || !req.user || recipe.userRef._id.toString() !== req.user.id.toString()) {
+        console.error('Unauthorized update attempt. Recipe user ID:', recipe.userRef ? recipe.userRef._id : 'undefined', 'Request user ID:', req.user.id);
+        return res.status(401).json({ message: "Vous n'avez pas l'autorisation de modifier cette recette" });
+      } else {
+        console.log('Authorized update. User ID:', req.user.id);
+     } 
+  
+       //5. Créer l'objet updatedFields :
+        const updatedFields = {};
+
+        // 6. Mettre à jour les champs de la recette seulement s'ils sont présents dans req.body
+        if (req.body.name) updatedFields.name = req.body.name;
+        if (req.body.country) updatedFields.country = req.body.country;
+        if (req.body.category) updatedFields.category = req.body.category;
+        if (req.body.regime) updatedFields.regime = req.body.regime;
+        if (req.body.ingredients) updatedFields.ingredients = req.body.ingredients;
+        if (req.body.instructions) updatedFields.instructions = req.body.instructions;
+        if (req.body.makingTime) updatedFields.makingTime = req.body.makingTime;
+        if (req.body.cookingTime) updatedFields.cookingTime = req.body.cookingTime;
+        if (req.body.pseudo) updatedFields.pseudo = req.body.pseudo;
+        if (req.body.imageUrl) updatedFields.imageUrl = req.body.imageUrl;
+  
+       //7. Mettre à jour la recette :
+      const updatedRecipe = await Recipe.findByIdAndUpdate(
+       req.params.id,
+       { $set: updatedFields },
+        { new: true }
+      );
+  
+      // 8.  Réponse avec la recette mise à jour
+        res.status(200).json({
+            _id: updatedRecipe._id,
+            name: updatedRecipe.name,
+            country: updatedRecipe.country,
+            category: updatedRecipe.category,
+            regime: updatedRecipe.regime,
+            ingredients: updatedRecipe.ingredients,
+            instructions: updatedRecipe.instructions,
+            makingTime: updatedRecipe.makingTime,
+            cookingTime: updatedRecipe.cookingTime,
+            pseudo: updatedRecipe.pseudo,
+            imageUrl: updatedRecipe.imageUrl,
+            message: "Recette mise à jour avec succès"
+        });
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+      res.status(500).json({ message: 'Erreur du serveur' });
+    }
+  };
+  
+
+  
 
 // @desc    Delete 1 recipe && signIn
 // @route   DELETE /api/recipes/:id
