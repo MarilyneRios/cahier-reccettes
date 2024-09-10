@@ -22,7 +22,7 @@ export const displayAllRecipes = async (req, res, next) => {
 
         // Trouver les recettes avec les champs partiels : name, country, category, regime, makingTime, cookingTime, imageUrl
         const recipes = await Recipe.find({}, 'name country category regime makingTime cookingTime imageUrl userRef')           
-             .populate('userRef', 'username profilePicture') // Populer l'utilisateur avec son nom    
+            .populate('userRef', 'username profilePicture') // Populer l'utilisateur avec son nom    
             .skip(pageSize * (page - 1)) // Pagination
             .limit(pageSize);
 
@@ -42,10 +42,31 @@ export const displayAllRecipes = async (req, res, next) => {
 };
 
 
-// @desc    recipes & display one recipe with all informations on ReadOneRecipe
+// @desc    Display one recipe with all information
 // @route   GET /api/recipes/:id
-// @access  Public
-export const displayOneRecipes = async (req, res, next) => {};
+// @access  Private (token)
+export const displayOneRecipe = async (req, res, next) => {
+    try {
+   
+      // Rechercher la recette par ID
+      const id = req.params.id;
+  
+      // Trouver une recette avec le ID
+      const recipe = await Recipe.findById(id).populate('userRef', 'username profilePicture');
+  
+      // Vérifier si la recette existe
+      if (!recipe) {
+        return res.status(404).json({ message: "Recette non trouvée" });
+      }
+  
+      // Réponse avec la recette entière
+      res.json({ recipe });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Erreur du serveur' });
+    }
+  };
+  
 
 // @desc    create 1 recipe && signIn
 // @route   POST /api/recipes
@@ -137,7 +158,28 @@ export const createRecipe = async (req, res, next) => {
 // @desc    Update 1 recipe && signIn
 // @route   PUT /api/recipes/:id
 // @access  Private (token)
-export const updateRecipe = async (req, res, next) => {};
+export const updateRecipe = async (req, res, next) => {
+    try {
+        // Vérifier que le user est connecté et que l'utilisateur connecté correspond bien au propriétaire de la recette
+        const recipe = await Recipe.findById(req.params.id).populate('userRef', 'username profilePicture');
+    
+        // Vérifier si la recette existe
+        if (!recipe) {
+          return res.status(404).json({ message: "Recette non trouvée" });
+        }
+    
+        // Vérification de l'utilisateur (l'utilisateur doit être le propriétaire de la recette pour y accéder)
+        if (recipe.userRef._id.toString() !== req.user._id.toString()) {
+          return res.status(401).json({ message: "Vous n'avez pas l'autorisation d'accéder à cette recette" });
+        }
+    
+        // Réponse avec la recette entière
+        res.json({ recipe });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur du serveur' });
+      }
+};
 
 // @desc    Delete 1 recipe && signIn
 // @route   DELETE /api/recipes/:id
