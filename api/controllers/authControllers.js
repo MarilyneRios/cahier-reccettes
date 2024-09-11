@@ -11,7 +11,9 @@ export const display = (req, res) => {
   });
 };
 
-// création de profil
+// @desc    Créer un nouvel utilisateur
+// @route   POST /api/auth/signup
+// @access  Public
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
@@ -31,7 +33,9 @@ export const signup = async (req, res, next) => {
   }
 };
 
-//connexion classique
+// @desc    Connexion d'un utilisateur existant (authentification classique)
+// @route   POST /api/auth/signin
+// @access  Public
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -55,7 +59,9 @@ export const signin = async (req, res, next) => {
   }
 };
 
-//connexion avec compte google
+// @desc    Connexion d'un utilisateur via Google (avec création de compte si nécessaire)
+// @route   POST /api/auth/google
+// @access  Public
 export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -100,20 +106,9 @@ export const google = async (req, res, next) => {
   }
 };
 
-/*
-export const signout = (req, res) => {
- console.log('Signout request received');
- try {
-  
-  res.clearCookie('access_token'); 
-  res.status(200).json('Signout successful!');
-} catch (error) {
-  console.error('Error during logout:', error);
-  res.status(500).json('Logout failed');
-}
-}*/
-
-// Déconnexion
+// @desc    Déconnexion d'un utilisateur
+// @route   GET /api/auth/signout
+// @access  Public
 export const signout = (req, res) => {
   console.log('Signout request received');
   try {

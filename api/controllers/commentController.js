@@ -1,5 +1,8 @@
 import Comment from '../models/commentModel.js';
 
+// @desc    Créer un commentaire pour un post
+// @route   POST /api/comments
+// @access  Privé (token requis)
 export const createComment = async (req, res, next) => {
   try {
     const { content, postId, userId } = req.body;
@@ -23,6 +26,9 @@ export const createComment = async (req, res, next) => {
   }
 };
 
+// @desc    Récupérer les commentaires d'un post
+// @route   GET /api/posts/:postId/comments
+// @access  Public
 export const getPostComments = async (req, res, next) => {
   try {
     const comments = await Comment.find({ postId: req.params.postId }).sort({
@@ -34,6 +40,9 @@ export const getPostComments = async (req, res, next) => {
   }
 };
 
+// @desc    Liker ou disliker un commentaire
+// @route   PUT /api/comments/:commentId/like
+// @access  Privé (token requis)
 export const likeComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.commentId);
@@ -55,6 +64,9 @@ export const likeComment = async (req, res, next) => {
   }
 };
 
+// @desc    Modifier un commentaire
+// @route   PUT /api/comments/:commentId
+// @access  Privé (token requis pour le commentaire de l'utilisateur, Admin pour les autres)
 export const editComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.commentId);
@@ -80,6 +92,9 @@ export const editComment = async (req, res, next) => {
   }
 };
 
+// @desc    Supprimer un commentaire
+// @route   DELETE /api/comments/:commentId
+// @access  Privé (token requis pour le commentaire de l'utilisateur, Admin pour les autres)
 export const deleteComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.commentId);
@@ -98,6 +113,9 @@ export const deleteComment = async (req, res, next) => {
   }
 };
 
+// @desc    Récupérer tous les commentaires (paginés et triés) - Admin seulement
+// @route   GET /api/comments
+// @access  Privé (token requis avec droits d'administrateur)
 export const getcomments = async (req, res, next) => {
   if (!req.user.isAdmin)
     return next(errorHandler(403, 'You are not allowed to get all comments'));

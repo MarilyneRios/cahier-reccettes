@@ -4,14 +4,16 @@ import User from '../models/userModel.js';
 import { errorHandler } from '../utils/error.js';
 import bcryptjs from 'bcryptjs';
 
-
+//test
 export const display = (req, res) => {
     res.json({
       message: 'hello world on api/userRoutes and userController',
     });
 };
 
-// Mise à jour du user
+// @desc    Mettre à jour un utilisateur existant
+// @route   PUT /api/users/:id
+// @access  Privé (token)
 export const updateUser = async (req, res, next) => {
   // Sécurité : vérification user
   if (req.user.id !== req.params.id) {
@@ -55,7 +57,9 @@ export const updateUser = async (req, res, next) => {
 }
 
 
-// Supprimer le user
+// @desc    Supprimer un utilisateur
+// @route   DELETE /api/users/:id
+// @access  Privé (token)
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, 'You can delete only your account!'));

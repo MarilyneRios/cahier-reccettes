@@ -2,8 +2,9 @@
 import Ingredient from "../models/ingredientModel.js";
 import { errorHandler } from "../utils/error.js";
 
-// Création d'un ingrédient
-
+// @desc    Créer un nouvel ingrédient
+// @route   POST /api/ingredients
+// @access  Private (token)
 export const createIngredient = async (req, res, next) => {
     try {
       // Log des données reçues dans la requête
@@ -59,11 +60,11 @@ export const createIngredient = async (req, res, next) => {
       // Passer l'erreur au middleware de gestion des erreurs
       next(error);
     }
-  };
+};
   
-  
-
-// afficher tous les ingrédients
+// @desc    Afficher tous les ingrédients
+// @route   GET /api/ingredients
+// @access  Public
 export const displayIngredients = async (req, res, next) => {
     console.log("Request received for displaying ingredients");
   try {
@@ -85,7 +86,9 @@ export const displayIngredients = async (req, res, next) => {
   }
 };
 
-// Mise à jour du user = fonctionne
+// @desc    Mettre à jour un ingrédient existant
+// @route   PUT /api/ingredients/:id
+// @access  Private (token)
 export const updateIngredient = async (req, res, next) => {
   try {
     const updatedIngredient = await Ingredient.findByIdAndUpdate(
@@ -104,7 +107,9 @@ export const updateIngredient = async (req, res, next) => {
   }
 };
 
-// Supprimer un ingredient = fonctionne
+// @desc    Supprimer un ingrédient
+// @route   DELETE /api/ingredients/:id
+// @access  Private (token)
 export const deleteIngredient = async (req, res, next) => {
   try {
     const deletedIngredient = await Ingredient.findByIdAndDelete(req.params.id);
@@ -119,9 +124,9 @@ export const deleteIngredient = async (req, res, next) => {
   }
 };
 
-
-// Recherche par nom
-
+// @desc    Rechercher un ingrédient par nom (recherche insensible à la casse)
+// @route   GET /api/ingredients/search?name=nom_de_l_ingredient
+// @access  Public
 export const searchIngredientByName = async (req, res, next) => {
   try {
     // Récupérer le paramètre 'name' depuis la requête (query string)
