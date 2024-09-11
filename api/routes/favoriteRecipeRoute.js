@@ -1,6 +1,14 @@
 import express from 'express';
 
-import {  } from '../controllers/recipeController.js';
+import { 
+    displayAllFavoriteRecipes, 
+    displayOneFavoriteRecipe, 
+    addFavoriteRecipe, 
+    removeFavoriteRecipe, 
+    searchRecipe, 
+    filtreCategoryRecipe, 
+    filtreRegimeRecipe 
+  } from '../controllers/recipeController.js';
 
 import { verifyToken } from '../utils/verifyUser.js';
 
@@ -11,12 +19,17 @@ const router = express.Router();
 
 // routes protégées avec verifyToken
 
-router.post('/', verifyToken, ); //POST: http://localhost:3000/api/recipes/ 
-router.get ('/', verifyToken) //GET: http://localhost:3000/api/recipes/displayAllRecipes 
-router.get ('//:id',  verifyToken,) //GET: http://localhost:3000/api/recipes/displayOneRecipe/66cc83a167d91d80563f7b25
-router.post ('//:id', verifyToken, ) // POST: http://localhost:3000/api/recipes/updateRecipe/66def36e2f915a6f29010b79
-router.delete ('//:id', verifyToken, ) // DELETE: http://localhost:3000/api/recipes/deleteRecipe/66def36e2f915a6f29010b79 
+router.post('/', verifyToken, addFavoriteRecipe); //POST: http://localhost:3000/api/favoriteRecipes/ 
+router.get('/all', verifyToken, displayAllFavoriteRecipes);//GET: http://localhost:3000/api/favoriteRecipes/all
+router.get('/one/:id', verifyToken, displayOneFavoriteRecipe);  //GET: http://localhost:3000/api/favoriteRecipes/one/id
+router.delete('/:id', verifyToken, removeFavoriteRecipe);// DELETE: http://localhost:3000/api/favoriteRecipes/id 
 
+///////////////////////////////////////////////////////////////////////////
+// Search et filtrer
+///////////////////////////////////////////////////////////////////////////
 
+router.get('/search', verifyToken, searchRecipe); // GET http://localhost:3000/api/favoriteRecipes/search
+router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/favoriteRecipes/filterCategoryRecipe
+router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/favoriteRecipes/filtreRegimeRecipe
 
 export default router;

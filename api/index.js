@@ -5,7 +5,8 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoute.js';
 import recipesRoutes from './routes/recipeRoute.js';
-import IngredientRoutes from './routes/ingredientRoute.js'
+import IngredientRoutes from './routes/ingredientRoute.js';
+import favoriteRecipes from './routes/favoriteRecipeRoute.js';
 //
 import cookieParser from 'cookie-parser';
 import path from 'path';
@@ -39,6 +40,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipesRoutes); 
 app.use('/api/ingredients', IngredientRoutes); 
+app.use('/api/favoriteRecipes', favoriteRecipes); 
 
 //attention si avant les routes pour affichage des routes get!!!!
 // Gérer toutes les autres routes en renvoyant 'index.html'
@@ -51,6 +53,7 @@ app.get('*', (req, res) => {
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
+    console.error(err.stack); // Log de l'erreur pour le débogage // 11/09/24
     return res.status(statusCode).json({
       success: false,
       message,
@@ -64,19 +67,3 @@ app.listen(port, () => {
 });
 
 
-/**
- * Les diverse Routes api
- * 
- * Auth : api/auth/
-  router.get('/', display); => GET : api/auth - Vérifier la connexion
-  router.post('/signup', signup); => POST : api/auth/signup - enregistrer un user 
-  router.post('/signin', signin); => POST : api/auth/signin - Authentifier un user et obtenir un token
-  router.get('/signout', signout); => GET : api/auth/signout - Déconnexion et nettoyer les cookies
-  router.post('/google', google); => POST : api/auth/google - S' Authentifier avec google
-
- * Private :  api/user/
- 
-  router.get('/', display); => GET: api/user/` GET : api/user- Vérifier la connexion
-  router.post('/update/:id', verifyToken, updateUser); => POST : api/user/update/${currentUser._id}` - obtenir le profil du user
-  router.delete('/delete/:id', verifyToken, deleteUser); => DELETE: api/user/delete/${currentUser._id}` - Modifier le profile d'un user
- */

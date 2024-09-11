@@ -21,13 +21,16 @@ export const displayOneFavoriteRecipe = async (req, res, next) => {};
 // @desc    add all recipe in favorite
 // @route   POST /api/recipes/addFavoriteRecipes
 // @access   Private (token)
-export const addFavoriteRecipes = async (req, res, next) => {};
+export const addFavoriteRecipe = async (req, res, next) => {};
 
 // @desc    Remove 1 recipe to favorite recipes by user on favorite && signIn
 // @route   DELETE /api/recipes/favorites/:id
 // @access  Private
 export const removeFavoriteRecipe = async (req, res, next) => {};
 
+
+///////////////////////////////////////////////////////////////////////////
+// Search et filtrer
 ///////////////////////////////////////////////////////////////////////////
 
 // @desc    Search recipes & display one recipe on homeScreen
