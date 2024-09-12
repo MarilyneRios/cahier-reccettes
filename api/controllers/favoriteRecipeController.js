@@ -71,7 +71,7 @@ export const addFavoriteRecipe = async (req, res, next) => {
 export const removeFavoriteRecipe = async (req, res, next) => {
     try {
       // 1. Accéder à l'ID de la recette depuis les paramètres de l'URL
-      const recipeId = req.params.id; // Changement de req.body à req.params
+      const recipeId = req.params.id; 
       console.log("1. recipeID", recipeId);
   
       // 2. Vérifier si l'ID de la recette est fourni
