@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import Comment from '../models/commentModel.js';
 
 // @desc    Créer un commentaire pour un post

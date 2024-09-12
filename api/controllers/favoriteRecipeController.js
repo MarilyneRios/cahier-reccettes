@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 //importation models
 import User from "../models/userModel.js";
 import Recipe from "../models/recipeModel.js";
@@ -21,7 +23,7 @@ export const displayOneFavoriteRecipe = async (req, res, next) => {};
 // @desc    add all recipe in favorite
 // @route   POST /api/recipes/addFavoriteRecipes
 // @access   Private (token)
-export const addFavoriteRecipe = async (req, res, next) => {};
+export const addFavoriteRecipe = async (req, res, next) => {};   
 
 // @desc    Remove 1 recipe to favorite recipes by user on favorite && signIn
 // @route   DELETE /api/recipes/favorites/:id

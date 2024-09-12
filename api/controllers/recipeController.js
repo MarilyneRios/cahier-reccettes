@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 //importation models
 import User from "../models/userModel.js";
 import Recipe from "../models/recipeModel.js";
@@ -276,7 +278,66 @@ export const deleteRecipe = async (req, res, next) => {
 // @route   GET /api/recipes/search/:query
 // @access  Public
 // by name recipe, name author and ingredient
-export const searchRecipe = async (req, res, next) => {};
+export const searchRecipe = async (req, res, next) => {
+  try {
+    // 1. Récupération du terme de recherche dans les paramètres
+    const searchTerm = req.params.query;
+    console.log('searchTerm is', searchTerm);
+
+    // 2. Si aucun terme de recherche n'est fourni
+    if (!searchTerm) {
+      return res.status(400).json({
+        success: false,
+        message: "Le paramètre 'query' est requis.",
+        statusCode: 400,
+      });
+    }
+
+    // 3. Recherche insensible à la casse
+    const searchRegex = new RegExp(searchTerm, "i");
+
+     // 4. Rechercher l'utilisateur correspondant au terme (par nom)
+     let user = null;
+     if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
+       // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
+       user = await User.findOne({ name: { $regex: searchRegex } });
+     }
+
+    // 5. Recherche des recettes par nom, pays ou userRef (si user trouvé)
+    const recipes = await Recipe.find({
+      $or: [
+        { name: { $regex: searchRegex } },
+        { country: { $regex: searchRegex } },
+        { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
+      ].filter(condition => condition), // Supprimer les conditions nulles
+    }).populate("userRef", "name"); // On récupère aussi le nom de l'utilisateur via `userRef`
+
+
+    // 6. Si aucune recette n'est trouvée
+    if (recipes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Aucune recette trouvée pour le terme recherché.",
+        statusCode: 404,
+      });
+    }
+
+    // 7. Retourner les recettes trouvées
+    res.status(200).json({
+      success: true,
+      recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+Pour Utiliser mongoose.Types.ObjectId.isValid(), 
+qui permet de vérifier si une chaîne de caractères est un ObjectId valide.
+il faut : "import mongoose from 'mongoose';"
+*/
+
 
 // @desc    Filter recipes by category & diplay one recipe on homeScreen
 // @route   GET /api/recipes/category/:category

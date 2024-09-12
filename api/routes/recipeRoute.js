@@ -17,9 +17,9 @@ import { verifyToken } from '../utils/verifyUser.js';
 
 const router = express.Router();
 
-
+///////////////////////////////////////////////////////////////////////////
 // routes protégées avec verifyToken
-
+///////////////////////////////////////////////////////////////////////////
 router.post('/', verifyToken, createRecipe); //POST: http://localhost:3000/api/recipes/ 
 router.get ('/', displayAllRecipes) //GET: http://localhost:3000/api/recipes/
 router.get ('/displayOneRecipe/:id',  verifyToken, displayOneRecipe) //GET: http://localhost:3000/api/recipes/displayOneRecipe/66cc83a167d91d80563f7b25
@@ -30,7 +30,7 @@ router.delete ('/deleteRecipe/:id', verifyToken, deleteRecipe) // DELETE: http:/
 // Search et filtrer
 ///////////////////////////////////////////////////////////////////////////
 
-router.get('/search', verifyToken, searchRecipe); // GET http://localhost:3000/api/recipes/search
+router.get('/search/:query', verifyToken, searchRecipe); // GET http://localhost:3000/api/recipes/search/salade
 router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filterCategoryRecipe
 router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filtreRegimeRecipe
 
