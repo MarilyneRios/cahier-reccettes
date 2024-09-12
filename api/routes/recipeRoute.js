@@ -26,13 +26,18 @@ router.get ('/displayOneRecipe/:id',  verifyToken, displayOneRecipe) //GET: http
 router.post ('/updateRecipe/:id', verifyToken, updateRecipe) // POST: http://localhost:3000/api/recipes/updateRecipe/66def36e2f915a6f29010b79
 router.delete ('/deleteRecipe/:id', verifyToken, deleteRecipe) // DELETE: http://localhost:3000/api/recipes/deleteRecipe/66def36e2f915a6f29010b79 
 
+
 ///////////////////////////////////////////////////////////////////////////
-// Search et filtrer
+// Search 
 ///////////////////////////////////////////////////////////////////////////
 
 router.get('/search/:query', verifyToken, searchRecipe); // GET http://localhost:3000/api/recipes/search/salade
-router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
 
+
+///////////////////////////////////////////////////////////////////////////
+// filtrer
+///////////////////////////////////////////////////////////////////////////
+router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
 router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
 
 export default router;

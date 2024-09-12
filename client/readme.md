@@ -15,7 +15,7 @@ et
 GET http://localhost:3000/api/ingredients/search?name=Tomate
 
 ////////////////////////////////////////////////////////////////////
-### envoyer la catégorie dans les paramètres de la requête
+### envoyer la catégorie dans les paramètres de la requête (idem pour regime)
 
 ````
 const category = 'dessert';
