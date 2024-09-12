@@ -31,7 +31,8 @@ router.delete ('/deleteRecipe/:id', verifyToken, deleteRecipe) // DELETE: http:/
 ///////////////////////////////////////////////////////////////////////////
 
 router.get('/search/:query', verifyToken, searchRecipe); // GET http://localhost:3000/api/recipes/search/salade
-router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filterCategoryRecipe
-router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filtreRegimeRecipe
+router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
+
+router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
 
 export default router;
