@@ -300,7 +300,8 @@ export const searchRecipe = async (req, res, next) => {
      let user = null;
      if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
        // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
-       user = await User.findOne({ name: { $regex: searchRegex } });
+       user = await User.findOne({ username: { $regex: searchRegex } });
+       console.log('user found:', user);
      }
 
     // 5. Recherche des recettes par nom, pays ou userRef (si user trouvé)
@@ -310,7 +311,7 @@ export const searchRecipe = async (req, res, next) => {
         { country: { $regex: searchRegex } },
         { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
       ].filter(condition => condition), // Supprimer les conditions nulles
-    }).populate("userRef", "name"); // On récupère aussi le nom de l'utilisateur via `userRef`
+    }).populate("userRef", "username"); // On récupère aussi le username de l'utilisateur via `userRef`
 
 
     // 6. Si aucune recette n'est trouvée
