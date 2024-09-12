@@ -22,7 +22,7 @@ const router = express.Router();
 router.post('/', verifyToken, addFavoriteRecipe); //POST: http://localhost:3000/api/favoriteRecipes/ et body json {"recipeId": "66def6fd1b93afaf4ce11f1f"}
 router.get('/all', verifyToken, displayAllFavoriteRecipes);//GET: http://localhost:3000/api/favoriteRecipes/all
 router.get('/one/:id', verifyToken, displayOneFavoriteRecipe);  //GET: http://localhost:3000/api/favoriteRecipes/one/id
-router.delete('/:id', verifyToken, removeFavoriteRecipe);// DELETE: http://localhost:3000/api/favoriteRecipes/id 
+router.delete('/:id', verifyToken, removeFavoriteRecipe);// DELETE: http://localhost:3000/api/favoriteRecipes/recipeId 
 
 
 ///////////////////////////////////////////////////////////////////////////
