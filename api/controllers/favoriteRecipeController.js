@@ -115,47 +115,75 @@ export const removeFavoriteRecipe = async (req, res, next) => {
   };
   
 
-// @desc    recipes & display all recipes with piscture, title and autheur on Home && signIn
+// @desc    Afficher toutes les recettes favorites avec pagination
 // @route   GET /api/recipes/favoriteRecipes
-// @access   Private (token)
+// @access  Private (token)
 export const displayAllFavoriteRecipes = async (req, res, next) => {
+  try {
+    //0. Nombre d'éléments par page
+    const pageSize = 6;
+    const page = Number(req.query.pageNumber) || 1;
 
- /*
-  // Rechercher les savedRecipes par user
-  const savedRecipes = await Recipe.find({
-    '_id': { $in: user.savedRecipes }
-  });
+    // 1. Récupérer le user et populate ses savedRecipe
+    const user = await User.findById(req.user.id).populate({
+      path: 'savedRecipe',
+      select: 'name country category regime makingTime cookingTime imageUrl', 
+    });
+    console.log('Utilisateur et recettes sauvegardées : ', user);
 
-  if (savedRecipes) {
-    return res.json(savedRecipes);
-  } else {
-    res.status(404);
-    throw new Error("No favorite recipes found");
+    // 2. Vérifier si le user a des  savedRecipes
+    if (user && user.savedRecipe.length > 0) {
+      // 3. Appliquer la pagination sur les  savedRecipes
+      const startIndex = (page - 1) * pageSize;
+      const paginatedRecipes = user.savedRecipe.slice(startIndex, startIndex + pageSize);
+
+      // 4. Compter le nombre total de recettes favorites
+      const count = user.savedRecipe.length;
+
+      // 5. Retourner les recettes paginées avec les informations de pagination
+      return res.json({
+        recipes: paginatedRecipes,
+        page,
+        pages: Math.ceil(count / pageSize),
+      });
+    } else {
+      res.status(404).json({ message: "Aucune recette favorite trouvée" });
+    }
+  } catch (error) {
+    next(error); 
   }
-    */
 };
+
 
 
 // @desc    Display 1 recipe of favorite recipes by user on ReadOneRecipe && signIn
 // @route   GET /api/recipes/favoriteOneRecipe/:id
-// @access   Private (token)
+// @access  Private (token)
 export const displayOneFavoriteRecipe = async (req, res, next) => {
-    
-   /*
-    // Rechercher 1 savedRecipe par user
-    const savedRecipes = await Recipe.findOne({
-      '_id': { $in: user.savedRecipes }
-    });
-  
-    if (savedRecipes) {
-      return res.json(savedRecipes);
-    } else {
-      res.status(404);
-      throw new Error("No favorite recipes found");
-    }
-  */
-};
+  try {
+    // 1. Récupérer le userId après vérification du token, et peupler ses recettes sauvegardées
+    const user = await User.findById(req.user.id).populate('savedRecipe');
+    console.log('Utilisateur et recettes sauvegardées : ', user);
 
+    // 2. Récupérer l'ID de la recette favorite depuis les paramètres de la requête
+    const recipeId = req.params.id;
+
+    // 3. Vérifier si l'ID de la recette existe dans le tableau des recettes sauvegardées
+    const favoriteRecipe = user.savedRecipe.find(recipe => recipe._id.toString() === recipeId);
+
+    // 4. Si la recette favorite existe, la retourner
+    if (favoriteRecipe) {
+      return res.json(favoriteRecipe);
+    } else {
+      // 5. Si la recette n'existe pas, renvoyer une erreur 404
+      res.status(404).json({ message: "Recette favorite non trouvée" });
+    }
+
+  } catch (error) {
+    // 6. Gestion des erreurs
+    next(error);
+  }
+};
 
 
 
