@@ -29,6 +29,7 @@ import {
   useDeleteUserMutation,
   useUpdateUserMutation,
 } from "../redux/usersApiSlice";
+import './Profile.css'
 
 export default function Profile() {
   const { currentUser, loading } = useSelector((state) => state.user);
@@ -237,7 +238,8 @@ export default function Profile() {
   const { username, email, password, passwordConfirm } = formData;
 
   return (
-    <FormContainer>
+    <div className="MiseEnForme">
+ <FormContainer >
       <h1 className="d-flex justify-content-center text-dark">Profil</h1>
       <Form onSubmit={handleSubmit}>
         {/* Image de profil */}
@@ -404,5 +406,7 @@ export default function Profile() {
         </div>
       </Form>
     </FormContainer>
+    </div>
+   
   );
 }

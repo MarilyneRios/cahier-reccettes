@@ -1,14 +1,14 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaUserCircle, FaUserPlus } from "react-icons/fa";
-import "../App.css";
+import "./Hero.css";
 
 export default function Hero() {
   return (
-    <section className="hero">
+    <section className="MiseEnForme ">
       <Container className="d-flex justify-content-center align-items-center">
         <Card
-          className="text-white p-5 d-flex flex-column align-items-center w-75 hero-card"
+          className="text-white p-5 d-flex flex-column align-items-center w-75 cardBg"
         >
           <h1 className="  mb-4  textWithShadow fst-italic" >
             Partage tes recettes préférées comme au bon vieux temps de nos grand-mères.

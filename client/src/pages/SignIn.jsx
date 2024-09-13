@@ -82,6 +82,7 @@ export default function SignIn() {
   
 
   return (
+    <div className="MiseEnForme">
     <FormContainer>
       <h1 className="d-flex justify-content-center text-dark">Connexion</h1>
 
@@ -126,7 +127,7 @@ export default function SignIn() {
 
         <Button
           type="submit"
-          variant="outline-dark"
+          variant="outline-success"
           className="my-3 w-100"
           disabled={loading}
         >
@@ -139,7 +140,7 @@ export default function SignIn() {
       <Row className="py-3">
         <Col>
           Avez-vous un compte ?{" "}
-          <Link to="/sign-up" className="text-dark">
+          <Link to="/sign-up" className="text-success">
             Inscription
           </Link>
           {error && (
@@ -152,5 +153,7 @@ export default function SignIn() {
         </Col>
       </Row>
     </FormContainer>
+    </div>
+
   );
 }

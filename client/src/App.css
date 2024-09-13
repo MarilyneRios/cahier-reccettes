@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+/* police d'écriture*/
 .textWithShadow {
   font-family: serif, sans-serif;
   font-weight: bold;
@@ -51,14 +52,15 @@ p {
 blockquote {
   text-align: center;
 }
-/*background App*/
 
+
+/*background App*/
 .backgroundHome {
     position: absolute;  
     top: 100;
     left: 0;
     width: 100%;
-    height: 100vh; 
+    min-height: 100vh;  
     background-image: url('./assets/bg5short.jpg');  
     background-size: cover;
     background-position: center 0%;
@@ -73,7 +75,7 @@ blockquote {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.25); 
+
   z-index: 1; /* Assure que ce pseudo-élément reste derrière les autres contenus */
 }
 
@@ -82,94 +84,15 @@ blockquote {
   z-index: 2; /* Met le contenu au-dessus de l'image et du fond semi-transparent */
 }
 
-/*//////////////////////////////////////////////////*/
-
-/*header */
-
-/*navbar*/
-
-.bg-opacity-custom {
-    background-color: rgba(0, 0, 0, 0.1); 
-    backdrop-filter: blur(5px);
-    position: relative;
-    z-index: 1
-}
-
-/*Largeur du menu*/
-.custom-dropdown-menu {
-  min-width: 300px;
- 
-}
-/* Couleur des liens pdt survol */
-.custom-dropdown-menu .dropdown-item:hover {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-/* Couleur des liens actif */
-.custom-dropdown-menu .dropdown-item.active {
-  background-color: #28a745;
-  color: #fff;
-}
-.active-header {
-    background-color: #28a745;
-   
-  }
-
-  /* Accordéon */
-.accordionBody {
-  text-decoration: none;
-  color: black;
-  display: flex;
-  justify-content: center;
-}
-
-.accordionBody:hover {
-  background-color: #d4edda;
-  color: #155724;
-
-}
-
-/* Navbar.Brand*/
-
-.link-navbarBrand {
-  color: white !important;
-  transition: color .3s ease-in-out;
-}
-
-.link-navbarBrand:hover{
-  color:  #28a745  !important;
-}
-
-
-/*//////////////////////////////////////////////////*/
-
-/* Hero */
-
-  .hero {
-    height: 100vh; 
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
-  }
-  
-  .hero-card {
-    background: rgba(0, 0, 0, 0.35); 
-    border-radius: 10px; 
-  }
-
-/*//////////////////////////////////////////////////*/
-
-/* about */
-
-.about {
-  height: 100vh; 
+/* style card hero et about*/
+.MiseEnForme{
+  min-height: 80vh; 
   display: flex;
   align-items: center; 
   justify-content: center; 
 }
 
-.about-card {
-  background: rgba(0, 0, 0, 0.35); 
+.cardBg{
+  background: rgba(0, 0, 0, 0.70); 
   border-radius: 10px; 
 }

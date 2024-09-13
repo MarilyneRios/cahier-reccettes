@@ -1,10 +1,11 @@
 import Container from "react-bootstrap/Container";
 import { Navbar, Nav, Dropdown, Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import Form from 'react-bootstrap/Form';
 import { Link, useLocation } from "react-router-dom";  // Import useLocation
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import "../App.css";
+import './Header.css';
 
 // icons
 import {  FaUserCircle , FaSearch, FaHome, FaInfoCircle } from "react-icons/fa";
@@ -27,20 +28,19 @@ function Header() {
         className="d-flex justify-content-between align-items-center font-weight-light m-0 p-0"
       >
         {/* Toggle button and dropdown on the left */}
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center me-3 ">
           {/* Menu déroulant */}
           <Dropdown>
             <Dropdown.Toggle
               variant="success"
               id="dropdown-basic"
-              className="ms-2"
-             
+              className="ms-2"             
             >
-              <RxHamburgerMenu />
+            <RxHamburgerMenu />
             </Dropdown.Toggle>
 
             {/* Élargir le menu déroulant */}
-            <Dropdown.Menu className="custom-dropdown-menu ">
+            <Dropdown.Menu className="custom-dropdown-menu">
               <Dropdown.Item 
                 as={Link} 
                 to="/" 
@@ -53,26 +53,31 @@ function Header() {
                 className={`mx-2 text-dark`} />Accueil
               </Dropdown.Item>
 
+              <Dropdown.Item>
+                   {/** search bar */} 
+          <Form className="d-flex align-items-center  mt-3 ">
+            <Form.Control
+              type="search"
+              placeholder="Chercher une recette"
+              className="form-control mx-3 "
+              aria-label="Search"
+            />
+            <Button variant="success" className="btn btn-sm ">
+              <FaSearch
+                aria-hidden="true"
+                aria-label="Loupe"
+                size={28}
+              />
+            </Button>
+          </Form>
+              </Dropdown.Item>
+
               <Dropdown.Divider />
 
               {/* Accordéon pour les catégories */}
               <Accordion defaultActiveKey="0" >
 
-                <Accordion.Item eventKey="0"  style={{ backgroundColor: '#d4edda' }}>
-                  <Accordion.Header  >
-                    <FaSearch 
-                    aria-hidden="true"
-                    aria-label="Loupe"
-                    size={18}
-                    className={`mx-2 `}/> Rechercher une recette :
-                  </Accordion.Header>
-                  <Accordion.Body className="text-center">
-                    <input className="mx-auto rounded w-100 text-center"
-                    placeholder="Nom de la recette ou de l'auteur"/>
-                  </Accordion.Body>
-                </Accordion.Item>
-
-                <Accordion.Item eventKey="1">
+                <Accordion.Item eventKey="0">
                   <Accordion.Header  >
                     <FaSearch 
                     aria-hidden="true"
@@ -106,7 +111,7 @@ function Header() {
                 to="/"  >Autres...</Accordion.Body>
                 </Accordion.Item>
              
-                <Accordion.Item eventKey="2" >
+                <Accordion.Item eventKey="1" >
                   <Accordion.Header>
                     <FaSearch 
                     aria-hidden="true"
@@ -176,19 +181,22 @@ function Header() {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+  
         </div>
 
         {/* Centered Brand */}
-        <Navbar.Brand
-          as={Link}
-          to="/"
-          className="mx-auto text-center textWithShadowNavbarBrand fs-1 link-navbarBrand "
-        >
-          Mon cahier de recettes
-        </Navbar.Brand>
+        <div className="d-flex flex-column align-items-center  mx-auto">
+          <Navbar.Brand
+            as={Link}
+            to="/"
+            className=" text-center textWithShadowNavbarBrand fs-1 link-navbarBrand"
+          >
+            Mon cahier de recettes
+          </Navbar.Brand>
+        </div>
 
         {/* Authentication buttons (Connexion/Inscription) */}
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center me-3">
           {currentUser ? (
             <Link
               to="/profile"
@@ -214,7 +222,7 @@ function Header() {
           ) : (
             <>
               <Nav.Link as={Link} to="/sign-in" className="p-0">
-                <Button variant="success" className="me-3 btn btn-success">
+                <Button variant="success" className="me-5 btn btn-success">
                   <FaUserCircle size={26} aria-hidden="true" aria-label="Se connecter" />{" "}
                   
                 </Button>

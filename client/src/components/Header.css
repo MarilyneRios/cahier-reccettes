@@ -1,0 +1,58 @@
+
+/*header */
+
+/*navbar*/
+
+.bg-opacity-custom {
+    background-color: rgba(0, 0, 0, 0.1); 
+    backdrop-filter: blur(5px);
+    position: relative;
+    z-index: 1
+}
+
+/*Largeur du menu*/
+.custom-dropdown-menu {
+  min-width: 300px;
+  min-height: 90vh;
+ 
+}
+/* Couleur des liens pdt survol */
+.custom-dropdown-menu .dropdown-item:hover {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Couleur des liens actif */
+.custom-dropdown-menu .dropdown-item.active {
+  background-color: #28a745;
+  color: #fff;
+}
+.active-header {
+    background-color: #28a745;
+   
+  }
+
+  /* Accordéon */
+.accordionBody {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.accordionBody:hover {
+  background-color: #d4edda;
+  color: #155724;
+
+}
+
+/* Navbar.Brand*/
+
+.link-navbarBrand {
+  color: white !important;
+  transition: color .3s ease-in-out;
+}
+
+.link-navbarBrand:hover{
+  color:  #28a745  !important;
+}

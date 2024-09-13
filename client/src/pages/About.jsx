@@ -1,13 +1,14 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
+import './About.css';
 
 export default function About() {
   return (
-    <div className="about ">
+    <div className="about MiseEnForme ">
       <Container className="">
         <Card 
-        className="text-white p-5 d-flex flex-column align-items-center w-100 about-card "
+        className="text-white p-5 d-flex flex-column align-items-center w-100 cardBg "
         >
 
           <h1 className=" my-4 textWithShadow ">  Bienvenue sur Mon Cahier de Recettes ! </h1>
