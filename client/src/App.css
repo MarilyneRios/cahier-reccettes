@@ -79,6 +79,10 @@ blockquote {
   z-index: 1; /* Assure que ce pseudo-élément reste derrière les autres contenus */
 }
 
+.bgViewRecipesHome{
+  background-color: #264653;
+}
+
 .container-relative {
   position: relative;
   z-index: 2; /* Met le contenu au-dessus de l'image et du fond semi-transparent */

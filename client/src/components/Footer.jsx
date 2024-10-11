@@ -13,21 +13,21 @@ function Footer() {
         <div>
         <Link
           href="mailto:Roads<rios.marilyne@gmail.com"
-          className="link-underline-light link-primary link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
+          className="link-underline-light link-success link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
         >
           Contact
         </Link>
         <Link
           href="https://github.com/MarilyneRios"
           target="_blank"
-          className="link-underline-light link-primary link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
+          className="link-underline-light link-success link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
         >
          GitHub
         </Link>
         <Link
           href="https://www.linkedin.com/in/marilyne-rios-59a13015b"
           target="_blank"
-          className="link-underline-light link-primary link-offset-2 link-underline-opacity-100-hover fs-5"
+          className="link-underline-light link-success link-offset-2 link-underline-opacity-100-hover fs-5"
         >
           Linkedin
         </Link>

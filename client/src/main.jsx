@@ -16,6 +16,7 @@ import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
+import ViewRecipes from './pages/ViewRecipes';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path='/sign-up' element={<SignUp />} />
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
+        <Route path='/viewRecipes' element={<ViewRecipes />} />
       </Route>
     </Route>
   )
