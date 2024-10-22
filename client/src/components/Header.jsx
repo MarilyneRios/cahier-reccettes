@@ -21,11 +21,11 @@ function Header() {
       expand="lg"
       bg="light"
       variant="light"
-      className="bg-transparent"
+      className="bg-transparent w-100 p-0 m-0"
     >
       <Container
         fluid
-        className="d-flex justify-content-between align-items-center font-weight-light m-0 p-0"
+        className="d-flex justify-content-between align-items-center font-weight-light  bg-overlay w-100 p-0 m-0"
       >
         {/* Toggle button and dropdown on the left */}
         <div className="d-flex align-items-center me-3 ">

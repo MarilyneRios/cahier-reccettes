@@ -1,12 +1,13 @@
 /* Hero */
 
+/*
 .hero {
-    height: 80vh; 
+    height: 50vh; 
     display: flex;
     align-items: center; 
     justify-content: center; 
   }
-  
+  */
   .hero-card {
     background: rgba(0, 0, 0, 0.70); 
     border-radius: 10px; 

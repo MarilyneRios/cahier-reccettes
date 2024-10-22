@@ -1,2 +1,35 @@
 /*CCS viewRecipes*/
 
+/* centrer les cards */
+#viewRecipes {
+    display: flex;
+    justify-content: center;
+    align-items: center;     
+    min-height: 100vh;      
+}
+
+/*grille 2 lignes et 3 colonnes*/
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-gap: 20px; 
+   
+  }
+
+.Bcard {
+    width: 100%; 
+    max-width: 300px;
+    height: 300px; 
+    margin: 10px; 
+    padding: 0;
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 40px;
+    background: linear-gradient(
+        45deg,
+        rgb(83, 3, 3) 0%,
+        rgb(228, 5, 5) 25%,
+        rgb(219, 11, 11) 67%
+    );
+    margin:2rem;
+}

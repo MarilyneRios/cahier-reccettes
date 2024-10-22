@@ -1,9 +1,10 @@
+//footer.jsx
 import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="container-fluid panel-footer p-3 text-center mt-0 fs-6 " 
-    style={{ backgroundColor: '#f8f9fa'}}>
+    <div className="container-fluid panel-footer p-3 text-center text-success fs-6 bg-dark  " 
+    >
    
       <div className='d-flex flex-column align-items-center justify-content-center '>
         
@@ -13,21 +14,21 @@ function Footer() {
         <div>
         <Link
           href="mailto:Roads<rios.marilyne@gmail.com"
-          className="link-underline-light link-success link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
+          className="link-underline-dark link-success link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
         >
           Contact
         </Link>
         <Link
           href="https://github.com/MarilyneRios"
           target="_blank"
-          className="link-underline-light link-success link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
+          className="link-underline-dark link-success link-offset-2 link-underline-opacity-100-hover fs-5 mx-2"
         >
          GitHub
         </Link>
         <Link
           href="https://www.linkedin.com/in/marilyne-rios-59a13015b"
           target="_blank"
-          className="link-underline-light link-success link-offset-2 link-underline-opacity-100-hover fs-5"
+          className="link-underline-dark link-success link-offset-2 link-underline-opacity-100-hover fs-5"
         >
           Linkedin
         </Link>

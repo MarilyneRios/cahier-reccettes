@@ -5,7 +5,7 @@ import './About.css';
 
 export default function About() {
   return (
-    <div className="about MiseEnForme ">
+    <div className="about MiseEnFormeAbout ">
       <Container className="">
         <Card 
         className="text-white p-5 d-flex flex-column align-items-center w-100 cardBg "
