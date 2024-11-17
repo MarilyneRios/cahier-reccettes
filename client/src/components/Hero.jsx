@@ -8,7 +8,7 @@ export default function Hero() {
     <section className="MiseEnFormeHome ">
       <Container className="d-flex justify-content-center align-items-center ">
         <Card
-          className="text-white p-5 mt-5 d-flex flex-column align-items-center w-75 cardBg"
+          className="text-white p-5  d-flex flex-column align-items-center w-75 cardBg"
         >
           <h1 className="  mb-4  textWithShadow fst-italic" >
             Partage tes recettes préférées comme au bon vieux temps de nos grand-mères.

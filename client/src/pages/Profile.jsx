@@ -243,7 +243,7 @@ export default function Profile() {
       <h1 className="d-flex justify-content-center text-dark">Profil</h1>
       <Form onSubmit={handleSubmit}>
         {/* Image de profil */}
-        <Form.Group className="my-2 d-flex justify-content-center">
+        <Form.Group className="mt-2 d-flex justify-content-center">
           <div
             className="position-relative d-flex flex-column align-items-center"
             style={{ width: "100px", height: "130px" }}

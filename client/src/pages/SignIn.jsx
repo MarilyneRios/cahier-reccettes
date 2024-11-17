@@ -82,8 +82,8 @@ export default function SignIn() {
   
 
   return (
-    <div className="MiseEnForme">
-    <FormContainer>
+    <div className="SignInAndUpForm">
+    <FormContainer >
       <h1 className="d-flex justify-content-center text-dark">Connexion</h1>
 
       <Form onSubmit={handleSubmit}>
@@ -134,6 +134,13 @@ export default function SignIn() {
           {loading ? "Chargement..." : "Se connecter"}
         </Button>
 
+      
+        <div className="separator my-4">
+           <hr className="separator-line" />
+           <span className="separator-text">ou</span>
+           <hr className="separator-line" />
+        </div>
+ 
         <OAuth disabled={loading} label={"Continue avec Google"}/>
       </Form>
 
