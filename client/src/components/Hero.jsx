@@ -11,7 +11,7 @@ export default function Hero() {
           className="text-white p-5  d-flex flex-column align-items-center w-75 cardBg"
         >
           <h1 className="  mb-4  textWithShadow fst-italic" >
-            Partage tes recettes préférées comme au bon vieux temps de nos grand-mères.
+            Partage tes recettes préférées comme au bon vieux temps de nos grand-mères en toute simplicité et bienveillance.
           </h1>
 
           <br></br>

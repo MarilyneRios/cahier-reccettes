@@ -90,8 +90,8 @@ export default function SignUp() {
   };
 
   return (
-    <div className="SignInAndUpForm">
-    <FormContainer>
+    <div className="SignInAndUpForm ">
+    <FormContainer className="">
       <h1 className="d-flex justify-content-center text-dark">
         Inscription
       </h1>

@@ -18,7 +18,14 @@
 .custom-dropdown-menu .dropdown-item:hover {
   background-color: #d4edda;
   color: #155724;
+
 }
+
+/*Ajout de transition pour les liens*/
+.custom-dropdown-menu .dropdown-item {
+  transition: all 0.3s ease-in-out;
+}
+
 
 /* Couleur des liens actif */
 .custom-dropdown-menu .dropdown-item.active {
@@ -28,9 +35,9 @@
 .active-header {
     background-color: #28a745;
    
-  }
+}
 
-  /* Accordéon */
+/* Accordéon */
 .accordionBody {
   text-decoration: none;
   color: black;
@@ -41,16 +48,26 @@
 .accordionBody:hover {
   background-color: #d4edda;
   color: #155724;
-
 }
 
 /* Navbar.Brand*/
-
 .link-navbarBrand {
   color: white !important;
   transition: color .3s ease-in-out;
 }
 
 .link-navbarBrand:hover{
-  color:  #28a745  !important;
+  color:  #1c7430   !important;
 }
+
+/* info bulle*/
+.tooltip-text {
+  display: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+
+
+
