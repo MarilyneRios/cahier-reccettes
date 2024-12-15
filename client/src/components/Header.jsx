@@ -241,8 +241,12 @@ function Header() {
       className="mx-3"
     />
     </span>
-  
-    <span className=" fs-6 fs-sm-5 fs-md-4 fs-lg-3">Mon cahier de recettes</span>
+{/* Affiché uniquement sur les smartphones */}
+<span className="fs-6 d-inline d-sm-none">Mon cahier de recettes</span>
+
+{/* Affiché sur les écrans plus grands */}
+<span className="fs-3 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline">Mon cahier de recettes</span>
+
   </Navbar.Brand>
 </div>
 
