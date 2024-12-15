@@ -5,6 +5,8 @@ import Form from "react-bootstrap/Form";
 import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+
 import "./Header.css";
 
 // icons
@@ -20,6 +22,19 @@ import SearchBar from "../components/searchBar";
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const location = useLocation(); // Use useLocation to get the current path
+  const navigate = useNavigate();
+
+  const handleHomeClick = () => {
+    // Naviguer vers la page d'accueil sans recharger la page
+    navigate('/');
+    // Faire défiler jusqu'à la section ViewRecipesHome après un délai
+    setTimeout(() => {
+      const section = document.getElementById('ViewRecipesHome');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100); // Le délai peut être ajusté si nécessaire
+  };
 
   return (
     <Navbar
@@ -156,7 +171,7 @@ function Header() {
               <Dropdown.Divider />
               <Dropdown.Item
                 as={Link}
-                to="/viewRecipes"
+                onClick={handleHomeClick}
                 className={`my-auto text-dark ${
                   location.pathname === "/viewRecipes" && "active"
                 }`}
@@ -273,7 +288,7 @@ function Header() {
           </Navbar.Brand>
           <Navbar.Brand
             as={Link}
-            to="/favorite"
+            onClick={handleHomeClick}
             className=" text-center textWithShadowNavbarBrand fs-4 link-navbarBrand"
           >
             <PiBooksDuotone
