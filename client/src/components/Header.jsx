@@ -242,7 +242,7 @@ function Header() {
     />
     </span>
   
-    <span className="fs-3 fs-md-4 fs-lg-6">Mon cahier de recettes</span>
+    <span className=" fs-6 fs-sm-5 fs-md-4 fs-lg-3">Mon cahier de recettes</span>
   </Navbar.Brand>
 </div>
 
