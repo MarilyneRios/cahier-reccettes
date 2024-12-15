@@ -11,6 +11,7 @@ body {
   color: #fff;
   width: 100%;
 }
+
 /* police d'écriture*/
 .textWithShadow {
   font-weight: bold;
@@ -64,7 +65,7 @@ blockquote {
 }
 
 
-/* style card about*/
+/* style card hero et about*/
 .cardBg{
   background: rgba(0, 0, 0, 0.70); 
   border-radius: 10px; 

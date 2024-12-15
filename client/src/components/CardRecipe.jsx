@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Card, Button } from "react-bootstrap";
-import bookImage from "../assets/homeBg2.png";
+import bookImage from "../assets/homeBg2.png"; 
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+
+import "./CardRecipe.css";
 
 function CardRecipe() {
   const [liked, setLiked] = useState(false);
@@ -11,29 +13,66 @@ function CardRecipe() {
   };
 
   return (
-    <div className="d-flex justify-content-center">
-      <Card className="text-center card-recipe">
-        <Button
-          variant="transparent"
-          className="like-btn"
-          style={{ position: "absolute", top: 10, right: 10 }}
-          onClick={handleLike}
-        >
-          {liked ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
-        </Button>
+    <div className="">
+        <Card style={{ width: '16rem',  }}>
+      <Card.Img variant="top" src={bookImage}  style={{  height: '14rem' }}/>
+      <Button
+      variant="transparent"
+      className="like-btn"
+      style={{
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        borderRadius: "50%",
+        padding: "5px",
+        zIndex: 1
+      }}
+      onClick={handleLike}
+    >
+      {liked ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
+    </Button>
+      <Card.Body>
+       
+        <Card.Text className="fs-6">
+        ⏱️ 20 min
+        </Card.Text>
+        <Card.Title>Drapeau | Card Title</Card.Title>
+      </Card.Body>
+    </Card>
 
-        <Card.Img
-          variant="top"
-          src={bookImage}
-          className=" m-0 p-3 card-img"
-        
-        />
-        <Card.Body>
-          <Card.Title className="text-center fs-4 mx-auto my-2">Titre recette</Card.Title>
-          <Card.Text className="text-center fs-5 mx-5 my-2">Description de la recette</Card.Text>
-          <Button variant="outline-success">Voir la recette</Button>
-        </Card.Body>
-      </Card>
+    {/*<Card   className="card  "  >
+  
+  <div>
+    <Card.Img
+      variant="top"
+      src={bookImage}
+      className="card-img-top recipe-image rounded"
+      
+    />
+    <Button
+      variant="transparent"
+      className="like-btn"
+      style={{
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        borderRadius: "50%",
+        padding: "5px",
+        zIndex: 1
+      }}
+      onClick={handleLike}
+    >
+      {liked ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
+    </Button>
+  </div>
+  <Card.Body className="p-3">
+    <h6 className="card-subtitle mb-2 text-muted">⏱️ 20 min</h6>
+    <h4 className="card-title">Card title</h4>
+  </Card.Body>
+</Card> */}
+
     </div>
   );
 }

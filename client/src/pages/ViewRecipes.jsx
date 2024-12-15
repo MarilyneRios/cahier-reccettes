@@ -1,27 +1,75 @@
-//viewRecipes.jsx components
-import "./ViewRecipes.css";
-import "../components/CardRecipe";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import CardRecipe from "../components/CardRecipe";
+
+// css
+import "./ViewRecipes.css";
 
 const viewRecipes = () => {
   return (
-    <div
-      id="viewRecipes"
-      className="d-flex justify-content-center align-items-center text-white text-center fs-2"
-    >
-      <div className="card-container ">
-        <div className="Bcard">
-        
-          <CardRecipe/>
-        </div>
-        <div className="Bcard">div 2 viewRecipes</div>
-        <div className="Bcard">div 3 viewRecipes</div>
-        <div className="Bcard">div 4 viewRecipes</div>
-        <div className="Bcard">div 5 viewRecipes</div>
-        <div className="Bcard">div 6 viewRecipes</div>
-      </div>
-    </div>
+
+    <Container className="d-flex flex-column align-items-center py-5">
+    {/* Titre */}
+    <h2 className="text-center mb-4 fst-italic">Nos Recettes</h2>
+
+    {/* Cartes en grille */}
+    <Row className="justify-content-center g-4 mb-3">
+      <Col md={4} className="d-flex justify-content-center">
+        <CardRecipe />
+      </Col>
+      <Col md={4} className="d-flex justify-content-center">
+        <CardRecipe />
+      </Col>
+      <Col md={4} className="d-flex justify-content-center">
+        <CardRecipe />
+      </Col>
+    </Row>
+    <Row className="justify-content-center g-4">
+      <Col md={4} className="d-flex justify-content-center">
+        <CardRecipe />
+      </Col>
+      <Col md={4} className="d-flex justify-content-center">
+        <CardRecipe />
+      </Col>
+      <Col md={4} className="d-flex justify-content-center">
+        <CardRecipe />
+      </Col>
+    </Row>
+  </Container>
+
   );
 };
 
 export default viewRecipes;
+
+    /* <div
+      id="viewRecipes"
+      className="d-flex flex-column justify-content-center align-items-center text-white text-center fs-2 my-3"
+    >
+    
+      <h2 className="text-center mb-3 fst-italic">Nos Recettes</h2>
+
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 ">
+  
+        <div className="col">
+          <CardRecipe />
+        </div>
+        <div className="col">
+          <CardRecipe />
+        </div>
+        <div className="col">   
+        <CardRecipe />
+        </div>
+        <div className="col">
+          <CardRecipe />
+        </div>
+        <div className="col">
+          <CardRecipe />
+        </div>
+        <div className="col">
+          <CardRecipe />
+        </div>
+      </div>
+    </div> */
