@@ -10,9 +10,9 @@ import "./ViewRecipes.css";
 const viewRecipes = () => {
   return (
 
-    <Container className="d-flex flex-column align-items-center py-5">
+    <Container className="d-flex flex-column align-items-center py-3">
     {/* Titre */}
-    <h2 className="text-center mb-4 fst-italic">Nos Recettes</h2>
+    <h2 className="text-center my-3 fst-italic">Nos Recettes</h2>
 
     {/* Cartes en grille */}
     <Row className="justify-content-center g-4 mb-3">

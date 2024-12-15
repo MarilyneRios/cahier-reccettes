@@ -14,7 +14,7 @@ function CardRecipe() {
 
   return (
     <div className="">
-        <Card style={{ width: '16rem',  }}>
+        <Card style={{ width: '18rem',  }}>
       <Card.Img variant="top" src={bookImage}  style={{  height: '14rem' }}/>
       <Button
       variant="transparent"
@@ -34,13 +34,13 @@ function CardRecipe() {
     </Button>
       <Card.Body>
        
-        <Card.Text className="fs-6">
+        <Card.Text className="fs-6 my-0">
         ⏱️ 20 min
         </Card.Text>
-        <Card.Title>Drapeau | Card Title</Card.Title>
+        <Card.Title className="fs-4 my-1" >Czech | Gulash </Card.Title>
       </Card.Body>
     </Card>
-
+  
     {/*<Card   className="card  "  >
   
   <div>
