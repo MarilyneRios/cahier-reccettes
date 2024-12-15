@@ -16,7 +16,7 @@ const viewRecipes = () => {
 
     {/* Cartes en grille */}
     <Row className="justify-content-center g-4 mb-3">
-      <Col md={4} className="d-flex justify-content-center">
+      <Col md={4} className="d-flex justify-content-center ">
         <CardRecipe />
       </Col>
       <Col md={4} className="d-flex justify-content-center">

@@ -13,7 +13,13 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); 
     gap: 20px; 
-    justify-items: center; /* Centrage horizontal des cartes */
+    justify-items: center; 
     width: 100%;
-    max-width: 1200px; /* Limite de largeur globale */
+    max-width: 1200px; 
 }
+
+/* effet sur les cards */
+.card:hover {
+    transform: scale(1.1); 
+    transition: transform 0.3s ease-in-out; 
+  }
