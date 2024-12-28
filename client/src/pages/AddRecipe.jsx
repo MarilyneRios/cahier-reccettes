@@ -1,181 +1,271 @@
-
-
-import { Form, Button } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
+import { useState } from "react";
+import { Form, Button, Card, Row, Col, Alert } from "react-bootstrap";
 import { RxCross1 } from "react-icons/rx";
-//import { toast } from "react-toastify";
+import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
-
+import "./addRecipe.styles.css";
 
 export default function AddRecipe() {
-  return (
-    <FormContainer>
-    <h1 className="text-center">Créer une recette</h1>
-    <Form >
-      <Form.Group className="my-2" controlId="name">
-        <Form.Label>Nom de la recette :</Form.Label>
-        <Form.Control
-          className="form-control input-lg"
-          type="text"
-          name="name"
-         
-          placeholder="Ecrire le nom de la recette"
-        ></Form.Control>
-      </Form.Group>
+  //les états
+  const [ingredients, setIngredients] = useState([
+    { name: "", quantity: "", unit: "" },
+  ]);
+  const [error, setError] = useState("");
+  const [previewImage, setPreviewImage] = useState(null);
 
-      {/*pays */}
-      <Form.Group className='my-2' controlId='country'>
-      <Form.Label>Pays :</Form.Label>
-      <Form.Control
-          className="form-control input-lg"
-          type="text"
-          name="country"
-          
-          placeholder="Ecrire la nationalité de la recette"
-      ></Form.Control>
-    </Form.Group>
+  // Gestion des ingrédients
+  const handleAddIngredient = () => {
+    setIngredients([...ingredients, { name: "", quantity: "", unit: "" }]);
+  };
 
-      <Form.Group className="my-2" controlId="category">
-        <Form.Label>Catégorie : </Form.Label>
-        <Form.Control
-          as="select"
-          className="form-control input-lg"
-          aria-label="Default select example"
-          name="category"
-         
-          
-        >
-          <option value="">Selectionner une catégorie</option>
-          <option value="allCategories">Toutes</option>
-          <option value="Aperitif">Apéritif</option>
-          <option value="starter">Entrée</option>
-          <option value="main">Plat</option>
-          <option value="Dessert">Dessert</option>
-          <option value="Boisson">Boisson</option>
-        </Form.Control>
-      </Form.Group>
+  const handleRemoveIngredient = (index) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
 
-      {/* select regime */}
-      <Form.Group className="my-2" controlId="regime">
-        <Form.Label>Régime : </Form.Label>
-        <Form.Control
-          as="select"
-          className="form-control input-lg"
-          aria-label="Default select example"
-          name="regime"
-         
-        >
-          <option value="">Selectionner une régime</option>
-          <option value="traditionnal">traditionnelle</option>
-          <option value="vegetarian">végétarien</option>
-          <option value="vegan">végan</option>
-          <option value="gluten">sans gluten</option>
-          <option value="others">autres</option>
-        </Form.Control>
-      </Form.Group>
+  const handleIngredientChange = (index, field, value) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients[index][field] = value;
+    setIngredients(updatedIngredients);
+  };
 
-      <Form.Group className="my-2" controlId="ingredients">
-        <Form.Label>Les ingrédients :</Form.Label>
-        {/* Affichage des champs d'ingrédients avec la possibilité de supprimer */}
-        
-            <div className="d-flex mb-2">
-              <input
-                className="form-control input-lg"
-                type="text"
-            
-                
-                placeholder="Ecrire un ingrédient"
-              />
-              <Button
-                className="btn-danger mx-2"
-              
-                type="button"
-              >
-                <RxCross1 />
-              </Button>
-            </div>
-          
-        {/* Bouton pour ajouter un ingrédient */}
-        <Button
-          className="btn-primary w-100 mx-2"
-        
-          type="button"
-        >
-          Ajouter un ingrédient
-        </Button>
-      </Form.Group>
+  // Gestion de la prévisualisation de l'image
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
-      <Form.Group className="my-2" controlId="instructions">
-        <Form.Label>La préparation :</Form.Label>
-        <textarea
-          className="form-control input-lg"
-          type="text"
-          name="instructions"
-       
-          placeholder="Ecrire les diverses étapes de la recette"
-        ></textarea>
-      </Form.Group>
+  // Validation et soumission du formulaire
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-      <Form.Group className="my-2" controlId="makingTime">
-        <Form.Label>Le temps de préparation (min) :</Form.Label>
-        <Form.Control
-          className="form-control input-lg"
-          type="number"
-          name="makingTime"
-      
-          placeholder="0"
-          min="0"
-        ></Form.Control>
-      </Form.Group>
+    const isInvalidIngredient = ingredients.some(
+      (ingredient) =>
+        !ingredient.name || !ingredient.quantity || !ingredient.unit
+    );
 
-      <Form.Group className="my-2" controlId="cookingTime">
-        <Form.Label>Le temps de cuisson (min) :</Form.Label>
-        <Form.Control
-          className="form-control input-lg"
-          type="number"
-          name="cookingTime"
-     
-          placeholder="0"
-          min="0"
-        ></Form.Control>
-      </Form.Group>
+    if (isInvalidIngredient) {
+      setError("Veuillez remplir tous les champs pour chaque ingrédient.");
+      return;
+    }
 
-      <Form.Group className="my-2" controlId="comments">
-        <Form.Label>Les bienfaits de la recette :</Form.Label>
-        <Form.Control
-          className="form-control input-lg"
-          type="text"
-          name="comments"
-     
-          placeholder="Ecrire les vertues de la recette"
-        ></Form.Control>
-      </Form.Group>
-
-      <Form.Group controlId="imageUrl">
-        <Form.Label>Image de la recette :</Form.Label>
-        <Form.Control
-          type="file"
-          name="imageUrl"
-          accept="image/*"
-    
-        />
-    
-        <Form.Label>ou par lien url :</Form.Label>
-        <Form.Control
-          className="form-control input-lg"
-          type="text"
-          name="imageUrl"
+    setError("");
+    setIngredients([{ name: "", quantity: "", unit: "" }]);
+    alert("Recette ajoutée avec succès !");
  
-          placeholder="Importer le lien url de votre image"
-        ></Form.Control>
-      </Form.Group>
+  };
 
-      <Button type="submit" variant="primary" className="mt-3 w-100">
-        Enregistrer la recette
-      </Button>
+  return (
+    <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
+      <FormContainer size="12">
+        <h1 className="text-center mb-4">Créer une recette</h1>
+        {error && <Alert variant="danger">{error}</Alert>}
 
-      { <Loader />}
-    </Form>
-  </FormContainer>
-  )
+        <Row>
+          {/* Colonne gauche */}
+          <Col xs={12} md={6} className="mb-4">
+            <Card className="mb-4">
+              <Card.Header className="cardHeader-addRecipe">
+                Informations générales
+              </Card.Header>
+              <Card.Body>
+                <Row>
+                  <Col xs={12} sm={8} className="mb-3">
+                    <Form.Group controlId="name">
+                      <Form.Label>
+                        Nom de la recette <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Ecrire le nom de la recette"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col xs={12} sm={4} className="mb-3">
+                    <Form.Group controlId="country">
+                      <Form.Label>
+                        Pays <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nationalité de la recette"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={6} className="mb-3">
+                    <Form.Group controlId="category">
+                      <Form.Label>Catégorie :</Form.Label>
+                      <Form.Control as="select" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="aperitif">Apéritif</option>
+                        <option value="starter">Entrée</option>
+                        <option value="main">Plat</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="boisson">Boisson</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </Col>
+                  <Col xs={12} sm={6} className="mb-3">
+                    <Form.Group controlId="regime">
+                      <Form.Label>Régime :</Form.Label>
+                      <Form.Control as="select">
+                        <option value="">Sélectionner un régime</option>
+                        <option value="traditionnal">Traditionnelle</option>
+                        <option value="vegetarian">Végétarien</option>
+                        <option value="vegan">Végan</option>
+                        <option value="gluten-free">Sans gluten</option>
+                        <option value="other">Autres</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={6}>
+                    <Form.Group controlId="makingTime" className="mb-3">
+                      <Form.Label>Temps de préparation (min) :</Form.Label>
+                      <Form.Control type="number" min="0" placeholder="0" />
+                    </Form.Group>
+                  </Col>
+                  <Col xs={6}>
+                    <Form.Group controlId="cookingTime" className="mb-3">
+                      <Form.Label>Temps de cuisson (min) :</Form.Label>
+                      <Form.Control type="number" min="0" placeholder="0" />
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+
+              {/* Section Image */}
+              <Card className="mb-4">
+              <Card.Header className="cardHeader-addRecipe">Image</Card.Header>
+              <Card.Body>
+                <Form.Group controlId="imageUrl">
+                  <Form.Label>Image de la recette :</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="imageUrl"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </Form.Group>
+
+                {/* Prévisualisation */}
+                {previewImage && (
+                  <div className="text-center mt-3">
+                    <img
+                      src={previewImage}
+                      alt="Prévisualisation"
+                      className="img-fluid rounded"
+                      style={{ maxWidth: "100%", maxHeight: "300px" }}
+                    />
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Colonne droite */}
+          <Col xs={12} md={6}>
+            <Card className="mb-4">
+              <Card.Header className="cardHeader-addRecipe">
+                Ingrédients
+              </Card.Header>
+              <Card.Body>
+                {ingredients.map((ingredient, index) => (
+                  <Row key={index} className="align-items-center mb-3">
+                    <Col xs={12} sm={5} className="mb-2 mb-sm-0 p-1">
+                      <Form.Control
+                        type="text"
+                        placeholder="Nom de l'ingrédient"
+                        value={ingredient.name}
+                        onChange={(e) =>
+                          handleIngredientChange(index, "name", e.target.value)
+                        }
+                        required
+                      />
+                    </Col>
+                    <Col xs={6} sm={3} className="mb-2 mb-sm-0 p-1">
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="Quantité"
+                        value={ingredient.quantity}
+                        onChange={(e) =>
+                          handleIngredientChange(
+                            index,
+                            "quantity",
+                            e.target.value
+                          )
+                        }
+                        required
+                      />
+                    </Col>
+                    <Col xs={6} sm={3} className="mb-2 mb-sm-0 p-1">
+                      <Form.Control
+                        as="select"
+                        value={ingredient.unit}
+                        onChange={(e) =>
+                          handleIngredientChange(index, "unit", e.target.value)
+                        }
+                        required
+                      >
+                        <option value="">Unité</option>
+                        <option value="g">g</option>
+                        <option value="ml">ml</option>
+                        <option value="pcs">tasse</option>
+                        <option value="tbsp">cuillère à soupe</option>
+                        <option value="tsp">cuillère à café</option>
+                      </Form.Control>
+                    </Col>
+                    <Col xs={12} sm={1} className="p-1">
+                      <Button
+                        variant="danger"
+                        onClick={() => handleRemoveIngredient(index)}
+                      >
+                        <RxCross1 />
+                      </Button>
+                    </Col>
+                  </Row>
+                ))}
+                <Button
+                  variant="outline-success"
+                  className="mt-2"
+                  onClick={handleAddIngredient}
+                >
+                  Ajouter un ingrédient
+                </Button>
+              </Card.Body>
+            </Card>
+
+            <Card className="mb-4">
+              <Card.Header className="cardHeader-addRecipe">
+                Préparation
+              </Card.Header>
+              <Card.Body>
+                <Form.Group controlId="instructions">
+                  <Form.Label>Les étapes :</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={20}
+                    placeholder="Décrivez les étapes..."
+                  />
+                </Form.Group>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        <Button type="submit" variant="success" className="w-100 mt-3">
+          Enregistrer la recette
+        </Button>
+        <Loader />
+      </FormContainer>
+    </section>
+  );
 }

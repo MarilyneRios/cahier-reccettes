@@ -1,0 +1,10 @@
+.cardHeader-addRecipe {
+    background-color: rgba(25, 135, 84, 1);
+    color: #fff
+}
+
+
+.bg-Recipe {
+   /* background: linear-gradient(45deg, rgb(5, 10, 27) 0%, rgba(10, 17, 37, 0.8) 70%, #000414 100%);*/
+    background: linear-gradient(45deg, rgb(5, 10, 27) 0%, rgba(10, 17, 37,0.4) 70%, #000414 100%);
+}
