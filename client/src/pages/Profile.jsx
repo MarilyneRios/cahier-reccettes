@@ -238,7 +238,7 @@ export default function Profile() {
   const { username, email, password, passwordConfirm } = formData;
 
   return (
-    <div className="MiseEnForme">
+    <div className="SignInAndUpForm">
  <FormContainer >
       <h1 className="d-flex justify-content-center text-dark">Profil</h1>
       <Form onSubmit={handleSubmit}>

@@ -18,8 +18,8 @@
     max-width: 1200px; 
 }
 
-/* effet sur les cards */
-.card:hover {
+/* effet sur les cards du #viewRecipes  */
+#viewRecipes  .card:hover {
     transform: scale(1.1); 
     transition: transform 0.3s ease-in-out; 
   }

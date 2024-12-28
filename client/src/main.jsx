@@ -17,6 +17,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import ViewRecipes from './pages/ViewRecipes';
+import AddRecipe from './pages/AddRecipe';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
         <Route path='/viewRecipes' element={<ViewRecipes />} />
+        <Route path='/addRecipe' element={<AddRecipe />} />
       </Route>
     </Route>
   )

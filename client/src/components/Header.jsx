@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import "./Header.css";
 
@@ -18,7 +18,6 @@ import { PiBooksDuotone } from "react-icons/pi";
 //element
 import SearchBar from "../components/searchBar";
 
-
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const location = useLocation(); // Use useLocation to get the current path
@@ -26,12 +25,12 @@ function Header() {
 
   const handleHomeClick = () => {
     // Naviguer vers la page d'accueil sans recharger la page
-    navigate('/');
+    navigate("/");
     // Faire défiler jusqu'à la section ViewRecipesHome après un délai
     setTimeout(() => {
-      const section = document.getElementById('ViewRecipesHome');
+      const section = document.getElementById("ViewRecipesHome");
       if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
+        section.scrollIntoView({ behavior: "smooth" });
       }
     }, 100); // Le délai peut être ajusté si nécessaire
   };
@@ -203,7 +202,7 @@ function Header() {
 
               <Dropdown.Item
                 as={Link}
-                to="/"
+                to="/addRecipe"
                 className={`my-auto text-dark ${
                   location.pathname === "/ajouter-recette" && "active"
                 }`}
@@ -240,31 +239,32 @@ function Header() {
 
         {/* Centered Brand */}
 
+        {/* Centre : Liens */}
+        <div className="d-lg-flex flex-row align-items-center mx-auto">
+          <Navbar.Brand
+            as={Link}
+            to="/favorite"
+            className="text-center textWithShadowNavbarBrand link-navbarBrand"
+          >
+            <span className="d-none d-sm-inline">
+              <FaBookOpenReader
+                aria-hidden="true"
+                aria-label="Mon cahier de recette"
+                size={25}
+                className="mx-3"
+              />
+            </span>
+            {/* Affiché uniquement sur les smartphones */}
+            <span className="fs-6 d-inline d-sm-none">
+              Mon cahier de recettes
+            </span>
 
-       {/* Centre : Liens */}
-<div className="d-lg-flex flex-row align-items-center mx-auto">
-  <Navbar.Brand
-    as={Link}
-    to="/favorite"
-    className="text-center textWithShadowNavbarBrand link-navbarBrand"
-  >
-    <span className="d-none d-sm-inline">
-    <FaBookOpenReader
-      aria-hidden="true"
-      aria-label="Mon cahier de recette"
-      size={25}
-      className="mx-3"
-    />
-    </span>
-{/* Affiché uniquement sur les smartphones */}
-<span className="fs-6 d-inline d-sm-none">Mon cahier de recettes</span>
-
-{/* Affiché sur les écrans plus grands */}
-<span className="fs-3 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline">Mon cahier de recettes</span>
-
-  </Navbar.Brand>
-</div>
-
+            {/* Affiché sur les écrans plus grands */}
+            <span className="fs-3 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline">
+              Mon cahier de recettes
+            </span>
+          </Navbar.Brand>
+        </div>
 
         {/* Centre : Barre de recherche*/}
         <div className="d-none d-lg-flex flex-column align-items-center mx-auto">
@@ -299,6 +299,20 @@ function Header() {
               className="mx-3"
             />
             <span className="tooltip-text">Les recettes</span>
+          </Navbar.Brand>
+          <Navbar.Brand
+            as={Link}
+            to="/addRecipe"
+            className=" text-center textWithShadowNavbarBrand fs-1 link-navbarBrand"
+          >
+            <FaCirclePlus
+              aria-hidden="true"
+              aria-label="ajouter une recette"
+              title="Ajouter une recette"
+              size={25}
+              className=""
+            />
+            <span className="tooltip-text">Ajouter une recette</span>
           </Navbar.Brand>
           <Navbar.Brand
             as={Link}
@@ -347,7 +361,8 @@ function Header() {
                     size={26}
                     aria-hidden="true"
                     aria-label="Se connecter"
-                  /> <span className="d-none d-sm-inline"> Connexion</span>
+                  />{" "}
+                  <span className="d-none d-sm-inline"> Connexion</span>
                 </Button>
               </Nav.Link>
             </>
