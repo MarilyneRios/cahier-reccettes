@@ -1,5 +1,6 @@
 //Home.jsx
 import ViewRecipes from "./ViewRecipes";
+import Header from "../components/Header";
 import Hero from "../components/Hero";
 
 import "../App.css";
@@ -14,8 +15,9 @@ export default function Home() {
 
       <section
         id="ViewRecipesHome"
-        className="flex flex-col justify-center items-center py-8"
+        className="flex flex-col justify-center items-center py-8 m-4"
       >
+        <Header className="w-100"/>
         <ViewRecipes />
       </section>
     </div>

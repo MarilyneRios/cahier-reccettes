@@ -58,14 +58,14 @@ export default function AddRecipe() {
 
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
-      <FormContainer size="12">
+      <FormContainer size="12" className="" >
         <h1 className="text-center mb-4">Créer une recette</h1>
         {error && <Alert variant="danger">{error}</Alert>}
 
         <Row>
           {/* Colonne gauche */}
           <Col xs={12} md={6} className="mb-4">
-            <Card className="mb-4">
+            <Card className="mb-4 custom-class">
               <Card.Header className="cardHeader-addRecipe">
                 Informations générales
               </Card.Header>
@@ -142,7 +142,7 @@ export default function AddRecipe() {
             </Card>
 
               {/* Section Image */}
-              <Card className="mb-4">
+              <Card className="mb-4 custom-class">
               <Card.Header className="cardHeader-addRecipe">Image</Card.Header>
               <Card.Body>
                 <Form.Group controlId="imageUrl">
@@ -172,7 +172,7 @@ export default function AddRecipe() {
 
           {/* Colonne droite */}
           <Col xs={12} md={6}>
-            <Card className="mb-4">
+            <Card className="mb-4 custom-class">
               <Card.Header className="cardHeader-addRecipe">
                 Ingrédients
               </Card.Header>
@@ -183,7 +183,7 @@ export default function AddRecipe() {
                       <Form.Control
                         type="text"
                         placeholder="Nom de l'ingrédient"
-                        value={ingredient.name}
+                        value={ingredient.name || ""}
                         onChange={(e) =>
                           handleIngredientChange(index, "name", e.target.value)
                         }
@@ -194,7 +194,6 @@ export default function AddRecipe() {
                       <Form.Control
                         type="number"
                         min="0"
-                        placeholder="Quantité"
                         value={ingredient.quantity}
                         onChange={(e) =>
                           handleIngredientChange(
@@ -243,7 +242,7 @@ export default function AddRecipe() {
               </Card.Body>
             </Card>
 
-            <Card className="mb-4">
+            <Card className="mb-4 custom-class">
               <Card.Header className="cardHeader-addRecipe">
                 Préparation
               </Card.Header>

@@ -8,7 +8,10 @@
 
 body {
   font-family: serif, sans-serif;
-  background: linear-gradient(45deg, rgb(5, 10, 27) 0%, rgba(10, 17, 37, 0.8) 70%, #000414 100%);
+  /*background: linear-gradient(45deg, rgb(5, 10, 27) 0%, rgba(10, 17, 37, 0.8) 70%, #000414 100%);*/
+ /* Dégradé linéaire de gauche à droite */
+background: linear-gradient(to right, #a4a28a 0%, rgba(192, 189, 184, 0.8) 70%, #9c9c8c 100%);
+
   color: #fff;
   width: 100%;
 }
