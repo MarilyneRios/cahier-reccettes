@@ -7,9 +7,10 @@
 .bg-Recipe {
    /* background: linear-gradient(45deg, rgb(5, 10, 27) 0%, rgba(10, 17, 37, 0.8) 70%, #000414 100%);
     background: linear-gradient(45deg, rgb(5, 10, 27) 0%, rgba(10, 17, 37,0.4) 70%, #000414 100%);*/
+    background-color: rgb(243, 241, 234,1) ;
 
 }
 
 .custom-class{
-    background-color: rgb(243, 241, 234) !important;
+    background-color: rgb(243, 241, 234) ;
 }
