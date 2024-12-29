@@ -1,7 +1,7 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaUserCircle, FaUserPlus } from "react-icons/fa";
-import "./Hero.css";
+import "./Hero.styles.css";
 
 export default function Hero() {
   return (

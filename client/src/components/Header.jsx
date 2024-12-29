@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import { Navbar, Nav, Dropdown, Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+import { Link, useLocation } from "react-router-dom"; 
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { PiBooksDuotone } from "react-icons/pi";
 
 //element
-import SearchBar from "../components/searchBar";
+import SearchBar from "./searchBar";
 
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -94,7 +94,7 @@ function Header() {
               <Dropdown.Divider />
 
               {/* Accordéon pour les catégories */}
-              <Accordion defaultActiveKey="0">
+              <Accordion >
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>
                     <FaSearch

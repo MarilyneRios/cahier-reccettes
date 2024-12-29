@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true, //indexation du username pour un gain de temps pour la recherche
+     // index: true, //indexation du username pour un gain de temps pour la recherche
     },
     email: {
       type: String,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // Ajouter un index sur le champ "username"
-userSchema.index({ username: 1 });
+//userSchema.index({ username: 1 }); erreur apparu après fixauto dans console le 29 12 24
 
 // Création du Modèle user
 const User = mongoose.model('User', userSchema);
