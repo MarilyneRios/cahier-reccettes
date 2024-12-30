@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Image } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
+import FormContainer from "../../components/shared/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaUnlock } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
@@ -12,7 +12,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import { app } from "../../firebase";
 import { RingLoader } from "react-spinners";
 import {
   updateUserStart,
@@ -22,13 +22,13 @@ import {
   deleteUserSuccess,
   deleteUserFailure,
   signOutSuccess,
-} from "../redux/userSlice";
+} from "../../redux/users/userSlice";
 // Importation de useSignInMutation:
 import {
   useSignOutMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
-} from "../redux/usersApiSlice";
+} from "../../redux/users/usersApiSlice";
 import './Profile.css'
 
 export default function Profile() {

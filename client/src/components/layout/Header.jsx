@@ -16,7 +16,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { PiBooksDuotone } from "react-icons/pi";
 
 //element
-import SearchBar from "./searchBar";
+import SearchBar from "../shared/searchBar";
 
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -24,15 +24,32 @@ function Header() {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    // Naviguer vers la page d'accueil sans recharger la page
     navigate("/");
-    // Faire défiler jusqu'à la section ViewRecipesHome après un délai
+    // Faire défiler jusqu'à la section HeroHome après un délai
+    setTimeout(() => {
+      const section = document.getElementById("HeroHome");
+      if (section) {
+        const offset = -100; // Ajustez pour voir le header du haut
+        const elementPosition = section.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition + offset;
+  
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }, 100); // Le délai 
+  };
+
+  const handleViewRecipeClick = () => {
+    
+    navigate("/");
     setTimeout(() => {
       const section = document.getElementById("ViewRecipesHome");
       if (section) {
         section.scrollIntoView({ behavior: "smooth" });
       }
-    }, 100); // Le délai peut être ajusté si nécessaire
+    }, 100); 
   };
 
   return (
@@ -62,7 +79,7 @@ function Header() {
             <Dropdown.Menu className="custom-dropdown-menu">
               <Dropdown.Item
                 as={Link}
-                to="/"
+                onClick={handleHomeClick}
                 className={`my-auto text-dark ${
                   location.pathname === "/" && "active active-header"
                 }`}
@@ -170,7 +187,7 @@ function Header() {
               <Dropdown.Divider />
               <Dropdown.Item
                 as={Link}
-                onClick={handleHomeClick}
+                onClick={handleViewRecipeClick}
                 className={`my-auto text-dark ${
                   location.pathname === "/viewRecipes" && "active"
                 }`}
@@ -274,7 +291,8 @@ function Header() {
         <div className="d-none d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand
             as={Link}
-            to="/"
+            
+            onClick={handleHomeClick}
             className="text-center textWithShadowNavbarBrand fs-1 link-navbarBrand"
           >
             <FaHome
@@ -288,7 +306,7 @@ function Header() {
           </Navbar.Brand>
           <Navbar.Brand
             as={Link}
-            onClick={handleHomeClick}
+            onClick={handleViewRecipeClick}
             className=" text-center textWithShadowNavbarBrand fs-4 link-navbarBrand"
           >
             <PiBooksDuotone

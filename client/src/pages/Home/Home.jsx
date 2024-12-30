@@ -1,13 +1,13 @@
 //Home.jsx
 
 //composants
-import ViewRecipes from "./ViewRecipes";
-import Header from "../components/Header";
-import Hero from "../components/heros/Hero";
-import HeroConnect from "../components/heros/HeroConnect"
-import Loader from "../components/Loader"
+import ViewRecipes from "../Recipes/ViewRecipes/ViewRecipes";
+import Header from "../../components/layout/Header";
+import Hero from "../../components/heros/Hero";
+import HeroConnect from "../../components/heros/HeroConnect"
+import Loader from "../../components/shared/Loader"
 
-import "../App.css";
+import "../../App.css";
 import "./Home.css";
 
 import { useSelector } from "react-redux";

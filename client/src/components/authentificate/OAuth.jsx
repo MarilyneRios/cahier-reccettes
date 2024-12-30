@@ -1,10 +1,10 @@
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
-import { app } from '../firebase';
+import { app } from '../../firebase';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "react-bootstrap";
-import { signInSuccess } from '../redux/userSlice';
-import { useGoogleSignInMutation } from "../redux/usersApiSlice";
+import { signInSuccess } from '../../redux/users/userSlice';
+import { useGoogleSignInMutation } from "../../redux/users/usersApiSlice";
 
 export default function OAuth({ label }) {
   const dispatch = useDispatch();

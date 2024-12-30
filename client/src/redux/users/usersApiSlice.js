@@ -1,4 +1,4 @@
-import { apiSlice } from './apiSlice';
+import { apiSlice } from '../apiSlice';
 
 // l’URL de base pour les appels d’API liés à l'authentification
 const AUTH_URL = '/api/auth';

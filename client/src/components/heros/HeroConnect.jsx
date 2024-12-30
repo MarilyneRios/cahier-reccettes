@@ -28,7 +28,8 @@ export default function HeroConnect() {
           </h1>
 
           <div className="d-flex mt-3 bg-white p-3 rounded">
-            <Link to="/" className="d-flex flex-column align-items-center mx-3">
+            <Link to="/about"
+             className="d-flex flex-column align-items-center mx-3">
               <FaBookOpenReader
                 aria-hidden="true"
                 aria-label="Mon cahier de recette"
@@ -39,7 +40,7 @@ export default function HeroConnect() {
               <span className="tooltip-text">Mon cahier de recettes</span>
             </Link>
             <Link
-              to="/sign-up"
+               onClick={handleHomeClick}
               className="d-flex flex-column align-items-center mx-3"
             >
               <PiBooksDuotone
@@ -52,7 +53,8 @@ export default function HeroConnect() {
               <span className="tooltip-text">Les recettes</span>
             </Link>
             <Link
-              onClick={handleHomeClick}
+             
+              to="addRecipe"
               className="d-flex flex-column align-items-center mx-3"
             >
               <FaCirclePlus

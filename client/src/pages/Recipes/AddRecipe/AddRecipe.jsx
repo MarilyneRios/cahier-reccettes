@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Form, Button, Card, Row, Col, Alert } from "react-bootstrap";
 import { RxCross1 } from "react-icons/rx";
-import FormContainer from "../components/FormContainer";
-import Loader from "../components/Loader";
+import FormContainer from "../../../components/shared/FormContainer";
+import Loader from "../../../components/shared/Loader";
 import "./addRecipe.styles.css";
 
 export default function AddRecipe() {

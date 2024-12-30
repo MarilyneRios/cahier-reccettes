@@ -10,14 +10,14 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // importation composants
 import App from './App';
-import PrivateRoute from './components/PrivateRoute';
-import Home from './pages/Home';
-import About from './pages/About';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import Profile from './pages/Profile';
-import ViewRecipes from './pages/ViewRecipes';
-import AddRecipe from './pages/AddRecipe';
+import PrivateRoute from './components/authentificate/PrivateRoute';
+import Home from './pages/Home/Home';
+import About from './pages/About/About';
+import SignIn from './pages/Auth/SignIn';
+import SignUp from './pages/Auth/SignUp';
+import Profile from './pages/Profile/Profile';
+import ViewRecipes from './pages/Recipes/ViewRecipes/ViewRecipes';
+import AddRecipe from './pages/Recipes/AddRecipe/AddRecipe';
 
 const router = createBrowserRouter(
   createRoutesFromElements(

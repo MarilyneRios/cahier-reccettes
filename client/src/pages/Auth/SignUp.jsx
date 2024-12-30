@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
+import FormContainer from "../../components/shared/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 // Importation de useSignInMutation:
-import { useSignUpMutation } from "../redux/usersApiSlice";
+import { useSignUpMutation } from "../../redux/users/usersApiSlice";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});

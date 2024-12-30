@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, Button } from "react-bootstrap";
-import bookImage from "../assets/homeBg2.png"; 
+import bookImage from "../../assets/homeBg2.png"; 
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 import "./CardRecipe.css";

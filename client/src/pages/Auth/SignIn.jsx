@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
+import FormContainer from "../../components/shared/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { signInStart, signInSuccess, signInFailure } from "../redux/userSlice";
+import { signInStart, signInSuccess, signInFailure } from "../../redux/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import OAuth from "../components/OAuth";
+import OAuth from "../../components/authentificate/OAuth";
 // Importation de useSignInMutation:
-import { useSignInMutation} from "../redux/usersApiSlice";
+import { useSignInMutation} from "../../redux/users/usersApiSlice";
 
 export default function SignIn() {
   // les états
