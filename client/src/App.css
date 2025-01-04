@@ -65,6 +65,19 @@ blockquote {
   background-position: center 80%;
   background-repeat: no-repeat;
   z-index: -1; 
+  transition: background-image 0.5s ease-in-out;
+  filter: blur(10px); /* Flou au début */
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+/* Pour supprimer le flou une fois l'image chargée */
+@keyframes fadeIn {
+  from {
+    filter: blur(10px);
+  }
+  to {
+    filter: blur(0);
+  }
 }
 
 
