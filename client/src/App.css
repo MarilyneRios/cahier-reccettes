@@ -58,28 +58,16 @@ blockquote {
 
 /*background App*/
 .backgroundHome {
-  position: absolute;  
+  position: absolute;
   width: 100%;
-  min-height: 100vh;  
+  min-height: 100vh;
   background-size: cover;
   background-position: center 80%;
   background-repeat: no-repeat;
-  z-index: -1; 
+  z-index: -1;
   transition: background-image 0.5s ease-in-out;
-  filter: blur(10px); /* Flou au début */
-  animation: fadeIn 1s ease-in-out forwards;
+  background-image: url('./assets/bgBanner.webp');
 }
-
-/* Pour supprimer le flou une fois l'image chargée */
-@keyframes fadeIn {
-  from {
-    filter: blur(10px);
-  }
-  to {
-    filter: blur(0);
-  }
-}
-
 
 /* style card hero et about*/
 .cardBg{
