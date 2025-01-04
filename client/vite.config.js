@@ -16,4 +16,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['chunk-m324agam.js']
   },
+  css: {
+    modules: true, 
+  },
 });
