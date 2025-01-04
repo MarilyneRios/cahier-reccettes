@@ -16,25 +16,31 @@ const initialState = {
     pseudo: "",
     imageUrl: "",
     userId: null, // Pas de récupération depuis localStorage
-  }
+  },
+  currentRecipe: null,
+  loading: false,
+  error: false,
 };
 
 const recipeSlice = createSlice({
-    name: 'recipe',
-    initialState,
-    reducers: {
-      // Définir les infos de la recette + mise à jour dans l'état
-      setRecipe: (state, action) => {
-        state.recipeInfo = action.payload;
-      },
-  
-      // Réinitialiser RecipeInfo
-      resetRecipeInfo: (state) => {
-        state.recipeInfo = initialState.recipeInfo;
-      },
+  name: 'recipe',
+  initialState,
+  reducers: {
+    setRecipe: (state, action) => {
+      state.recipeInfo = {
+        ...state.recipeInfo,
+        ...action.payload, 
+      };
     },
-  });
+    resetRecipeInfo: (state) => {
+      state.recipeInfo = initialState.recipeInfo;
+    },
+    setUserId: (state, action) => {
+      state.recipeInfo.userId = action.payload;
+    },
+  },
+});
 
-export const { setRecipe, resetRecipeInfo } = recipeSlice.actions;
+export const { setRecipe, resetRecipeInfo,setUserId  } = recipeSlice.actions;
 
 export default recipeSlice.reducer;

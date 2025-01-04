@@ -24,6 +24,8 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
+  whitelist: ['user'], // Seuls les reducers spécifiés seront persistés
+  blacklist: ['recipe'], // Ne pas persister les données de recette
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

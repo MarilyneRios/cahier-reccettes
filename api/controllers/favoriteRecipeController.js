@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 //importation models
 import User from "../models/userModel.js";
 import Recipe from "../models/recipeModel.js";
-import Ingredient from "../models/ingredientModel.js"
 // importation sécurité
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";

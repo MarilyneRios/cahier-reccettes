@@ -7,6 +7,14 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithAuth = async (args, api, extraOptions) => {
   const token = api.getState().user.currentUser?.accessToken;
+ /* if (!token) {
+    return {
+      error: {
+        status: 401,
+        message: "Unauthorized: No token provided",
+      },
+    };
+  }*/
   const result = await baseQuery({
     ...args,
     headers: {
