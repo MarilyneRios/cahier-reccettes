@@ -362,7 +362,7 @@ export default function AddRecipe() {
             </Col>
           </Row>
 
-          <Button type="submit" variant="success" className="w-100 mt-3">
+          <Button type="submit" variant="success" className="w-100 mt-3 btnAddRecipe">
             {isLoading ? <Loader /> : "Enregistrer la recette"}
           </Button>
         </Form>
