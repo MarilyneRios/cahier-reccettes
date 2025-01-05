@@ -18,9 +18,13 @@
 /* section des cards de Viewrecipes*/
 #ViewRecipesHome {
   max-width: 100%;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 
-
+.header{
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
+}
 
 

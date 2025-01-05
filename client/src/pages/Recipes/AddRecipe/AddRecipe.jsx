@@ -36,6 +36,7 @@ export default function AddRecipe() {
     regime: "",
     ingredients: [],
     instructions: "",
+    comments:"",
     makingTime: "",
     cookingTime: "",
     pseudo: currentUser?.username || "",
@@ -265,7 +266,7 @@ export default function AddRecipe() {
                     <p className="text-muted">Aucun ingrédient ajouté pour le moment.</p>
                   ) : (
                     recipe.ingredients.map((ingredient, index) => (
-                      <Row key={index} className="align-items-center mb-3">
+                      <Row key={index} className="align-items-center mb-3 mx-3">
                         <Col xs={12} sm={5} className="mb-2 mb-sm-0">
                           <Form.Control
                             type="text"
@@ -308,6 +309,7 @@ export default function AddRecipe() {
                         <Col xs={12} sm={1}>
                           <Button
                             variant="danger"
+                            className="m-0"
                             onClick={() => handleRemoveIngredient(index)}
                           >
                             <RxCross1 />
@@ -333,11 +335,24 @@ export default function AddRecipe() {
                     <Form.Label>Les étapes :</Form.Label>
                     <Form.Control
                       as="textarea"
-                      rows={10}
+                      rows={7}
                       placeholder="Décrivez les étapes..."
                       value={recipe.instructions}
                       onChange={(e) =>
                         setRecipe({ ...recipe, instructions: e.target.value })
+                      }
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="comments">
+                    <Form.Label>Les bienfaits :</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      placeholder="Décrivez les bienfaits..."
+                      value={recipe.comments}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, comments: e.target.value })
                       }
                       required
                     />

@@ -1,39 +1,60 @@
-//Home.jsx
-
-//composants
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
 import ViewRecipes from "../Recipes/ViewRecipes/ViewRecipes";
 import Header from "../../components/layout/Header";
 import Hero from "../../components/heros/Hero";
-import HeroConnect from "../../components/heros/HeroConnect"
-import Loader from "../../components/shared/Loader"
-
+import HeroConnect from "../../components/heros/HeroConnect";
+import Loader from "../../components/shared/Loader";
 import "../../App.css";
 import "./Home.css";
 
-import { useSelector } from "react-redux";
-
 export default function Home() {
-  
   const { currentUser, loading } = useSelector((state) => state.user);
 
+  // Gestion de la pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   return (
-    <div className="flex flex-col min-h-screen  text-white">
+    <div className="flex flex-col min-h-screen text-white">
+      {/* Section Hero */}
       <section id="HeroHome" className="flex-grow">
-      {/**si user non connecté = Hero sinon HeroConnect */}
-      {currentUser ? <HeroConnect /> : <Hero />}
-     
+        {currentUser ? <HeroConnect /> : <Hero />}
       </section>
 
+      {/* Section des recettes */}
       <section
         id="ViewRecipesHome"
-        className="flex flex-col justify-center items-center py-8 my-4"
+        className="flex flex-col justify-center items-center pt-8 my-4"
       >
-        <Header className="w-100"/>
-        <ViewRecipes />
+        <div className="header"> <Header className="w-100" /> </div>
+        <h2 className="fst-italic text-center mt-3 title">Toutes nos recettes</h2>
+        <ViewRecipes currentPage={currentPage} />
+
+        {/* Pagination */}
+        <div className="d-flex justify-content-center align-items-center mt-3">
+          <Button
+            variant="outline-success"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            &lt;
+          </Button>
+          <span className="mx-3 fs-5">Page {currentPage}</span>
+          <Button
+            variant="outline-success"
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            &gt;
+          </Button>
+        </div>
       </section>
     </div>
   );

@@ -38,9 +38,12 @@ const recipeSlice = createSlice({
     setUserId: (state, action) => {
       state.recipeInfo.userId = action.payload;
     },
+    setCurrentRecipe: (state, action) => {
+      state.currentRecipe = action.payload;
+    },
   },
 });
 
-export const { setRecipe, resetRecipeInfo,setUserId  } = recipeSlice.actions;
+export const { setRecipe, resetRecipeInfo,setUserId,setCurrentRecipe } = recipeSlice.actions;
 
 export default recipeSlice.reducer;

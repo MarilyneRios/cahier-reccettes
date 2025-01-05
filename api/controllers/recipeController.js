@@ -70,7 +70,7 @@ export const createRecipe = async (req, res, next) => {
   }
 };
 
-// @desc    recipes & display all recipes with piscture, title and autheur on Home
+// @desc    recipes & display all recipes with piscture, title and author on Home
 // @route   GET /api/recipes/
 // @access  Public
 export const displayAllRecipes = async (req, res, next) => {
@@ -90,9 +90,10 @@ export const displayAllRecipes = async (req, res, next) => {
 
       // Réponse avec les recettes et les infos de pagination
       res.json({
-          recipes,
-          page,
-          pages: Math.ceil(count / pageSize),
+        recipes,
+        total: count, // Ajout du total pour les recettes
+        page,
+        pages: Math.ceil(count / pageSize),
       });
   } catch (error) {
       next(error);

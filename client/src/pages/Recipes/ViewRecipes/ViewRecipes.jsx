@@ -1,75 +1,35 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
+import { useDisplayAllRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
+import { Spinner } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
-
-// css
 import "./ViewRecipes.css";
 
-const viewRecipes = () => {
+export default function ViewRecipes({ currentPage }) {
+  // Récupération des recettes avec le paramètre currentPage
+  const { data: recipesData, isLoading, isError } = useDisplayAllRecipesQuery({
+    pageNumber: currentPage,
+    pageSize: 6, // Nombre d'éléments par page
+  });
+  
+  if (isLoading) {
+    return <Spinner animation="border" role="status" />;
+  }
+
+  if (isError) {
+    return <p className="text-danger">Erreur : {error?.data?.message || "Impossible de charger les recettes."}</p>;
+  }
+
+  const { recipes } = recipesData;
+
   return (
-
-    <Container className="d-flex flex-column align-items-center py-3">
-    {/* Titre */}
-    <h2 className="text-center my-3 fst-italic display-5">Nos Recettes</h2>
-
-    {/* Cartes en grille */}
-    <Row className="justify-content-center g-4 mb-3">
-      <Col md={4} className="d-flex justify-content-center ">
-        <CardRecipe />
-      </Col>
-      <Col md={4} className="d-flex justify-content-center">
-        <CardRecipe />
-      </Col>
-      <Col md={4} className="d-flex justify-content-center">
-        <CardRecipe />
-      </Col>
-    </Row>
-    <Row className="justify-content-center g-4">
-      <Col md={4} className="d-flex justify-content-center">
-        <CardRecipe />
-      </Col>
-      <Col md={4} className="d-flex justify-content-center">
-        <CardRecipe />
-      </Col>
-      <Col md={4} className="d-flex justify-content-center">
-        <CardRecipe />
-      </Col>
-    </Row>
-  </Container>
+<div className="d-flex flex-wrap justify-content-center">
+  <div className="row row-cols-1 row-cols-md-3 g-4 my-3" style={{ width: '80%' }}>
+    {recipes.slice(0, 6).map((recipe) => ( // Affiche uniquement 6 cartes 
+      <div className="col d-flex justify-content-center" key={recipe._id}>
+        <CardRecipe  recipe={recipe} />
+      </div>
+    ))}
+  </div>
+</div>
 
   );
-};
-
-export default viewRecipes;
-
-    /* <div
-      id="viewRecipes"
-      className="d-flex flex-column justify-content-center align-items-center text-white text-center fs-2 my-3"
-    >
-    
-      <h2 className="text-center mb-3 fst-italic">Nos Recettes</h2>
-
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 ">
-  
-        <div className="col">
-          <CardRecipe />
-        </div>
-        <div className="col">
-          <CardRecipe />
-        </div>
-        <div className="col">   
-        <CardRecipe />
-        </div>
-        <div className="col">
-          <CardRecipe />
-        </div>
-        <div className="col">
-          <CardRecipe />
-        </div>
-        <div className="col">
-          <CardRecipe />
-        </div>
-      </div>
-    </div> */
+}

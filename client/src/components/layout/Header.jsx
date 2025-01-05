@@ -57,7 +57,7 @@ function Header() {
       expand="lg"
       bg="light"
       variant="light"
-      className="bg-transparent w-100 p-0 m-0"
+      className="bg-transparent w-100 p-0 m-0 headerD"
     >
       <Container
         fluid
