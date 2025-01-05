@@ -24,6 +24,8 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Recipe'],
     }),
+
+    
     deleteRecipe: builder.mutation({
       query: (id) => ({
         url: `${RECIPES_URL}/deleteRecipe/${id}`,
