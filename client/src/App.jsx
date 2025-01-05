@@ -10,9 +10,7 @@ const App = () => {
     <div >
     <div id="bgGenerale" 
     className='backgroundHome'
-    style={{
-      backgroundImage: `url(${bgBanner})`,
-    }}>
+   >
     </div>
    
     <header className="">

@@ -65,8 +65,8 @@ blockquote {
   background-position: center 80%;
   background-repeat: no-repeat;
   z-index: -1;
-  transition: background-image 0.5s ease-in-out;
-  background-image: url('./assets/bgBanner.webp');
+  
+  background-image: url('./assets/bgBanner.png');
 }
 
 /* style card hero et about*/
