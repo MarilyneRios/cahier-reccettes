@@ -40,7 +40,7 @@ const recipeSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      default: 'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
+      default: 'https://firebasestorage.googleapis.com/v0/b/cahier-recette.appspot.com/o/1736092969670homeBg2.png?alt=media&token=86b7c025-6e2a-4bc4-be65-36ef1083c75c',
     },
      instructions: {
       type: [String], // Changez en tableau de chaînes

@@ -1,5 +1,8 @@
+import mongoose from 'mongoose';
 import Recipe from '../models/recipeModel.js';
+import User from '../models/userModel.js';
 import { errorHandler } from '../utils/error.js';
+import { verifyToken } from '../utils/verifyUser.js';
 
 //test
 export const display = (req, res) => {
@@ -65,4 +68,34 @@ export const createRecipe = async (req, res, next) => {
     }
     next(error);
   }
+};
+
+// @desc    recipes & display all recipes with piscture, title and autheur on Home
+// @route   GET /api/recipes/
+// @access  Public
+export const displayAllRecipes = async (req, res, next) => {
+ try {
+      // Nombre d'éléments par page
+      const pageSize = 6;
+      const page = Number(req.query.pageNumber) || 1;
+
+      // Trouver les recettes avec les champs partiels : name, country, cookingTime, imageUrl
+      const recipes = await Recipe.find({}, 'name country  cookingTime imageUrl userRef')           
+          .populate('userRef', 'username profilePicture') // Populer l'utilisateur avec son nom    
+          .skip(pageSize * (page - 1)) // Pagination
+          .limit(pageSize);
+
+      // Compter le nombre total de recettes pour la pagination
+      const count = await Recipe.countDocuments();
+
+      // Réponse avec les recettes et les infos de pagination
+      res.json({
+          recipes,
+          page,
+          pages: Math.ceil(count / pageSize),
+      });
+  } catch (error) {
+      next(error);
+  }
+ 
 };

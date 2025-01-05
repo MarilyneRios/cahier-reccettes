@@ -48,6 +48,10 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
+// Gestion des erreurs 404 pour les routes non définies
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Route non trouvée' });
+});
 
 // Middleware de gestion des erreurs
 app.use((err, req, res, next) => {
