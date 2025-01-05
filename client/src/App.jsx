@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import bgBanner from "./assets/bgBanner.webp";
+
 
 const App = () => {
   return (
