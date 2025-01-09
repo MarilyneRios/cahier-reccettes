@@ -5,7 +5,7 @@ import "./ViewRecipes.css";
 
 export default function ViewRecipes({ currentPage }) {
   // Récupération des recettes avec le paramètre currentPage
-  const { data: recipesData, isLoading, isError } = useDisplayAllRecipesQuery({
+  const { data: recipesData, isLoading, isError, error } = useDisplayAllRecipesQuery({
     pageNumber: currentPage,
     pageSize: 6, // Nombre d'éléments par page
   });
@@ -14,11 +14,20 @@ export default function ViewRecipes({ currentPage }) {
     return <Spinner animation="border" role="status" />;
   }
 
+
   if (isError) {
-    return <p className="text-danger">Erreur : {error?.data?.message || "Impossible de charger les recettes."}</p>;
+    return (
+      <p className="text-danger">
+        Erreur : {error?.data?.message || "Impossible de charger les recettes."}
+      </p>
+    );
   }
 
-  const { recipes } = recipesData;
+  const recipes = recipesData?.recipes || []; // Assurez-vous que `recipes` est un tableau
+
+  if (recipes.length === 0) {
+    return <p>Aucune recette disponible.</p>;
+  }
 
   return (
 <div className="d-flex flex-wrap justify-content-center">
