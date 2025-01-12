@@ -18,6 +18,8 @@ import SignUp from './pages/Auth/SignUp';
 import Profile from './pages/Profile/Profile';
 import ViewRecipes from './pages/Recipes/ViewRecipes/ViewRecipes';
 import AddRecipe from './pages/Recipes/AddRecipe/AddRecipe';
+import DisplayRecipe from './pages/Recipes/DisplayRecipe/DisplayRecipe';
+import ChangeRecipe from './pages/Recipes/ChangeRecipe/ChangeRecipe'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +32,8 @@ const router = createBrowserRouter(
         <Route path='/profile' element={<Profile />} />
         <Route path='/viewRecipes' element={<ViewRecipes />} />
         <Route path='/addRecipe' element={<AddRecipe />} />
+        <Route path='/displayRecipe/:id' element={<DisplayRecipe/>} />
+        <Route path='/changeRecipe/:id' element={<ChangeRecipe />} />
       </Route>
     </Route>
   )

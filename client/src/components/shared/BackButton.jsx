@@ -10,7 +10,7 @@ const BackButton = () => {
 
   return (
     <button onClick={handleGoBack}
-    className="btn btn-dark  mt-2 fs-4 border border-dark rounded "
+    className="btn btn-secondary  mt-2 fs-4 border border-dark rounded "
     style={{ position: "absolute", top: 0, left: 10 }}>
         <IoReturnUpBack size={25}/>
     </button>

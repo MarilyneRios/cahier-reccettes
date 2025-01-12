@@ -35,7 +35,7 @@ export default function Home() {
         className="flex flex-col justify-center items-center pt-8 my-4"
       >
         <div className="header"> <Header className="w-100" /> </div>
-        <h2 className="fst-italic text-center mt-3 title">Toutes nos recettes</h2>
+        <h2 className="fst-italic text-center mt-3 shadow-lg title custom-text-shadow">Toutes nos recettes</h2>
         <ViewRecipes currentPage={currentPage} />
 
         {/* Pagination */}

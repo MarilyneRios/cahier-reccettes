@@ -22,7 +22,13 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Recipe'],
     }),
-
+    displayOneRecipe: builder.query({
+      query: (id) => ({
+        url: `${RECIPES_URL}/displayOneRecipe/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Recipe'],
+    }),
  
     updateRecipe: builder.mutation({
       query: ({ id, ...Recipes }) => ({
@@ -41,20 +47,15 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Recipe'],
     }),
 
-    oneRecipeAuth: builder.query({
-      query: (id) => ({
-        url: `${RECIPES_URL}/oneRecipeAuth/${id}`,
-        method: 'GET',
-      }),
-      providesTags: ['Recipe'],
-    }),
+ 
   }),
 });
 
 export const {
   useAddRecipeMutation,  
   useDisplayAllRecipesQuery,
+  useDisplayOneRecipeQuery,
   useUpdateRecipeMutation,
   useDeleteRecipeMutation,
-  useOneRecipeAuthQuery,
+  
 } = recipesApiSlice;

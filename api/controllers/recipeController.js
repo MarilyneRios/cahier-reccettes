@@ -100,3 +100,28 @@ export const displayAllRecipes = async (req, res, next) => {
   }
  
 };
+
+// @desc    Display one recipe with all information
+// @route   GET /api/recipes/:id
+// @access  Private (token)
+export const displayOneRecipe = async (req, res, next) => {
+  try {
+ 
+    // Rechercher la recette par ID
+    const id = req.params.id;
+
+    // Trouver une recette avec le ID
+    const recipe = await Recipe.findById(id).populate('userRef', 'username profilePicture');
+
+    // Vérifier si la recette existe
+    if (!recipe) {
+      return res.status(404).json({ message: "Recette non trouvée" });
+    }
+
+    // Réponse avec la recette entière
+    res.json({ recipe });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur du serveur' });
+  }
+};
