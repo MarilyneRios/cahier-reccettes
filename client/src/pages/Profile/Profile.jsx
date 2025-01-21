@@ -55,6 +55,9 @@ export default function Profile() {
   const [imageError, setImageError] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
+  //survol image
+  const [isHovered, setIsHovered] = useState(false);
+
   // Vérifie si 'image' a une valeur. Si oui, la fonction handleFileUpload est appelée
   useEffect(() => {
     if (image) {
@@ -244,66 +247,57 @@ export default function Profile() {
       <Form onSubmit={handleSubmit}>
         {/* Image de profil */}
         <Form.Group className="mt-2 d-flex justify-content-center">
-          <div
-            className="position-relative d-flex flex-column align-items-center"
-            style={{ width: "100px", height: "130px" }}
-          >
-            <div
-              className="position-relative cursor-pointer"
-              style={{ width: "100px", height: "100px" }}
-              onClick={() => fileRef.current.click()}
-            >
-              <Image
-                src={formData.profilePicture || currentUser.profilePicture}
-                alt="image de profil"
-                className="rounded-circle object-cover border border-dark"
-                style={{ width: "100px", height: "100px" }}
-              />
-              {imagePercent > 0 && imagePercent < 100 && (
-                <div
-                  className="position-absolute top-50 start-50 translate-middle"
-                  style={{ width: "100px", height: "100px" }}
-                >
-                  <RingLoader size={100} color="#208537" loading={true} />
-                </div>
-              )}
-            </div>
-            <p
-              className="text-center mt-2"
-              style={{ display: "inline-block", width: "250px" }}
-            >
-              {imageError ? (
-                <span className="text-danger">{imageError}</span>
-              ) : imagePercent > 0 && imagePercent < 100 ? (
-                <span className="text-dark">{`Téléchargement : ${imagePercent}%`}</span>
-              ) : imagePercent === 100 ? (
-                <span className="text-success">
-                  Image téléchargée avec succès
-                </span>
-              ) : (
-                ""
-              )}
-            </p>
-          </div>
-          <Form.Control
-            type="file"
-            accept="image/*"
-            ref={fileRef}
-            hidden
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (validateFile(file)) {
-                setImagePercent(0);
-                setImage(file);
-              }
-            }}
-          />
-          {imageError && (
-            <p className="text-danger text-center">{imageError}</p>
-          )}
-        </Form.Group>
+  <div
+    className="position-relative d-flex flex-column align-items-center"
+    style={{ width: "100px", height: "130px" }}
+  >
+    <div
+      className="position-relative cursor-pointer"
+      style={{ width: "100px", height: "100px" }}
+      onClick={() => fileRef.current.click()}
+      onMouseEnter={() => setIsHovered(true)} // Détecte le survol
+      onMouseLeave={() => setIsHovered(false)} // Détecte la fin du survol
+    >
+      <Image
+        src={formData.profilePicture || currentUser.profilePicture}
+        alt="image de profil"
+        className="rounded-circle object-cover border border-dark cursor-pointer"
+        style={{ width: "100px", height: "100px" }}
+      />
+      {imagePercent > 0 && imagePercent < 100 && (
+        <div
+          className="position-absolute top-50 start-50 translate-middle"
+          style={{ width: "100px", height: "100px" }}
+        >
+          <RingLoader size={100} color="#208537" loading={true} />
+        </div>
+      )}
+    </div>
+    {isHovered && ( // Affichage conditionnel du message
+      <h6 className="fst-italic mt-2">Modifier votre image de profil</h6>
+    )}
+    <Form.Control
+      type="file"
+      accept="image/*"
+      ref={fileRef}
+      hidden
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (validateFile(file)) {
+          setImagePercent(0);
+          setImage(file);
+        }
+      }}
+    />
+    {imageError && (
+      <p className="text-danger text-center">{imageError}</p>
+    )}
+  </div>
+</Form.Group>
+
 
         <Form.Group className="my-2">
+        <h6 className="fst-italic">Modifier votre pseudo :</h6>
           <Form.Control
             type="text"
             id="username"
@@ -315,6 +309,7 @@ export default function Profile() {
         </Form.Group>
 
         <Form.Group className="my-2">
+        <h6 className="fst-italic">Modifier votre email :</h6>
           <Form.Control
             type="email"
             id="email"
@@ -326,6 +321,7 @@ export default function Profile() {
         </Form.Group>
 
         <Form.Group className="my-2">
+        <h6 className="fst-italic">Modifier votre mot de passe :</h6>
           <div className="d-flex">
             <Form.Control
               type={visiblePassword ? "text" : "password"}
@@ -353,6 +349,7 @@ export default function Profile() {
         </Form.Group>
 
         <Form.Group className="my-2">
+        <h6 className="fst-italic">Confirmer votre mot de passe :</h6>
           <div className="d-flex">
             <Form.Control
               type={visibleConfirmPassword ? "text" : "password"}
@@ -382,7 +379,7 @@ export default function Profile() {
         <Button
           type="submit"
           variant="outline-dark"
-          className="my-3 w-100"
+          className="my-3 w-100 btnProfil"
           disabled={loading}
         >
           {loading ? "Loading..." : "Enregistrer"}
