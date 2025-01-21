@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // Icons
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 // Composants réutilisables
@@ -12,7 +13,7 @@ import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice
 // image par défaut
 import bookImage from "../../../assets/homeBg2.png";
 //Image par <a href="https://pixabay.com/fr/users/darkmoon_art-1664300/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3057904">Dorothe</a> de <a href="https://pixabay.com/fr//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3057904">Pixabay</a>
-import notebook from "../../../assets/notebook.png";
+//import notebook from "../../../assets/notebook.png";
 // css
 import "./displayRecipe.styles.css";
 import "../../../App.css"
@@ -22,6 +23,7 @@ export default function DisplayRecipe() {
   console.log("ID récupéré depuis l'URL:", id);
 
   const [liked, setLiked] = useState(false);
+ 
 
   // Utilisation du hook pour récupérer la recette
   const {
@@ -40,6 +42,8 @@ export default function DisplayRecipe() {
     "| error:",
     error
   );
+
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -70,6 +74,18 @@ export default function DisplayRecipe() {
 
   const handleLike = () => {
     setLiked(!liked);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      
+
+      // naviguer sur ChangeRecipe
+      navigate(`/changeRecipe/${id}`);
+    } catch (error) {
+      Next(error)
+    }
   };
 
   return (
@@ -165,6 +181,24 @@ export default function DisplayRecipe() {
             )}
           </ol>
         </div>
+        <div className="recipe-comments">
+        <h2>Bienfaits</h2>
+          <ol>
+            {recipe.comments && recipe.comments.length > 0 ? (
+              recipe.comments.map((step, index) => <li key={index}>{step}</li>)
+            ) : (
+              <p>Aucune information disponible.</p>
+            )}
+          </ol>
+        </div>
+        <Button type="submit" 
+          variant="success" 
+          className="w-100 mt-3 btnChangeRecipe"
+          onClick={handleSubmit}
+        >
+            {isLoading ? <Loader /> : "Modifier la recette"}
+        </Button>
+       
       </section>
     </div>
   </section>

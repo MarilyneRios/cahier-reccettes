@@ -163,7 +163,7 @@ export default function ChangeRecipe() {
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
     <FormContainer size="12">
-      <h1 className="text-center mb-4">Créer une recette</h1>
+      <h1 className="text-center mb-4">Modifier une recette</h1>
 
       {error && <Alert variant="danger">{error}</Alert>}
 
