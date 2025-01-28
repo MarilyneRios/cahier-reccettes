@@ -36,8 +36,8 @@ export default function AddRecipe() {
     category: "",
     regime: "",
     ingredients: [],
-    instructions: "",
-    comments:"",
+    instructions: [],
+    comments: [],
     makingTime: "",
     cookingTime: "",
     pseudo: currentUser?.username || "",
@@ -53,8 +53,10 @@ export default function AddRecipe() {
 
   const navigate = useNavigate();
 
+  // redux RTK
   const [addRecipe] = useAddRecipeMutation();
 
+  // image recipe
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -125,10 +127,14 @@ export default function AddRecipe() {
     }
   }, [file]);
 
+  // Gestion des ingrédients
   const handleAddIngredient = () => {
     setRecipe((prevRecipe) => ({
       ...prevRecipe,
-      ingredients: [...prevRecipe.ingredients, { name: "", quantity: "", unit: "" }],
+      ingredients: [
+        ...prevRecipe.ingredients,
+        { name: "", quantity: "", unit: "" },
+      ],
     }));
   };
 
@@ -144,6 +150,52 @@ export default function AddRecipe() {
       const updatedIngredients = [...prevRecipe.ingredients];
       updatedIngredients[index][field] = value;
       return { ...prevRecipe, ingredients: updatedIngredients };
+    });
+  };
+
+  // Gestion des instructions
+  const handleAddInstruction = () => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      instructions: [...prevRecipe.instructions, ""],
+    }));
+  };
+
+  const handleRemoveInstruction = (index) => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      instructions: prevRecipe.instructions.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleInstructionChange = (index, value) => {
+    setRecipe((prevRecipe) => {
+      const updatedInstructions = [...prevRecipe.instructions];
+      updatedInstructions[index] = value;
+      return { ...prevRecipe, instructions: updatedInstructions };
+    });
+  };
+
+  // Gestion des comments (bienfaits)
+  const handleAddComment = () => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      comments: [...prevRecipe.comments, ""],
+    }));
+  };
+
+  const handleRemoveComment = (index) => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      comments: prevRecipe.comments.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleCommentChange = (index, value) => {
+    setRecipe((prevRecipe) => {
+      const updatedComments = [...prevRecipe.comments];
+      updatedComments[index] = value;
+      return { ...prevRecipe, comments: updatedComments };
     });
   };
 
@@ -166,7 +218,7 @@ export default function AddRecipe() {
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
       <FormContainer size="12">
         <h1 className="text-center mb-4">Créer une recette</h1>
-        <BackButton/>
+        <BackButton />
 
         {error && <Alert variant="danger">{error}</Alert>}
 
@@ -177,57 +229,125 @@ export default function AddRecipe() {
               <Card className="mb-4">
                 <Card.Header>Informations générales</Card.Header>
                 <Card.Body>
-                  <Form.Group controlId="name" className="mb-3">
-                    <Form.Label>Nom de la recette *</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Nom de la recette"
-                      value={recipe.name}
-                      onChange={(e) => setRecipe({ ...recipe, name: e.target.value })}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="country" className="mb-3">
-                    <Form.Label>Pays *</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Nationalité de la recette"
-                      value={recipe.country}
-                      onChange={(e) => setRecipe({ ...recipe, country: e.target.value })}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="category" className="mb-3">
-                    <Form.Label>Catégorie *</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={recipe.category}
-                      onChange={(e) => setRecipe({ ...recipe, category: e.target.value })}
-                      required
+                {/* Mise en page pour Category et Regime */}
+                <div className="row">
+                    <Form.Group controlId="name"  className="col-12 col-md-6 mb-3">
+                      <Form.Label>Nom de la recette *</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nom de la recette"
+                        value={recipe.name}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, name: e.target.value })
+                        }
+                        required
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="country" className="col-12 col-md-6 mb-3">
+                      <Form.Label>Pays *</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nationalité de la recette"
+                        value={recipe.country}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, country: e.target.value })
+                        }
+                        required
+                      />
+                    </Form.Group>
+                  </div>
+                  {/* Mise en page pour Category et Regime */}
+                  <div className="row">
+                    <Form.Group
+                      controlId="category"
+                      className="col-12 col-md-6 mb-3"
                     >
-                      <option value="">Sélectionner une catégorie</option>
-                      <option value="aperitif">Apéritif</option>
-                      <option value="starter">Entrée</option>
-                      <option value="main">Plat</option>
-                      <option value="dessert">Dessert</option>
-                      <option value="boisson">Boisson</option>
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="regime" className="mb-3">
-                    <Form.Label>Régime *</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={recipe.regime}
-                      onChange={(e) => setRecipe({ ...recipe, regime: e.target.value })}
-                      required
+                      <Form.Label>Catégorie *</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={recipe.category}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, category: e.target.value })
+                        }
+                        required
+                      >
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="aperitif">Apéritif</option>
+                        <option value="starter">Entrée</option>
+                        <option value="main">Plat</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="boisson">Boisson</option>
+                      </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group
+                      controlId="regime"
+                      className="col-12 col-md-6 mb-3"
                     >
-                      <option value="">Sélectionner un régime</option>
-                      <option value="traditionnal">Traditionnelle</option>
-                      <option value="vegetarian">Végétarien</option>
-                      <option value="vegan">Végan</option>
-                      <option value="gluten-free">Sans gluten</option>
-                    </Form.Control>
-                  </Form.Group>
+                      <Form.Label>Régime *</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={recipe.regime}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, regime: e.target.value })
+                        }
+                        required
+                      >
+                        <option value="">Sélectionner un régime</option>
+                        <option value="traditionnal">Traditionnelle</option>
+                        <option value="vegetarian">Végétarien</option>
+                        <option value="vegan">Végan</option>
+                        <option value="gluten-free">Sans gluten</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </div>
+                </Card.Body>
+              </Card>
+
+              <Card className="mb-4">
+                <Card.Header>Temps de préparation et cuisson</Card.Header>
+                <Card.Body>
+                  <Form>
+                    <div className="row">
+                      <Form.Group
+                        controlId="makingTime"
+                        className="col-12 col-md-6 mb-3"
+                      >
+                        <Form.Label>Préparation (en min) *</Form.Label>
+                        <Form.Control
+                          type="number"
+                          min="0"
+                          placeholder="Temps de préparation"
+                          value={recipe.makingTime}
+                          onChange={(e) =>
+                            setRecipe({ ...recipe, makingTime: e.target.value })
+                          }
+                          required
+                        />
+                      </Form.Group>
+
+                      <Form.Group
+                        controlId="cookingTime"
+                        className="col-12 col-md-6 mb-3"
+                      >
+                        <Form.Label>Cuisson (en min) *</Form.Label>
+                        <Form.Control
+                          type="number"
+                          min="0"
+                          placeholder="Temps de cuisson"
+                          value={recipe.cookingTime}
+                          onChange={(e) =>
+                            setRecipe({
+                              ...recipe,
+                              cookingTime: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                      </Form.Group>
+                    </div>
+                  </Form>
                 </Card.Body>
               </Card>
 
@@ -265,7 +385,9 @@ export default function AddRecipe() {
                 <Card.Header>Ingrédients</Card.Header>
                 <Card.Body>
                   {recipe.ingredients.length === 0 ? (
-                    <p className="text-muted">Aucun ingrédient ajouté pour le moment.</p>
+                    <p className="text-muted">
+                      Aucun ingrédient ajouté pour le moment.
+                    </p>
                   ) : (
                     recipe.ingredients.map((ingredient, index) => (
                       <Row key={index} className="align-items-center mb-3 mx-3">
@@ -275,7 +397,11 @@ export default function AddRecipe() {
                             placeholder="Nom de l'ingrédient"
                             value={ingredient.name}
                             onChange={(e) =>
-                              handleIngredientChange(index, "name", e.target.value)
+                              handleIngredientChange(
+                                index,
+                                "name",
+                                e.target.value
+                              )
                             }
                             required
                           />
@@ -283,10 +409,15 @@ export default function AddRecipe() {
                         <Col xs={6} sm={3} className="mb-2 mb-sm-0">
                           <Form.Control
                             type="number"
+                            min="0"
                             placeholder="Quantité"
                             value={ingredient.quantity}
                             onChange={(e) =>
-                              handleIngredientChange(index, "quantity", e.target.value)
+                              handleIngredientChange(
+                                index,
+                                "quantity",
+                                e.target.value
+                              )
                             }
                             required
                           />
@@ -296,7 +427,11 @@ export default function AddRecipe() {
                             as="select"
                             value={ingredient.unit}
                             onChange={(e) =>
-                              handleIngredientChange(index, "unit", e.target.value)
+                              handleIngredientChange(
+                                index,
+                                "unit",
+                                e.target.value
+                              )
                             }
                             required
                           >
@@ -333,38 +468,90 @@ export default function AddRecipe() {
               <Card className="mb-4">
                 <Card.Header>Préparation</Card.Header>
                 <Card.Body>
-                  <Form.Group controlId="instructions">
-                    <Form.Label>Les étapes :</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={7}
-                      placeholder="Décrivez les étapes..."
-                      value={recipe.instructions}
-                      onChange={(e) =>
-                        setRecipe({ ...recipe, instructions: e.target.value })
-                      }
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="comments">
-                    <Form.Label>Les bienfaits :</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      placeholder="Décrivez les bienfaits..."
-                      value={recipe.comments}
-                      onChange={(e) =>
-                        setRecipe({ ...recipe, comments: e.target.value })
-                      }
-                      required
-                    />
-                  </Form.Group>
+                  {recipe.instructions.length === 0 ? (
+                    <p className="text-muted">
+                      Aucune instruction ajouté pour le moment.
+                    </p>
+                  ) : (
+                    recipe.instructions.map((instruction, index) => (
+                      <Row key={index} className="mb-2">
+                        <Col xs={10}>
+                          <Form.Control
+                            type="text"
+                            as="textarea"
+                            rows={3}
+                            placeholder={`Étape de préparation ${index + 1}`}
+                            value={instruction}
+                            onChange={(e) =>
+                              handleInstructionChange(index, e.target.value)
+                            }
+                          />
+                        </Col>
+                        <Col xs={2}>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleRemoveInstruction(index)}
+                          >
+                            <RxCross1 />
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))
+                  )}
+                  <Button
+                    variant="outline-success"
+                    onClick={handleAddInstruction}
+                  >
+                    Ajouter une étape
+                  </Button>
+                </Card.Body>
+              </Card>
+              <Card className="mb-4">
+                <Card.Header>Bienfaits</Card.Header>
+                <Card.Body>
+                  {recipe.comments.length === 0 ? (
+                    <p className="text-muted">
+                      Aucun bienfait ajouté pour le moment.
+                    </p>
+                  ) : (
+                    recipe.comments.map((comment, index) => (
+                      <Row key={index} className="mb-2">
+                        <Col xs={10}>
+                          <Form.Control
+                            type="text"
+                            as="textarea"
+                            rows={2}
+                            placeholder={`Bienfait ${index + 1}`}
+                            value={comment}
+                            onChange={(e) =>
+                              handleCommentChange(index, e.target.value)
+                            }
+                          />
+                        </Col>
+                        <Col xs={2}>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleRemoveComment(index)}
+                          >
+                            <RxCross1 />
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))
+                  )}
+                  <Button variant="outline-success" onClick={handleAddComment}>
+                    Ajouter un bienfait
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
 
-          <Button type="submit" variant="success" className="w-100 mt-3 btnAddRecipe">
+          <Button
+            type="submit"
+            variant="success"
+            className="w-100 mt-3 btnAddRecipe"
+          >
             {isLoading ? <Loader /> : "Enregistrer la recette"}
           </Button>
         </Form>
