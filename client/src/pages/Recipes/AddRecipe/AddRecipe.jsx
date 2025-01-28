@@ -11,6 +11,7 @@ import { RxCross1 } from "react-icons/rx";
 // Composants réutilisables
 import FormContainer from "../../../components/shared/FormContainer";
 import Loader from "../../../components/shared/Loader";
+import BackButton from "../../../components/shared/BackButton";
 
 // Image sur Firebase
 import {
@@ -165,6 +166,7 @@ export default function AddRecipe() {
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
       <FormContainer size="12">
         <h1 className="text-center mb-4">Créer une recette</h1>
+        <BackButton/>
 
         {error && <Alert variant="danger">{error}</Alert>}
 
