@@ -225,13 +225,13 @@ export default function AddRecipe() {
         <Form onSubmit={handleSubmit}>
           <Row>
             {/* Colonne gauche */}
-            <Col xs={12} md={6} className="mb-4">
-              <Card className="mb-4">
+            <Col xs={12} md={6} className="mb-2">
+              <Card className="mb-3">
                 <Card.Header>Informations générales</Card.Header>
                 <Card.Body>
                 {/* Mise en page pour Category et Regime */}
                 <div className="row">
-                    <Form.Group controlId="name"  className="col-12 col-md-6 mb-3">
+                    <Form.Group controlId="name"  className="col-12 col-md-6 mb-2">
                       <Form.Label>Nom de la recette *</Form.Label>
                       <Form.Control
                         type="text"
@@ -244,7 +244,7 @@ export default function AddRecipe() {
                       />
                     </Form.Group>
 
-                    <Form.Group controlId="country" className="col-12 col-md-6 mb-3">
+                    <Form.Group controlId="country" className="col-12 col-md-6 mb-2">
                       <Form.Label>Pays *</Form.Label>
                       <Form.Control
                         type="text"
@@ -259,9 +259,8 @@ export default function AddRecipe() {
                   </div>
                   {/* Mise en page pour Category et Regime */}
                   <div className="row">
-                    <Form.Group
-                      controlId="category"
-                      className="col-12 col-md-6 mb-3"
+                    <Form.Group  controlId="category"
+                      className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Catégorie *</Form.Label>
                       <Form.Control
@@ -281,9 +280,8 @@ export default function AddRecipe() {
                       </Form.Control>
                     </Form.Group>
 
-                    <Form.Group
-                      controlId="regime"
-                      className="col-12 col-md-6 mb-3"
+                    <Form.Group controlId="regime"
+                      className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Régime *</Form.Label>
                       <Form.Control
@@ -305,14 +303,13 @@ export default function AddRecipe() {
                 </Card.Body>
               </Card>
 
-              <Card className="mb-4">
+              <Card className="mb-3" id="Temps_de_préparation_et_cuisson">
                 <Card.Header>Temps de préparation et cuisson</Card.Header>
                 <Card.Body>
                   <Form>
                     <div className="row">
-                      <Form.Group
-                        controlId="makingTime"
-                        className="col-12 col-md-6 mb-3"
+                      <Form.Group controlId="makingTime"
+                        className="col-12 col-md-6 mb-2"
                       >
                         <Form.Label>Préparation (en min) *</Form.Label>
                         <Form.Control
@@ -327,9 +324,8 @@ export default function AddRecipe() {
                         />
                       </Form.Group>
 
-                      <Form.Group
-                        controlId="cookingTime"
-                        className="col-12 col-md-6 mb-3"
+                      <Form.Group  controlId="cookingTime"
+                        className="col-12 col-md-6 mb-2"
                       >
                         <Form.Label>Cuisson (en min) *</Form.Label>
                         <Form.Control
@@ -352,7 +348,7 @@ export default function AddRecipe() {
               </Card>
 
               {/* Image */}
-              <Card className="mb-4">
+              <Card className="mb-2" id="ImageAddRecipe">
                 <Card.Header>Image</Card.Header>
                 <Card.Body>
                   <Form.Group controlId="imageUrl">
@@ -381,7 +377,7 @@ export default function AddRecipe() {
 
             {/* Colonne droite */}
             <Col xs={12} md={6}>
-              <Card className="mb-4">
+              <Card className="mb-3" id="ingredient">
                 <Card.Header>Ingrédients</Card.Header>
                 <Card.Body>
                   {recipe.ingredients.length === 0 ? (
@@ -436,6 +432,7 @@ export default function AddRecipe() {
                             required
                           >
                             <option value="">Unité</option>
+                            <option value="number">nombre</option>
                             <option value="g">g</option>
                             <option value="ml">ml</option>
                             <option value="pcs">tasse</option>
@@ -465,7 +462,7 @@ export default function AddRecipe() {
                 </Card.Body>
               </Card>
 
-              <Card className="mb-4">
+              <Card className="mb-3" id="preparation">
                 <Card.Header>Préparation</Card.Header>
                 <Card.Body>
                   {recipe.instructions.length === 0 ? (
@@ -506,7 +503,7 @@ export default function AddRecipe() {
                   </Button>
                 </Card.Body>
               </Card>
-              <Card className="mb-4">
+              <Card className="mb-3" id="biennfaits">
                 <Card.Header>Bienfaits</Card.Header>
                 <Card.Body>
                   {recipe.comments.length === 0 ? (
@@ -547,10 +544,10 @@ export default function AddRecipe() {
             </Col>
           </Row>
 
-          <Button
+          <Button id="buutonAddRecipe"
             type="submit"
             variant="success"
-            className="w-100 mt-3 btnAddRecipe"
+            className="w-100 mt-2 mb-3 btnAddRecipe"
           >
             {isLoading ? <Loader /> : "Enregistrer la recette"}
           </Button>

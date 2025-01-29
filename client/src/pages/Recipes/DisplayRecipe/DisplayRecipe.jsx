@@ -159,9 +159,9 @@ export default function DisplayRecipe() {
             <ul>
               {recipe.ingredients && recipe.ingredients.length > 0 ? (
                 recipe.ingredients.map(
-                  ({ ingredient, quantity, unit, _id }) => (
+                  ({ ingredient, name, quantity, unit, _id }) => (
                     <li key={_id}>
-                      {quantity} {unit} de {ingredient}
+                      {quantity} {unit} de {name}{ingredient}
                     </li>
                   )
                 )
