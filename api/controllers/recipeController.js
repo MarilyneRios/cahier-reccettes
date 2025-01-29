@@ -125,3 +125,70 @@ export const displayOneRecipe = async (req, res, next) => {
     res.status(500).json({ message: 'Erreur du serveur' });
   }
 };
+
+// @desc    Update 1 recipe
+// @route   PATCH /api/recipes/:id
+// @access  Private (token)
+export const updateRecipe = async (req, res, next) => {
+  console.log('Received request to update recipeId:', req.params.id);
+  const recipeId = req.params.id;
+
+  try {
+    if (!req.user || !req.user.id) {
+      console.error('User not authenticated or missing _id. req.user:', req.user);
+      return res.status(401).json({ message: "Vous n'êtes pas authentifié" });
+    }
+
+    console.log('Request body:', req.body);
+
+    const recipe = await Recipe.findById(recipeId).populate('userRef', 'username profilePicture');
+
+    if (!recipe) {
+      console.error('Recipe not found for ID:', recipeId);
+      return res.status(404).json({ message: "Recette non trouvée" });
+    }
+
+    if (!recipe.userRef || recipe.userRef._id.toString() !== req.user.id.toString()) {
+      console.error('Unauthorized update attempt. Recipe user ID:', recipe.userRef ? recipe.userRef._id : 'undefined', 'Request user ID:', req.user.id);
+      return res.status(401).json({ message: "Vous n'avez pas l'autorisation de modifier cette recette" });
+    }
+
+    const updatedFields = {};
+
+    // Update fields only if provided in request body
+    if (req.body.name) updatedFields.name = req.body.name;
+    if (req.body.country) updatedFields.country = req.body.country;
+    if (req.body.category) updatedFields.category = req.body.category;
+    if (req.body.regime) updatedFields.regime = req.body.regime;
+    if (req.body.ingredients) updatedFields.ingredients = req.body.ingredients;
+    if (req.body.instructions) updatedFields.instructions = req.body.instructions;
+    if (req.body.makingTime) updatedFields.makingTime = req.body.makingTime;
+    if (req.body.cookingTime) updatedFields.cookingTime = req.body.cookingTime;
+    if (req.body.pseudo) updatedFields.pseudo = req.body.pseudo;
+    if (req.body.imageUrl) updatedFields.imageUrl = req.body.imageUrl;
+
+    const updatedRecipe = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    res.status(200).json({
+      _id: updatedRecipe._id,
+      name: updatedRecipe.name,
+      country: updatedRecipe.country,
+      category: updatedRecipe.category,
+      regime: updatedRecipe.regime,
+      ingredients: updatedRecipe.ingredients,
+      instructions: updatedRecipe.instructions,
+      makingTime: updatedRecipe.makingTime,
+      cookingTime: updatedRecipe.cookingTime,
+      pseudo: updatedRecipe.pseudo,
+      imageUrl: updatedRecipe.imageUrl,
+      message: "Recette mise à jour avec succès",
+    });
+  } catch (error) {
+    console.error('Error updating recipe:', error);
+    res.status(500).json({ message: 'Erreur du serveur' });
+  }
+};
