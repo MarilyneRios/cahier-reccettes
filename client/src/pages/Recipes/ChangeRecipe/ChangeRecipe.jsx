@@ -482,7 +482,7 @@ const handleInstructionChange = (index, value) => {
                             required
                           >
                             <option value="">Unité</option>
-                            <option value="number">nombre</option>
+                            <option value="nombre">nombre</option>
                             <option value="g">g</option>
                             <option value="ml">ml</option>
                             <option value="pcs">tasse</option>
