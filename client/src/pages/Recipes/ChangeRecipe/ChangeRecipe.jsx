@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // React-Bootstrap
 import { Form, Button, Card, Row, Col, Alert } from "react-bootstrap";
@@ -12,7 +13,7 @@ import { RxCross1 } from "react-icons/rx";
 import FormContainer from "../../../components/shared/FormContainer";
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
-
+import bookImage from "../../../assets/homeBg2.png";
 // Image sur Firebase
 import {
   getDownloadURL,
@@ -23,13 +24,23 @@ import {
 import { app } from "../../../firebase";
 
 // Import de la mutation addRecipe
-import { useAddRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
+import { useUpdateRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
+import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";
 
 import "./changeRecipe.styles.css";
 
 export default function ChangeRecipe() {
+  // 
   const { currentUser } = useSelector((state) => state.user);
+   // Récupération de l'ID recipe depuis l'URL
+  const { id } = useParams();
 
+  // vérifier chaque étape du processus
+  console.log("ID récupéré depuis l'URL:", id);
+
+  const navigate = useNavigate();
+
+  //Initialiser l'état de la recette
   const [recipe, setRecipe] = useState({
     name: "",
     country: "",
@@ -45,18 +56,61 @@ export default function ChangeRecipe() {
     userId: currentUser?.id || null,
   });
 
-  const [previewImage, setPreviewImage] = useState(null);
-  const [file, setFile] = useState(null);
-  const [imageError, setImageError] = useState(null);
+
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [file, setFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [imageError, setImageError] = useState(null);
 
-  const navigate = useNavigate();
+    // Pour récupérer les datas du recipe
+    const {
+      data: recipeData,
+      isError,
+    } = useDisplayOneRecipeQuery(id);
 
-  // redux RTK
-  const [addRecipe] = useAddRecipeMutation();
+    // vérifier chaque étape du processus
+    console.log("Données reçues du backend (recipeData):", recipeData);
+    console.log( "isLoading:",  isLoading, "| isError:",  isError,  "| error:",  error );
 
-  // image recipe
+   // Mettre à jour l'état du recipe qd les datas sont récupérées
+   useEffect(() => {
+    if (recipeData && recipeData.recipe) {
+      // Éviter la mise à jour si recipeData est déjà utilisé
+      if (recipe.name === "") {
+        setRecipe({
+          ...recipe,
+          name: recipeData.recipe.name || "",
+          country: recipeData.recipe.country || "",
+          category: recipeData.recipe.category || "",
+          regime: recipeData.recipe.regime || "",
+          ingredients: Array.isArray(recipeData.recipe.ingredients) ? recipeData.recipe.ingredients : [],
+          instructions: recipeData.recipe.instructions || [],
+          comments: recipeData.recipe.comments || [],
+          makingTime: recipeData.recipe.makingTime || "",
+          cookingTime: recipeData.recipe.cookingTime || "",
+          imageUrl: recipeData.recipe.imageUrl || "",
+        });
+      }
+    }
+  }, [recipeData, recipe.name]);   
+  
+  // vérifier chaque étape du processus
+  console.log("État actuel de recipe après mise à jour:", recipe);
+
+  // Modifier les datas de recipe
+  const[updateRecipe] = useUpdateRecipeMutation(id);
+
+
+  // Pour gérer les changements dans les champs du formulaire
+  const handleChange = (e) => {
+    console.log("Changement détecté dans le champ:", e.target.name, "Nouvelle valeur:", e.target.value);
+    setRecipe({ ...recipe, [e.target.name]: e.target.value });
+  };
+  
+  //////////////////////////////////////////////////
+  // télécharger image firebase
+  //////////////////////////////////////////////////
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -127,56 +181,57 @@ export default function ChangeRecipe() {
     }
   }, [file]);
 
-  // Gestion des ingrédients
+////////////////////////////////////////////////////////
+// // ingredients
+////////////////////////////////////////////////////////
   const handleAddIngredient = () => {
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
+    setRecipe({
+      ...recipe,
       ingredients: [
-        ...prevRecipe.ingredients,
-        { name: "", quantity: "", unit: "" },
+        ...recipe.ingredients,
+        { name: "", quantity: "", unit: "" }, // Ajoute un ingrédient vide
       ],
-    }));
+    });
   };
-
-  const handleRemoveIngredient = (index) => {
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
-      ingredients: prevRecipe.ingredients.filter((_, i) => i !== index),
-    }));
-  };
-
+  
   const handleIngredientChange = (index, field, value) => {
-    setRecipe((prevRecipe) => {
-      const updatedIngredients = [...prevRecipe.ingredients];
-      updatedIngredients[index][field] = value;
-      return { ...prevRecipe, ingredients: updatedIngredients };
-    });
+    const newIngredients = [...recipe.ingredients];
+    newIngredients[index][field] = value;
+    setRecipe({ ...recipe, ingredients: newIngredients });
+  };
+  
+  const handleRemoveIngredient = (index) => {
+    const newIngredients = recipe.ingredients.filter((_, i) => i !== index);
+    setRecipe({ ...recipe, ingredients: newIngredients });
   };
 
-  // Gestion des instructions
-  const handleAddInstruction = () => {
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
-      instructions: [...prevRecipe.instructions, ""],
-    }));
-  };
+  ////////////////////////////////////////////////////////
+  // // instuctions
+  ////////////////////////////////////////////////////////
+const handleAddInstruction = () => {
+  setRecipe((prevRecipe) => ({
+    ...prevRecipe,
+    instructions: [...prevRecipe.instructions, ""],
+  }));
+};
 
-  const handleRemoveInstruction = (index) => {
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
-      instructions: prevRecipe.instructions.filter((_, i) => i !== index),
-    }));
-  };
+const handleRemoveInstruction = (index) => {
+  setRecipe((prevRecipe) => ({
+    ...prevRecipe,
+    instructions: prevRecipe.instructions.filter((_, i) => i !== index),
+  }));
+};
 
-  const handleInstructionChange = (index, value) => {
-    setRecipe((prevRecipe) => {
-      const updatedInstructions = [...prevRecipe.instructions];
-      updatedInstructions[index] = value;
-      return { ...prevRecipe, instructions: updatedInstructions };
-    });
-  };
-
-  // Gestion des comments (bienfaits)
+const handleInstructionChange = (index, value) => {
+  setRecipe((prevRecipe) => {
+    const updatedInstructions = [...prevRecipe.instructions];
+    updatedInstructions[index] = value;
+    return { ...prevRecipe, instructions: updatedInstructions };
+  });
+};
+  ////////////////////////////////////////////////////////
+  // // comments
+  ////////////////////////////////////////////////////////
   const handleAddComment = () => {
     setRecipe((prevRecipe) => ({
       ...prevRecipe,
@@ -203,13 +258,11 @@ export default function ChangeRecipe() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const recipeData = { ...recipe };
-
-      // Si une image a été ajoutée, l'URL est déjà stockée dans `recipe.imageUrl`
-      await addRecipe(recipeData).unwrap(); // Utilisation de la mutation
-      navigate(-1); // Redirection après soumission réussie
+      console.log("Données envoyées au backend:", recipe);
+      await updateRecipe({ id, ...recipe });
+      navigate(-1); // Retour à la page précédente
     } catch (error) {
-      setError("Erreur lors de la création de la recette.");
+      setError("Erreur lors de la mise à jour de la recette.");
       setIsLoading(false);
     }
   };
@@ -217,7 +270,7 @@ export default function ChangeRecipe() {
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
       <FormContainer size="12">
-        <h1 className="text-center mb-4">Ajouter une recette</h1>
+        <h1 className="text-center mb-4">Modifier une recette</h1>
         <BackButton />
 
         {error && <Alert variant="danger">{error}</Alert>}
@@ -229,7 +282,7 @@ export default function ChangeRecipe() {
               <Card className="mb-3">
                 <Card.Header>Informations générales</Card.Header>
                 <Card.Body>
-                {/* Mise en page pour Category et Regime */}
+                {/* Mise en page pour name et country */}
                 <div className="row">
                     <Form.Group controlId="name"  className="col-12 col-md-6 mb-2">
                       <Form.Label>Nom de la recette *</Form.Label>
@@ -237,9 +290,8 @@ export default function ChangeRecipe() {
                         type="text"
                         placeholder="Nom de la recette"
                         value={recipe.name}
-                        onChange={(e) =>
-                          setRecipe({ ...recipe, name: e.target.value })
-                        }
+                        onChange={handleChange}
+                        name="name"
                         required
                       />
                     </Form.Group>
@@ -250,9 +302,8 @@ export default function ChangeRecipe() {
                         type="text"
                         placeholder="Nationalité de la recette"
                         value={recipe.country}
-                        onChange={(e) =>
-                          setRecipe({ ...recipe, country: e.target.value })
-                        }
+                        onChange={handleChange}
+                        name="country"
                         required
                       />
                     </Form.Group>
@@ -266,9 +317,8 @@ export default function ChangeRecipe() {
                       <Form.Control
                         as="select"
                         value={recipe.category}
-                        onChange={(e) =>
-                          setRecipe({ ...recipe, category: e.target.value })
-                        }
+                        onChange={handleChange}
+                        name="category"
                         required
                       >
                         <option value="">Sélectionner une catégorie</option>
@@ -287,9 +337,8 @@ export default function ChangeRecipe() {
                       <Form.Control
                         as="select"
                         value={recipe.regime}
-                        onChange={(e) =>
-                          setRecipe({ ...recipe, regime: e.target.value })
-                        }
+                        onChange={handleChange}
+                        name="regime"
                         required
                       >
                         <option value="">Sélectionner un régime</option>
@@ -306,7 +355,7 @@ export default function ChangeRecipe() {
               <Card className="mb-3" id="Temps_de_préparation_et_cuisson">
                 <Card.Header>Temps de préparation et cuisson</Card.Header>
                 <Card.Body>
-                  <Form>
+                  
                     <div className="row">
                       <Form.Group controlId="makingTime"
                         className="col-12 col-md-6 mb-2"
@@ -317,9 +366,8 @@ export default function ChangeRecipe() {
                           min="0"
                           placeholder="Temps de préparation"
                           value={recipe.makingTime}
-                          onChange={(e) =>
-                            setRecipe({ ...recipe, makingTime: e.target.value })
-                          }
+                          onChange={handleChange}
+                          name="makingTime"
                           required
                         />
                       </Form.Group>
@@ -333,26 +381,28 @@ export default function ChangeRecipe() {
                           min="0"
                           placeholder="Temps de cuisson"
                           value={recipe.cookingTime}
-                          onChange={(e) =>
-                            setRecipe({
-                              ...recipe,
-                              cookingTime: e.target.value,
-                            })
-                          }
+                          onChange={handleChange}
+                          name="cookingTime"
                           required
                         />
                       </Form.Group>
                     </div>
-                  </Form>
+                  
                 </Card.Body>
               </Card>
 
               {/* Image */}
               <Card className="mb-2" id="ImageAddRecipe">
                 <Card.Header>Image</Card.Header>
-                <Card.Body>
+                <Card.Body className="text-center">
+                      <img
+                              src={recipe.imageUrl || bookImage}
+                              alt={recipe.name}
+                              className="recipe-image border border-white rounded mb-3"
+                              style={{ width: "300px", maxHeight: "300px", objectFit: "cover" }}
+                            />
                   <Form.Group controlId="imageUrl">
-                    <Form.Label>Image de la recette :</Form.Label>
+                   
                     <Form.Control
                       type="file"
                       name="imageUrl"
@@ -537,7 +587,7 @@ export default function ChangeRecipe() {
                     ))
                   )}
                   <Button variant="outline-success" onClick={handleAddComment}>
-                    Modifier un bienfait
+                    Ajouter un bienfait
                   </Button>
                 </Card.Body>
               </Card>

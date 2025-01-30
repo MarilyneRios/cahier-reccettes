@@ -165,6 +165,7 @@ export const updateRecipe = async (req, res, next) => {
     if (req.body.makingTime) updatedFields.makingTime = req.body.makingTime;
     if (req.body.cookingTime) updatedFields.cookingTime = req.body.cookingTime;
     if (req.body.pseudo) updatedFields.pseudo = req.body.pseudo;
+    if (req.body.comments) updatedFields.comments = req.body.comments;
     if (req.body.imageUrl) updatedFields.imageUrl = req.body.imageUrl;
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(
@@ -184,6 +185,7 @@ export const updateRecipe = async (req, res, next) => {
       makingTime: updatedRecipe.makingTime,
       cookingTime: updatedRecipe.cookingTime,
       pseudo: updatedRecipe.pseudo,
+      comments: updatedRecipe.comments,
       imageUrl: updatedRecipe.imageUrl,
       message: "Recette mise à jour avec succès",
     });

@@ -33,7 +33,7 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
     updateRecipe: builder.mutation({
       query: ({ id, ...Recipes }) => ({
         url: `${RECIPES_URL}/updateRecipe/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: Recipes,
       }),
       invalidatesTags: ['Recipe'],

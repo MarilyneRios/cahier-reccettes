@@ -79,8 +79,6 @@ export default function DisplayRecipe() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
-
       // naviguer sur ChangeRecipe
       navigate(`/changeRecipe/${id}`);
     } catch (error) {
