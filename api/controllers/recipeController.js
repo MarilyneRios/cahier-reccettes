@@ -194,3 +194,38 @@ export const updateRecipe = async (req, res, next) => {
     res.status(500).json({ message: 'Erreur du serveur' });
   }
 };
+
+// @desc    Delete 1 recipe
+// @route   DELETE /api/recipes/:id
+// @access  Private (token)
+export const deleteRecipe = async (req, res, next) => {
+  console.log('Received request to delete recipeId:', req.params.id);
+
+  try {
+      // 1. Trouver la recette par ID et populate 'userRef'
+      const recipe = await Recipe.findById(req.params.id).populate('userRef', 'username profilePicture');
+      
+      // 2. Vérifier si la recette existe
+      if (!recipe) {
+          console.error('Recipe not found for ID:', req.params.id);
+          return res.status(404).json({ message: "Recette non trouvée" });
+      }
+      
+      // 3. Vérifier l'autorisation de l'utilisateur
+      if (!recipe.userRef || !req.user || recipe.userRef._id.toString() !== req.user.id.toString()) {
+          console.error('Unauthorized delete attempt. Recipe user ID:', recipe.userRef ? recipe.userRef._id : 'undefined', 'Request user ID:', req.user.id);
+          return res.status(403).json({ message: "Vous n'avez pas l'autorisation de supprimer cette recette" });
+      } else {
+          console.log('Authorized delete. User ID:', req.user.id);
+      }
+      
+      // 4. Supprimer la recette
+      await Recipe.findByIdAndDelete(req.params.id);
+
+      // Réponse après suppression
+      res.status(200).json({ message: 'La recette a été supprimée avec succès' });
+  } catch (error) {
+      console.error('Error deleting recipe:', error);
+      next(error);
+  }
+};
