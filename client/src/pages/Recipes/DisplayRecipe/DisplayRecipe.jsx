@@ -191,7 +191,7 @@ export default function DisplayRecipe() {
         </div>
         <Button type="submit" 
           variant="success" 
-          className="w-100 mt-3 btnChangeRecipe"
+          className="w-100 mt-3 btnDisplayRecipe"
           onClick={handleSubmit}
         >
             {isLoading ? <Loader /> : "Modifier la recette"}

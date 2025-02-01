@@ -544,10 +544,10 @@ export default function AddRecipe() {
             </Col>
           </Row>
 
-          <Button id="buutonAddRecipe"
+          <Button id="buttonAddRecipe"
             type="submit"
             variant="success"
-            className="w-100 mt-2 mb-3 btnAddRecipe"
+            className="w-100 mt-2 mb-3 fs-5 btnAddRecipe"
           >
             {isLoading ? <Loader /> : "Enregistrer la recette"}
           </Button>

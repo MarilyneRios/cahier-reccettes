@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 
 // React-Bootstrap
 import { Form, Button, Card, Row, Col, Alert } from "react-bootstrap";
+import { GoTrash } from "react-icons/go";
 
 // Icône
 import { RxCross1 } from "react-icons/rx";
@@ -26,13 +27,14 @@ import { app } from "../../../firebase";
 // Import de la mutation addRecipe
 import { useUpdateRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
 import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";
+import { useDeleteRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
 
 import "./changeRecipe.styles.css";
 
 export default function ChangeRecipe() {
-  // 
+  //
   const { currentUser } = useSelector((state) => state.user);
-   // Récupération de l'ID recipe depuis l'URL
+  // Récupération de l'ID recipe depuis l'URL
   const { id } = useParams();
 
   // vérifier chaque étape du processus
@@ -56,25 +58,28 @@ export default function ChangeRecipe() {
     userId: currentUser?.id || null,
   });
 
-
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [imageError, setImageError] = useState(null);
 
-    // Pour récupérer les datas du recipe
-    const {
-      data: recipeData,
-      isError,
-    } = useDisplayOneRecipeQuery(id);
+  // Pour récupérer les datas du recipe
+  const { data: recipeData, isError } = useDisplayOneRecipeQuery(id);
 
-    // vérifier chaque étape du processus
-    console.log("Données reçues du backend (recipeData):", recipeData);
-    console.log( "isLoading:",  isLoading, "| isError:",  isError,  "| error:",  error );
+  // vérifier chaque étape du processus
+  console.log("Données reçues du backend (recipeData):", recipeData);
+  console.log(
+    "isLoading:",
+    isLoading,
+    "| isError:",
+    isError,
+    "| error:",
+    error
+  );
 
-   // Mettre à jour l'état du recipe qd les datas sont récupérées
-   useEffect(() => {
+  // Mettre à jour l'état du recipe qd les datas sont récupérées
+  useEffect(() => {
     if (recipeData && recipeData.recipe) {
       // Éviter la mise à jour si recipeData est déjà utilisé
       if (recipe.name === "") {
@@ -84,7 +89,9 @@ export default function ChangeRecipe() {
           country: recipeData.recipe.country || "",
           category: recipeData.recipe.category || "",
           regime: recipeData.recipe.regime || "",
-          ingredients: Array.isArray(recipeData.recipe.ingredients) ? recipeData.recipe.ingredients : [],
+          ingredients: Array.isArray(recipeData.recipe.ingredients)
+            ? recipeData.recipe.ingredients
+            : [],
           instructions: recipeData.recipe.instructions || [],
           comments: recipeData.recipe.comments || [],
           makingTime: recipeData.recipe.makingTime || "",
@@ -93,21 +100,25 @@ export default function ChangeRecipe() {
         });
       }
     }
-  }, [recipeData, recipe.name]);   
-  
+  }, [recipeData, recipe.name]);
+
   // vérifier chaque étape du processus
   console.log("État actuel de recipe après mise à jour:", recipe);
 
   // Modifier les datas de recipe
-  const[updateRecipe] = useUpdateRecipeMutation(id);
-
+  const [updateRecipe] = useUpdateRecipeMutation(id);
 
   // Pour gérer les changements dans les champs du formulaire
   const handleChange = (e) => {
-    console.log("Changement détecté dans le champ:", e.target.name, "Nouvelle valeur:", e.target.value);
+    console.log(
+      "Changement détecté dans le champ:",
+      e.target.name,
+      "Nouvelle valeur:",
+      e.target.value
+    );
     setRecipe({ ...recipe, [e.target.name]: e.target.value });
   };
-  
+
   //////////////////////////////////////////////////
   // télécharger image firebase
   //////////////////////////////////////////////////
@@ -181,9 +192,9 @@ export default function ChangeRecipe() {
     }
   }, [file]);
 
-////////////////////////////////////////////////////////
-// // ingredients
-////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  // // ingredients
+  ////////////////////////////////////////////////////////
   const handleAddIngredient = () => {
     setRecipe({
       ...recipe,
@@ -193,13 +204,13 @@ export default function ChangeRecipe() {
       ],
     });
   };
-  
+
   const handleIngredientChange = (index, field, value) => {
     const newIngredients = [...recipe.ingredients];
     newIngredients[index][field] = value;
     setRecipe({ ...recipe, ingredients: newIngredients });
   };
-  
+
   const handleRemoveIngredient = (index) => {
     const newIngredients = recipe.ingredients.filter((_, i) => i !== index);
     setRecipe({ ...recipe, ingredients: newIngredients });
@@ -208,27 +219,27 @@ export default function ChangeRecipe() {
   ////////////////////////////////////////////////////////
   // // instuctions
   ////////////////////////////////////////////////////////
-const handleAddInstruction = () => {
-  setRecipe((prevRecipe) => ({
-    ...prevRecipe,
-    instructions: [...prevRecipe.instructions, ""],
-  }));
-};
+  const handleAddInstruction = () => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      instructions: [...prevRecipe.instructions, ""],
+    }));
+  };
 
-const handleRemoveInstruction = (index) => {
-  setRecipe((prevRecipe) => ({
-    ...prevRecipe,
-    instructions: prevRecipe.instructions.filter((_, i) => i !== index),
-  }));
-};
+  const handleRemoveInstruction = (index) => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      instructions: prevRecipe.instructions.filter((_, i) => i !== index),
+    }));
+  };
 
-const handleInstructionChange = (index, value) => {
-  setRecipe((prevRecipe) => {
-    const updatedInstructions = [...prevRecipe.instructions];
-    updatedInstructions[index] = value;
-    return { ...prevRecipe, instructions: updatedInstructions };
-  });
-};
+  const handleInstructionChange = (index, value) => {
+    setRecipe((prevRecipe) => {
+      const updatedInstructions = [...prevRecipe.instructions];
+      updatedInstructions[index] = value;
+      return { ...prevRecipe, instructions: updatedInstructions };
+    });
+  };
   ////////////////////////////////////////////////////////
   // // comments
   ////////////////////////////////////////////////////////
@@ -253,6 +264,28 @@ const handleInstructionChange = (index, value) => {
       return { ...prevRecipe, comments: updatedComments };
     });
   };
+
+  ////////////////////////////////////////////////////////
+  // //Supp une recette
+  ////////////////////////////////////////////////////////
+   // Modifier les datas de recipe
+   const [deleteRecipe] = useDeleteRecipeMutation(id);
+
+  const handleDeleteRecipe = async () => {
+    try {
+      // Appel à la mutation pour supprimer la recette
+      await deleteRecipe(id).unwrap();
+      // Vous pouvez ajouter ici des actions après la suppression, comme la redirection ou la mise à jour de l'état
+      console.log('Recette supprimée avec succès');
+      navigate('/');
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la recette', error);
+    }
+
+  };
+  ////////////////////////////////////////////////////////
+  // // Soumettre le formulaire
+  ////////////////////////////////////////////////////////
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -282,9 +315,12 @@ const handleInstructionChange = (index, value) => {
               <Card className="mb-3">
                 <Card.Header>Informations générales</Card.Header>
                 <Card.Body>
-                {/* Mise en page pour name et country */}
-                <div className="row">
-                    <Form.Group controlId="name"  className="col-12 col-md-6 mb-2">
+                  {/* Mise en page pour name et country */}
+                  <div className="row">
+                    <Form.Group
+                      controlId="name"
+                      className="col-12 col-md-6 mb-2"
+                    >
                       <Form.Label>Nom de la recette *</Form.Label>
                       <Form.Control
                         type="text"
@@ -296,7 +332,10 @@ const handleInstructionChange = (index, value) => {
                       />
                     </Form.Group>
 
-                    <Form.Group controlId="country" className="col-12 col-md-6 mb-2">
+                    <Form.Group
+                      controlId="country"
+                      className="col-12 col-md-6 mb-2"
+                    >
                       <Form.Label>Pays *</Form.Label>
                       <Form.Control
                         type="text"
@@ -310,7 +349,8 @@ const handleInstructionChange = (index, value) => {
                   </div>
                   {/* Mise en page pour Category et Regime */}
                   <div className="row">
-                    <Form.Group  controlId="category"
+                    <Form.Group
+                      controlId="category"
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Catégorie *</Form.Label>
@@ -330,7 +370,8 @@ const handleInstructionChange = (index, value) => {
                       </Form.Control>
                     </Form.Group>
 
-                    <Form.Group controlId="regime"
+                    <Form.Group
+                      controlId="regime"
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Régime *</Form.Label>
@@ -355,39 +396,39 @@ const handleInstructionChange = (index, value) => {
               <Card className="mb-3" id="Temps_de_préparation_et_cuisson">
                 <Card.Header>Temps de préparation et cuisson</Card.Header>
                 <Card.Body>
-                  
-                    <div className="row">
-                      <Form.Group controlId="makingTime"
-                        className="col-12 col-md-6 mb-2"
-                      >
-                        <Form.Label>Préparation (en min) *</Form.Label>
-                        <Form.Control
-                          type="number"
-                          min="0"
-                          placeholder="Temps de préparation"
-                          value={recipe.makingTime}
-                          onChange={handleChange}
-                          name="makingTime"
-                          required
-                        />
-                      </Form.Group>
+                  <div className="row">
+                    <Form.Group
+                      controlId="makingTime"
+                      className="col-12 col-md-6 mb-2"
+                    >
+                      <Form.Label>Préparation (en min) *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="Temps de préparation"
+                        value={recipe.makingTime}
+                        onChange={handleChange}
+                        name="makingTime"
+                        required
+                      />
+                    </Form.Group>
 
-                      <Form.Group  controlId="cookingTime"
-                        className="col-12 col-md-6 mb-2"
-                      >
-                        <Form.Label>Cuisson (en min) *</Form.Label>
-                        <Form.Control
-                          type="number"
-                          min="0"
-                          placeholder="Temps de cuisson"
-                          value={recipe.cookingTime}
-                          onChange={handleChange}
-                          name="cookingTime"
-                          required
-                        />
-                      </Form.Group>
-                    </div>
-                  
+                    <Form.Group
+                      controlId="cookingTime"
+                      className="col-12 col-md-6 mb-2"
+                    >
+                      <Form.Label>Cuisson (en min) *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="Temps de cuisson"
+                        value={recipe.cookingTime}
+                        onChange={handleChange}
+                        name="cookingTime"
+                        required
+                      />
+                    </Form.Group>
+                  </div>
                 </Card.Body>
               </Card>
 
@@ -395,14 +436,17 @@ const handleInstructionChange = (index, value) => {
               <Card className="mb-2" id="ImageAddRecipe">
                 <Card.Header>Image</Card.Header>
                 <Card.Body className="text-center">
-                      <img
-                              src={recipe.imageUrl || bookImage}
-                              alt={recipe.name}
-                              className="recipe-image border border-white rounded mb-3"
-                              style={{ width: "300px", maxHeight: "300px", objectFit: "cover" }}
-                            />
+                  <img
+                    src={recipe.imageUrl || bookImage}
+                    alt={recipe.name}
+                    className="recipe-image border border-white rounded mb-3"
+                    style={{
+                      width: "300px",
+                      maxHeight: "300px",
+                      objectFit: "cover",
+                    }}
+                  />
                   <Form.Group controlId="imageUrl">
-                   
                     <Form.Control
                       type="file"
                       name="imageUrl"
@@ -594,15 +638,24 @@ const handleInstructionChange = (index, value) => {
             </Col>
           </Row>
 
-          <Button id="buutonAddRecipe"
+          <Button
+            id="buttonChangeRecipe"
             type="submit"
             variant="success"
-            className="w-100 mt-2 mb-3 btnAddRecipe"
+            className=" my-3 fs-5 "
           >
             {isLoading ? <Loader /> : "Modifier la recette"}
+          </Button>
+          <Button
+            variant="danger"
+            id="buttonDeleteRecipe"
+            className=" my-3  fs-5 "
+            onClick={handleDeleteRecipe}
+          >
+             <GoTrash />
           </Button>
         </Form>
       </FormContainer>
     </section>
-  )
+  );
 }
