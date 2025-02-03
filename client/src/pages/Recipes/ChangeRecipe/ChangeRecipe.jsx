@@ -29,6 +29,11 @@ import { useUpdateRecipeMutation } from "../../../redux/recipes/recipesApiSlice"
 import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";
 import { useDeleteRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
 
+//notification
+import { toast  } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 import "./changeRecipe.styles.css";
 
 export default function ChangeRecipe() {
@@ -277,9 +282,13 @@ export default function ChangeRecipe() {
       await deleteRecipe(id).unwrap();
       // Vous pouvez ajouter ici des actions après la suppression, comme la redirection ou la mise à jour de l'état
       console.log('Recette supprimée avec succès');
-      navigate('/');
+      console.log("Affichage de la notification...");
+      toast.success("Recette supprimée avec succès!");
+
+      setTimeout(() => navigate('/'), 2000);
     } catch (error) {
       console.error('Erreur lors de la suppression de la recette', error);
+      toast.error( "Erreur lors de la mise à jour !");
     }
 
   };
@@ -293,9 +302,11 @@ export default function ChangeRecipe() {
       setIsLoading(true);
       console.log("Données envoyées au backend:", recipe);
       await updateRecipe({ id, ...recipe });
-      navigate(-1); // Retour à la page précédente
+      toast.success("Recette modifiée avec succès.");
+      navigate(-1); 
     } catch (error) {
       setError("Erreur lors de la mise à jour de la recette.");
+      toast.error( "Erreur lors de la  mise à jour de la recette !");
       setIsLoading(false);
     }
   };

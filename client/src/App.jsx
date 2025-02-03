@@ -42,6 +42,7 @@ import Footer from './components/layout/Footer';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutSuccess } from "./redux/users/userSlice";
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const dispatch = useDispatch();
@@ -79,6 +80,7 @@ function App() {
 
     <main className=""> 
         <Container fluid className="p-0 m-0">
+        <ToastContainer position="top-right" autoClose={3000} />
           <Outlet />
         </Container>
       </main>

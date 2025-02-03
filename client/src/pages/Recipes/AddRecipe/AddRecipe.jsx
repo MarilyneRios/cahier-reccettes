@@ -25,6 +25,10 @@ import { app } from "../../../firebase";
 // Import de la mutation addRecipe
 import { useAddRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
 
+//notification
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "./addRecipe.styles.css";
 
 export default function AddRecipe() {
@@ -206,10 +210,22 @@ export default function AddRecipe() {
       const recipeData = { ...recipe };
 
       // Si une image a été ajoutée, l'URL est déjà stockée dans `recipe.imageUrl`
-      await addRecipe(recipeData).unwrap(); // Utilisation de la mutation
-      navigate(-1); // Redirection après soumission réussie
+      const createdRecipe = await addRecipe(recipeData).unwrap(); // Utilisation de la mutation
+      console.log("Recipe Data:", createdRecipe); 
+
+      toast.success("Recette créée avec succès !");
+
+      if (createdRecipe && createdRecipe.savedRecipe && createdRecipe.savedRecipe._id) {
+        console.log("ID de la recette créée :", createdRecipe.savedRecipe._id);
+        navigate(`/displayRecipe/${createdRecipe.savedRecipe._id}`); 
+      } else {
+        console.error("Recipe ID not found in the response.");
+      }
+      
+     
     } catch (error) {
       setError("Erreur lors de la création de la recette.");
+      toast.error("Erreur lors de la création !");
       setIsLoading(false);
     }
   };
@@ -229,10 +245,13 @@ export default function AddRecipe() {
               <Card className="mb-3">
                 <Card.Header>Informations générales</Card.Header>
                 <Card.Body>
-                {/* Mise en page pour Category et Regime */}
-                <div className="row">
-                    <Form.Group controlId="name"  className="col-12 col-md-6 mb-2">
-                      <Form.Label>Nom de la recette *</Form.Label>
+                  {/* Mise en page pour Category et Regime */}
+                  <div className="row">
+                    <Form.Group
+                      controlId="name"
+                      className="col-12 col-md-6 mb-2"
+                    >
+                      <Form.Label>Nom *</Form.Label>
                       <Form.Control
                         type="text"
                         placeholder="Nom de la recette"
@@ -244,7 +263,10 @@ export default function AddRecipe() {
                       />
                     </Form.Group>
 
-                    <Form.Group controlId="country" className="col-12 col-md-6 mb-2">
+                    <Form.Group
+                      controlId="country"
+                      className="col-12 col-md-6 mb-2"
+                    >
                       <Form.Label>Pays *</Form.Label>
                       <Form.Control
                         type="text"
@@ -259,7 +281,8 @@ export default function AddRecipe() {
                   </div>
                   {/* Mise en page pour Category et Regime */}
                   <div className="row">
-                    <Form.Group  controlId="category"
+                    <Form.Group
+                      controlId="category"
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Catégorie *</Form.Label>
@@ -280,7 +303,8 @@ export default function AddRecipe() {
                       </Form.Control>
                     </Form.Group>
 
-                    <Form.Group controlId="regime"
+                    <Form.Group
+                      controlId="regime"
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Régime *</Form.Label>
@@ -308,7 +332,8 @@ export default function AddRecipe() {
                 <Card.Body>
                   <Form>
                     <div className="row">
-                      <Form.Group controlId="makingTime"
+                      <Form.Group
+                        controlId="makingTime"
                         className="col-12 col-md-6 mb-2"
                       >
                         <Form.Label>Préparation (en min) *</Form.Label>
@@ -324,7 +349,8 @@ export default function AddRecipe() {
                         />
                       </Form.Group>
 
-                      <Form.Group  controlId="cookingTime"
+                      <Form.Group
+                        controlId="cookingTime"
                         className="col-12 col-md-6 mb-2"
                       >
                         <Form.Label>Cuisson (en min) *</Form.Label>
@@ -544,7 +570,8 @@ export default function AddRecipe() {
             </Col>
           </Row>
 
-          <Button id="buttonAddRecipe"
+          <Button
+            id="buttonAddRecipe"
             type="submit"
             variant="success"
             className="w-100 mt-2 mb-3 fs-5 btnAddRecipe"
