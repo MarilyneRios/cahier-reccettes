@@ -71,6 +71,8 @@ export default function ChangeRecipe() {
 
   // Pour récupérer les datas du recipe
   const { data: recipeData, isError } = useDisplayOneRecipeQuery(id);
+  console.log("Données complètes de la recette:", recipeData);
+
 
   // vérifier chaque étape du processus
   console.log("Données reçues du backend (recipeData):", recipeData);
