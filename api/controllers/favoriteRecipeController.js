@@ -9,9 +9,64 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 
-// @desc    add all recipe in favorite
+// @desc    Add one recipe to favorites
+// @route   POST /api/recipes/addFavoriteRecipes
+// @access  Private (token required)
+export const addFavoriteRecipe = async (req, res) => {
+  try {
+    // 1. Vérifier si `req.user` est défini
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Utilisateur non authentifié" });
+    }
+
+    // 2. Récupérer l'ID de la recette depuis le body
+    const { recipeId } = req.body;
+    console.log("1. Recipe ID received:", recipeId);
+
+    // 3. Vérifier si `recipeId` est fourni et valide
+    if (!recipeId || !mongoose.Types.ObjectId.isValid(recipeId)) {
+      return res.status(400).json({ message: "ID de recette invalide" });
+    }
+
+    // 4. Trouver la recette
+    const recipe = await Recipe.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+    console.log("2. Recipe found:", recipe.title);
+
+    // 5. Récupérer l'utilisateur authentifié
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    console.log("3. User found:", user.username);
+
+    // 6. Vérifier si la recette est déjà enregistrée
+    if (user.savedRecipe.includes(recipeId)) {
+      return res.status(400).json({ message: "Recette déjà ajoutée aux favoris" });
+    }
+
+    // 7. Ajouter la recette aux favoris
+    user.savedRecipe.push(recipeId);
+    await user.save();
+    console.log("4. Updated user saved recipes:", user.savedRecipe);
+
+    // 8. Retourner la liste mise à jour des recettes favorites
+    return res.status(200).json({ savedRecipes: user.savedRecipe });
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la recette aux favoris:", error);
+    return res.status(500).json({ message: "Erreur interne du serveur" });
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// old logique
+///////////////////////////////////////////////////////////////////////////////////////////////
+// @desc    add one recipe in favorite
 // @route   POST /api/recipes/addFavoriteRecipes
 // @access   Private (token) = verifyToken
+/*
 export const addFavoriteRecipe = async (req, res, next) => {
     try {
       //1. Accéder à l'ID de la recette depuis la requête 
@@ -63,6 +118,7 @@ export const addFavoriteRecipe = async (req, res, next) => {
       return res.status(500).json({ message: "Erreur lors de l'ajout de la recette aux favoris"});
     }
   };
+  */
 
 // @desc    Remove 1 recipe to favorite recipes by user on favorite && signIn
 // @route   DELETE /api/recipes/favorites/:id
