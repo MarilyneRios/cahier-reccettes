@@ -107,7 +107,7 @@ export default function DisplayRecipe() {
           {/* Partie gauche */}
           <section className="left-part custom-left-border bg-light w-50 m-0 p-3 rounded-start">
             <div className="recipe-header mb-2 text-center">
-              <h1 className="fs-2">{recipe.name}</h1>
+              <h1 className="fs-2 title-border">{recipe.name}</h1>
               <p className="fs-5 fst-italic">Origine : {recipe.country || "Non précisée"}</p>
             </div>
             <figure>
@@ -158,7 +158,7 @@ export default function DisplayRecipe() {
               </Button>
 
               <div className="recipe-ingredients">
-                <h2 className="recipe-header text-center">Ingrédients</h2>
+                <h2 className="recipe-header title-border text-center">Ingrédients</h2>
                 <ul>
                   {recipe.ingredients?.length > 0 ? (
                     recipe.ingredients.map(({ name, quantity, unit, _id }) => (
@@ -174,7 +174,7 @@ export default function DisplayRecipe() {
             </div>
 
             <div className="recipe-instructions">
-              <h2>Préparation</h2>
+              <h2 className="title-border">Préparation</h2>
               <ol>
                 {recipe.instructions?.length > 0 ? (
                   recipe.instructions.map((step, index) => <li key={index}>{step}</li>)
@@ -185,7 +185,7 @@ export default function DisplayRecipe() {
             </div>
 
             <div className="recipe-comments">
-              <h2>Bienfaits</h2>
+              <h2 className="title-border">Bienfaits</h2>
               <ol>
                 {recipe.comments?.length > 0 ? (
                   recipe.comments.map((comment, index) => <li key={index}>{comment}</li>)

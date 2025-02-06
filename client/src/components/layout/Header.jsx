@@ -203,7 +203,7 @@ function Header() {
 
               <Dropdown.Item
                 as={Link}
-                to="/"
+                to="/allFavoriteRecipe"
                 className={`my-auto text-dark ${
                   location.pathname === "/mon-cahier" && "active"
                 }`}
@@ -260,7 +260,7 @@ function Header() {
         <div className="d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand
             as={Link}
-            to="/favorite"
+            to="/allFavoriteRecipe"
             className="text-center link-navbarBrand image3D rounded-pill px-2 mb-1 border border-white"
           >
             <span className="d-none d-sm-inline">
