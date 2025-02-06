@@ -70,7 +70,7 @@ function Header() {
             <Dropdown.Toggle
               variant="success"
               id="dropdown-basic"
-              className="ms-2"
+              className="ms-2 image3D"
             >
               <RxHamburgerMenu />
             </Dropdown.Toggle>
@@ -87,22 +87,22 @@ function Header() {
                 <FaHome
                   aria-hidden="true"
                   aria-label="Maison"
-                  size={18}
-                  className={`mx-2 text-dark`}
+                  size={25}
+                  className={`mx-2 text-dark image3D rounded-pill p-1`}
                 />
                 Accueil
               </Dropdown.Item>
 
               <Dropdown.Item>
                 {/** search bar */}
-                <Form className="d-flex align-items-center  mt-3 ">
+                <Form className="d-flex align-items-center  my-3 ">
                   <Form.Control
                     type="search"
                     placeholder="Chercher une recette"
-                    className="form-control mx-3 "
+                    className="form-control mx-3 image3D rounded-pill  "
                     aria-label="Search"
                   />
-                  <Button variant="success" className="btn btn-sm ">
+                  <Button variant="success" className="btn btn-sm image3D rounded-pill">
                     <FaSearch aria-hidden="true" aria-label="Loupe" size={28} />
                   </Button>
                 </Form>
@@ -117,8 +117,8 @@ function Header() {
                     <FaSearch
                       aria-hidden="true"
                       aria-label="Loupe"
-                      size={18}
-                      className={`mx-2 `}
+                      size={22}
+                      className={`mx-2 image3D rounded-pill p-2"`}
                     />{" "}
                     Rechercher par catégorie :
                   </Accordion.Header>
@@ -160,8 +160,8 @@ function Header() {
                     <FaSearch
                       aria-hidden="true"
                       aria-label="Loupe"
-                      size={18}
-                      className={`mx-2 `}
+                      size={22}
+                      className={`mx-2 image3D rounded-pill p-2"`}
                     />
                     Par régime alimentaire :
                   </Accordion.Header>
@@ -195,8 +195,8 @@ function Header() {
                 <PiBooksDuotone
                   aria-hidden="true"
                   aria-label="ajouter une recette"
-                  size={20}
-                  className="mx-2 text-black"
+                  size={25}
+                  className="mx-2 text-black image3D rounded-pill p-1"
                 />
                 Toutes les recettes
               </Dropdown.Item>
@@ -211,8 +211,8 @@ function Header() {
                 <FaBookOpenReader
                   aria-hidden="true"
                   aria-label="Mon cahier"
-                  size={18}
-                  className="mx-2"
+                  size={25}
+                  className="mx-2 image3D rounded-pill p-1"
                 />
                 Mon cahier de recettes
               </Dropdown.Item>
@@ -227,8 +227,8 @@ function Header() {
                 <FaCirclePlus
                   aria-hidden="true"
                   aria-label="ajouter une recette"
-                  size={18}
-                  className="mx-2"
+                  size={25}
+                  className="mx-2 image3D rounded-pill p-1"
                 />
                 Ajouter une recette
               </Dropdown.Item>
@@ -245,8 +245,8 @@ function Header() {
                 <FaInfoCircle
                   aria-hidden="true"
                   aria-label="informations"
-                  size={18}
-                  className="mx-2"
+                  size={25}
+                  className="mx-2 image3D rounded-pill p-1"
                 />
                 À propos de nous
               </Dropdown.Item>
@@ -261,30 +261,30 @@ function Header() {
           <Navbar.Brand
             as={Link}
             to="/favorite"
-            className="text-center textWithShadowNavbarBrand link-navbarBrand"
+            className="text-center link-navbarBrand image3D rounded-pill px-2 mb-1 border border-white"
           >
             <span className="d-none d-sm-inline">
               <FaBookOpenReader
                 aria-hidden="true"
                 aria-label="Mon cahier de recette"
-                size={25}
-                className="mx-3"
+                size={22}
+                className=" mb-2  mx-1 "
               />
             </span>
             {/* Affiché uniquement sur les smartphones */}
-            <span className="fs-6 d-inline d-sm-none">
+            <span className="fs-6 d-inline d-sm-none  ">
               Mon cahier de recettes
             </span>
 
             {/* Affiché sur les écrans plus grands */}
-            <span className="fs-3 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline">
+            <span className="fs-5 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline mx-1 ">
               Mon cahier de recettes
             </span>
           </Navbar.Brand>
         </div>
 
         {/* Centre : Barre de recherche*/}
-        <div className="d-none d-lg-flex flex-column align-items-center mx-auto">
+        <div className="d-none d-lg-flex flex-column align-items-center mx-auto image3D rounded-pill mb-1">
           <SearchBar />
         </div>
 
@@ -299,8 +299,8 @@ function Header() {
               aria-hidden="true"
               aria-label="Maison"
               title="Accueil"
-              size={25}
-              className=""
+              size={30}
+              className="image3D rounded-pill p-1"
             />
             <span className="tooltip-text">Accueil</span>
           </Navbar.Brand>
@@ -313,8 +313,8 @@ function Header() {
               aria-hidden="true"
               aria-label="Toutes les recettes"
               title="Toutes les recettes"
-              size={28}
-              className="mx-3"
+              size={30}
+              className="mx-3 image3D rounded-pill p-1"
             />
             <span className="tooltip-text">Les recettes</span>
           </Navbar.Brand>
@@ -328,7 +328,7 @@ function Header() {
               aria-label="ajouter une recette"
               title="Ajouter une recette"
               size={25}
-              className=""
+              className="image3D rounded-pill"
             />
             <span className="tooltip-text">Ajouter une recette</span>
           </Navbar.Brand>
@@ -342,7 +342,7 @@ function Header() {
               aria-label="A propos de nous"
               title="A propos de nous"
               size={25}
-              className=""
+              className="image3D rounded-pill"
             />
             <span className="tooltip-text">A propos de nous</span>
           </Navbar.Brand>
@@ -363,7 +363,7 @@ function Header() {
                   e.target.onerror = null;
                   e.target.src = "defaultProfilePicture.png";
                 }}
-                className="border border-dark"
+                className="border border-dark image3D btnNav"
                 style={{
                   height: "3.5rem",
                   width: "3.5rem",
@@ -374,7 +374,7 @@ function Header() {
           ) : (
             <>
               <Nav.Link as={Link} to="/sign-in" className="p-0">
-                <Button variant="success" className=" btn btn-success">
+                <Button variant="success" className=" btn btn-success image3D">
                   <FaUserCircle
                     size={26}
                     aria-hidden="true"

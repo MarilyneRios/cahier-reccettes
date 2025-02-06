@@ -1,13 +1,4 @@
 /*header */
-/*
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000; 
-}
-*/
 
 .bg-overlay {
   z-index: 3;  
@@ -74,6 +65,8 @@ header {
 
 .link-navbarBrand:hover{
   color:  #1c7430   !important;
+  transform: translateY(-2px);
+
 }
 
 /* info bulle*/
@@ -84,6 +77,15 @@ header {
   font-size: 0.85rem;
 }
 
+/*image de profil*/
 
+.image3D {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
+}
 
-
+.btnNav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.6); 
+}
