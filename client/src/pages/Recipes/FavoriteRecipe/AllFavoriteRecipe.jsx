@@ -9,7 +9,7 @@ import { Spinner } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
 
 //css
-import "./favoriteRecipe.styles.css";
+import "./allFavoriteRecipe.styles.css";
 import "../../../App.css";
 
 export default function AllFavoriteRecipe() {
