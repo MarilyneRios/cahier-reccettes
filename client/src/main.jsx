@@ -21,7 +21,6 @@ import AddRecipe from './pages/Recipes/AddRecipe/AddRecipe';
 import DisplayRecipe from './pages/Recipes/DisplayRecipe/DisplayRecipe';
 import ChangeRecipe from './pages/Recipes/ChangeRecipe/ChangeRecipe'
 import AllFavoriteRecipe from './pages/Recipes/FavoriteRecipe/AllFavoriteRecipe';
-import FavoriteRecipe from './pages/Recipes/FavoriteRecipe/FavoriteRecipe';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,7 +36,6 @@ const router = createBrowserRouter(
         <Route path='/displayRecipe/:id' element={<DisplayRecipe/>} />
         <Route path='/changeRecipe/:id' element={<ChangeRecipe />} />
         <Route path='/allFavoriteRecipe' element={<AllFavoriteRecipe />} />
-        <Route path='/favoriteRecipe/:id' element={<FavoriteRecipe />} />
       </Route>
     </Route>
   )
