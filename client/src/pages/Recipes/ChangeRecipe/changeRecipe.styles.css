@@ -26,3 +26,24 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.6); 
 }
+
+/* Pour les petits écrans */
+@media screen and (max-width: 780px) {
+
+/* btn modifier la recette */
+#buttonChangeRecipe {
+    width: 70%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
+   }
+    /* btn supprimer la recette */
+#buttonDeleteRecipe {
+    width: 45px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+    margin-left: 0.5 rem;
+}
+
+}

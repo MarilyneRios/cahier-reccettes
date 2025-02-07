@@ -316,7 +316,11 @@ export default function ChangeRecipe() {
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
       <FormContainer size="12">
-        <h1 className="text-center mb-4">Modifier une recette</h1>
+      <h1 className="text-center mb-4">
+  <span className="d-inline d-md-none">Modifier</span>
+  <span className="d-none d-md-inline">Modifier une recette</span>
+</h1>
+
         <BackButton />
 
         {error && <Alert variant="danger">{error}</Alert>}
@@ -452,7 +456,7 @@ export default function ChangeRecipe() {
                   <img
                     src={recipe.imageUrl || bookImage}
                     alt={recipe.name}
-                    className="recipe-image border border-white rounded mb-3"
+                    className="recipe-image img-fluid w-100 border border-white rounded mb-3"
                     style={{
                       width: "300px",
                       maxHeight: "300px",
@@ -494,7 +498,7 @@ export default function ChangeRecipe() {
                   ) : (
                     recipe.ingredients.map((ingredient, index) => (
                       <Row key={index} className="align-items-center mb-3 mx-3">
-                        <Col xs={12} sm={5} className="mb-2 mb-sm-0">
+                        <Col xs={12} sm={5} className="mb-2 mb-sm-0 pe-0">
                           <Form.Control
                             type="text"
                             placeholder="Nom de l'ingrédient"
@@ -513,7 +517,6 @@ export default function ChangeRecipe() {
                           <Form.Control
                             type="number"
                             min="0"
-                            placeholder="Quantité"
                             value={ingredient.quantity}
                             onChange={(e) =>
                               handleIngredientChange(
@@ -522,6 +525,7 @@ export default function ChangeRecipe() {
                                 e.target.value
                               )
                             }
+                            style={{ width: '80px' }} 
                             required
                           />
                         </Col>
@@ -536,15 +540,16 @@ export default function ChangeRecipe() {
                                 e.target.value
                               )
                             }
+                            style={{ width: '80px' }}
                             required
                           >
                             <option value="">Unité</option>
-                            <option value="nombre">nombre</option>
+                            <option value="nombre">nbre</option>
                             <option value="g">g</option>
                             <option value="ml">ml</option>
                             <option value="pcs">tasse</option>
-                            <option value="tbsp">cuillère à soupe</option>
-                            <option value="tsp">cuillère à café</option>
+                            <option value="tbsp">c.soupe</option>
+                            <option value="tsp">c.café</option>
                           </Form.Control>
                         </Col>
                         <Col xs={12} sm={1}>
@@ -579,7 +584,7 @@ export default function ChangeRecipe() {
                   ) : (
                     recipe.instructions.map((instruction, index) => (
                       <Row key={index} className="mb-2">
-                        <Col xs={10}>
+                        <Col xs={10} className="pe-0  w-75">
                           <Form.Control
                             type="text"
                             as="textarea"
@@ -591,7 +596,7 @@ export default function ChangeRecipe() {
                             }
                           />
                         </Col>
-                        <Col xs={2}>
+                        <Col xs={2} className="text-center">
                           <Button
                             variant="danger"
                             onClick={() => handleRemoveInstruction(index)}
@@ -610,7 +615,7 @@ export default function ChangeRecipe() {
                   </Button>
                 </Card.Body>
               </Card>
-              <Card className="mb-3" id="biennfaits">
+              <Card className="mb-2" id="biennfaits">
                 <Card.Header>Bienfaits</Card.Header>
                 <Card.Body>
                   {recipe.comments.length === 0 ? (
@@ -619,12 +624,13 @@ export default function ChangeRecipe() {
                     </p>
                   ) : (
                     recipe.comments.map((comment, index) => (
-                      <Row key={index} className="mb-2">
-                        <Col xs={10}>
+                      <Row key={index} className="mb-2 align-items-center">
+                        <Col xs={10}  className="pe-0  w-75">
                           <Form.Control
                             type="text"
                             as="textarea"
                             rows={2}
+                            Col={5}
                             placeholder={`Bienfait ${index + 1}`}
                             value={comment}
                             onChange={(e) =>
@@ -632,9 +638,10 @@ export default function ChangeRecipe() {
                             }
                           />
                         </Col>
-                        <Col xs={2}>
+                        <Col xs={2} className="text-center">
                           <Button
                             variant="danger"
+                            className=" " 
                             onClick={() => handleRemoveComment(index)}
                           >
                             <RxCross1 />
@@ -655,14 +662,14 @@ export default function ChangeRecipe() {
             id="buttonChangeRecipe"
             type="submit"
             variant="success"
-            className=" my-3 fs-5 "
+            className=" my-3 fs-5 fs-md-6"
           >
             {isLoading ? <Loader /> : "Modifier la recette"}
           </Button>
           <Button
             variant="danger"
             id="buttonDeleteRecipe"
-            className=" my-3  fs-5 "
+            className=" my-3  fs-5 fs-md-6 "
             onClick={handleDeleteRecipe}
           >
              <GoTrash />

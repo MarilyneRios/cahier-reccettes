@@ -99,116 +99,120 @@ export default function DisplayRecipe() {
 
   return (
     <div className="backgroundDisplayRecipe my-3">
-      <section className="DisplayRecipe-container">
-        <div className="content-container notebook-decoration text-dark d-flex flex-row w-100 pt-5">
-          {/* Bouton de retour */}
-          <BackButton />
-
-          {/* Partie gauche */}
-          <section className="left-part custom-left-border bg-light w-50 m-0 p-3 rounded-start">
-            <div className="recipe-header mb-2 text-center">
-              <h1 className="fs-2 title-border">{recipe.name}</h1>
-              <p className="fs-5 fst-italic">Origine : {recipe.country || "Non précisée"}</p>
-            </div>
-            <figure>
-              <img
-                src={recipe.imageUrl || bookImage}
-                alt={recipe.name}
-                className="recipe-image border border-white rounded"
-                style={{ width: "300px", maxHeight: "300px", objectFit: "cover" }}
-              />
-              <figcaption className="blockquote-image my-1">
-                <p>
-                  <strong>Catégorie :</strong> <cite>{recipe.category}</cite>
-                  <span className="mx-3">
-                    <strong>Régime :</strong> <cite>{recipe.regime}</cite>
-                  </span>
-                </p>
-                <p>
-                  <strong>Préparation :</strong> <cite>{recipe.makingTime || "?"} min</cite>
-                  <span className="mx-2"></span>
-                  <strong>Cuisson :</strong> <cite>{recipe.cookingTime || "?"} min</cite>
-                </p>
-              </figcaption>
-            </figure>
-            <figcaption className="recipe-info">
-              <p className="fs-5 fst-italic">
-                <strong>Auteur :</strong> {recipe.pseudo || "Anonyme"}
+    <section className="DisplayRecipe-container">
+      <div className="content-container notebook-decoration text-dark d-flex flex-column flex-md-row w-100 pt-5">
+        {/* Bouton de retour */}
+        <BackButton />
+  
+        {/* Partie gauche */}
+        <section className="left-part custom-left-border bg-light w-100 w-md-50 m-0 p-3 rounded-top rounded-md-start">
+          <div className="recipe-header mb-2 text-center">
+            <h1 className="fs-2 title-border">{recipe.name}</h1>
+            <p className="fs-5 fst-italic">Origine : {recipe.country || "Non précisée"}</p>
+          </div>
+          <figure className="text-center">
+            <img
+              src={recipe.imageUrl || bookImage}
+              alt={recipe.name}
+              className="recipe-image img-fluid w-100 border border-white rounded"
+              style={{ maxHeight: "250px", objectFit: "cover" }}
+            />
+            <figcaption className="blockquote-image my-1">
+              <p>
+                <strong>Catégorie :</strong> <cite>{recipe.category}</cite>
+                <span className="mx-3">
+                  <strong>Régime :</strong> <cite>{recipe.regime}</cite>
+                </span>
+              </p>
+              <p>
+                <strong>Préparation :</strong> <cite>{recipe.makingTime || "?"} min</cite>
+                <span className="mx-2"></span>
+                <strong>Cuisson :</strong> <cite>{recipe.cookingTime || "?"} min</cite>
               </p>
             </figcaption>
-          </section>
-
-          {/* Partie droite */}
-          <section className="right-part custom-right-border bg-light w-50 m-0 p-3 rounded-end">
-            <div className="recipe-details">
-              <Button
-                variant="transparent"
-                className="like-btn"
-                style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.5)",
-                  borderRadius: "50%",
-                  padding: "5px",
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                }}
-                onClick={handleLike}
-              >
-                {liked ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
-              </Button>
-
-              <div className="recipe-ingredients">
-                <h2 className="recipe-header title-border text-center">Ingrédients</h2>
-                <ul>
-                  {recipe.ingredients?.length > 0 ? (
-                    recipe.ingredients.map(({ name, quantity, unit, _id }) => (
-                      <li key={_id}>
-                        {quantity} {unit} de {name}
-                      </li>
-                    ))
-                  ) : (
-                    <p>Aucun ingrédient disponible.</p>
-                  )}
-                </ul>
-              </div>
-            </div>
-
-            <div className="recipe-instructions">
-              <h2 className="title-border">Préparation</h2>
-              <ol>
-                {recipe.instructions?.length > 0 ? (
-                  recipe.instructions.map((step, index) => <li key={index}>{step}</li>)
+          </figure>
+          <figcaption className="recipe-info">
+            <p className="fs-5 fst-italic">
+              <strong>Auteur :</strong> {recipe.pseudo || "Anonyme"}
+            </p>
+          </figcaption>
+        </section>
+  
+        {/* Partie droite */}
+        <section className="right-part custom-right-border bg-light w-100 w-md-50 m-0 p-3 rounded-bottom rounded-md-end">
+          <div className="recipe-details">
+            <Button
+              variant="transparent"
+              className="like-btn"
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderRadius: "50%",
+                padding: "5px",
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+              }}
+              onClick={handleLike}
+            >
+              {liked ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
+            </Button>
+  
+            <div className="recipe-ingredients listDisplay">
+              <h2 className="recipe-header title-border text-center">Ingrédients</h2>
+              <ul>
+                {recipe.ingredients?.length > 0 ? (
+                  recipe.ingredients.map(({ name, quantity, unit, _id }) => (
+                    <li key={_id}>
+                      {quantity} {unit} de {name}
+                    </li>
+                  ))
                 ) : (
-                  <p>Aucune instruction disponible.</p>
+                  <p>Aucun ingrédient disponible.</p>
                 )}
-              </ol>
+              </ul>
+            </div>
+          </div>
+  
+          <div className="recipe-instructions listDisplay">
+            <h2 className="title-border">Préparation</h2>
+            <ol>
+              {recipe.instructions?.length > 0 ? (
+                recipe.instructions.map((step, index) => <li key={index}>{step}</li>)
+              ) : (
+                <p>Aucune instruction disponible.</p>
+              )}
+            </ol>
+          </div>
+  
+          <div className="recipe-comments listDisplay ">
+            <h2 className="title-border">Bienfaits</h2>
+            <ol>
+              {recipe.comments?.length > 0 ? (
+                recipe.comments.map((comment, index) => <li key={index}>{comment}</li>)
+              ) : (
+                <p>Aucune information disponible.</p>
+              )}
+            </ol>
+          </div>
+  
+          {/* Bouton de modification affiché uniquement pour le créateur */}
+          {isCreator && (
+            <div className="d-flex justify-content-center">
+            <Button
+              type="submit"
+              variant="success"
+              className="w-100 mt-3 btnDisplayRecipe"
+              onClick={handleSubmit}
+            >
+              {isLoading ? <Loader /> : "Modifier la recette"}
+            </Button>
             </div>
 
-            <div className="recipe-comments">
-              <h2 className="title-border">Bienfaits</h2>
-              <ol>
-                {recipe.comments?.length > 0 ? (
-                  recipe.comments.map((comment, index) => <li key={index}>{comment}</li>)
-                ) : (
-                  <p>Aucune information disponible.</p>
-                )}
-              </ol>
-            </div>
-
-            {/* Bouton de modification affiché uniquement pour le créateur */}
-            {isCreator && (
-              <Button
-                type="submit"
-                variant="success"
-                className="w-100 mt-3 btnDisplayRecipe"
-                onClick={handleSubmit}
-              >
-                {isLoading ? <Loader /> : "Modifier la recette"}
-              </Button>
-            )}
-          </section>
-        </div>
-      </section>
-    </div>
+          )}
+        </section>
+      </div>
+    </section>
+  </div>
+  
   );
 }

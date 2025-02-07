@@ -11,17 +11,12 @@
     overflow: hidden;
 }
 
-/*  */
-.recipe-ingredients,
-.recipe-instructions {
-  margin-top: 2rem;
-}
-
-.recipe-ingredients ul,
-.recipe-instructions ol {
+/* liste section droite */
+.listDisplay ul, 
+.listDisplay ol {
+  margin-top: 1rem;
   margin-left: 1.5rem;
 }
-
 
 /* effet cahier*/
 .custom-left-border{
@@ -40,7 +35,7 @@
     box-shadow: 8px 0 12px rgba(0, 0, 0, 0.2);
 }
 
-
+/*  milieu du cahier */
 .notebook-decoration::before {
     content: "";
     position: absolute;
@@ -75,4 +70,27 @@
 .btnDisplayRecipe:hover {
     transform: translateY(-2px); 
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.6); 
+}
+
+
+/* Pour les petits écrans */
+@media screen and (max-width: 780px) {
+    /* Supprime la barre du milieu */
+    .notebook-decoration::before {
+        display: none;
+    }
+    .custom-left-border{
+        border: 5px solid green;
+        border: 12px 8px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: -8px 0 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .custom-right-border{
+        border: 5px solid green;
+        border: 12px 8px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 8px 0 12px rgba(0, 0, 0, 0.2);
+    }
+    
 }
