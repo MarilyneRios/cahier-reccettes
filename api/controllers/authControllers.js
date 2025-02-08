@@ -71,7 +71,7 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1m" });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "4h" });
       const { password: hashedPassword, ...userData  } = user._doc;
       const expiryDate = new Date(Date.now() + 14400000); // 4 heures  
       res
@@ -95,7 +95,7 @@ export const google = async (req, res, next) => {
         profilePicture: req.body.photo,
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1m" });
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "4h" });
       const { password: hashedPassword2, ...userData  } = newUser._doc;
       const expiryDate = new Date(Date.now() + 14400000); // 4 heures  
       res

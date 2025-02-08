@@ -5,7 +5,6 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoute.js';
 import recipesRoutes from './routes/recipeRoute.js';
-//import ingredientRoutes from './routes/ingredientRoute.js';
 import favoriteRecipes from './routes/favoriteRecipeRoute.js';
 //
 import cookieParser from 'cookie-parser';
@@ -39,7 +38,6 @@ app.use(cookieParser());
 app.use('/api/user', userRoutes);  
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipesRoutes); 
-//app.use('/api/ingredients', ingredientRoutes); 
 app.use('/api/favoriteRecipes', favoriteRecipes); 
 
 //attention si avant les routes pour affichage des routes get!!!!

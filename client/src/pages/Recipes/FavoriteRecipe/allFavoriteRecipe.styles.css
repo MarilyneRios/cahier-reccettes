@@ -1,0 +1,16 @@
+
+.Aucune-recipe-container {
+    height: 55vh;
+    
+    display: grid;
+    
+}
+
+.Aucune-recipe{
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 3rem;
+    background: rgba(0, 0, 0, 0.7);
+}

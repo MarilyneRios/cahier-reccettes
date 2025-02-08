@@ -4,35 +4,35 @@ const FAVORITES_URL = '/api/favoriteRecipes';
 
 export const favoriteApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getFavorites: builder.query({
-      query: () => ({
-        url: `${FAVORITES_URL}/`,
-        method: 'GET',
-      }),
-      providesTags: ['Favorite'],
-    }),
-    addFavorite: builder.mutation({
+    // Afficher toutes les recettes avec la pagination
+    getAllFavoriteRecipes: builder.query({
+        query: ({ pageNumber = 1, pageSize = 6 }) => ({
+            url: `${FAVORITES_URL}/?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+            method: 'GET',  
+        }),
+        providesTags: ['Favorite'],
+        }),
+    addFavoriteRecipe: builder.mutation({
       query: (recipeId) => ({
         url: `${FAVORITES_URL}/add`,
-        method: 'POST',
+        method: "POST",
         body: { recipeId },
       }),
-      invalidatesTags: ['Favorite'],
+      invalidatesTags: ["Favorite"],
     }),
-    removeFavorite: builder.mutation({
+    removeFavoriteRecipe: builder.mutation({
       query: (recipeId) => ({
         url: `${FAVORITES_URL}/${recipeId}`,
-        method: 'DELETE',
-        body: { recipeId },
+        method: "DELETE",
       }),
-      invalidatesTags: ['Favorite'],
+      invalidatesTags: ["Favorite"],
     }),
   }),
 });
 
 // Exporte les hooks auto-générés pour RTK Query
 export const {
-  useGetFavoritesQuery,
-  useAddFavoriteMutation,
-  useRemoveFavoriteMutation,
+  useGetAllFavoriteRecipesQuery,
+  useAddFavoriteRecipeMutation,
+  useRemoveFavoriteRecipeMutation,
 } = favoriteApiSlice;
