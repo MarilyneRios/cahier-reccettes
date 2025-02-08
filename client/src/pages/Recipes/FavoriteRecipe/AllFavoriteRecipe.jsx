@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 // RTK redux
-import { useDisplayAllRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
+import { useGetFavoritesQuery } from "../../../redux/favorites/favoriteApiSlice";
 // boostrap
 import { Spinner } from "react-bootstrap";
 
@@ -15,7 +15,7 @@ import "../../../App.css";
 export default function AllFavoriteRecipe() {
   const [currentPage, setCurrentPage] = useState(1);
      // Récupération des recettes avec le paramètre currentPage
-  const { data: recipesData, isLoading, isError, error } = useDisplayAllRecipesQuery({
+  const { data: recipesData, isLoading, isError, error } = useGetFavoritesQuery({
     pageNumber: currentPage,
     pageSize: 6, // Nombre d'éléments par page
   });

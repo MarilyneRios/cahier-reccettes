@@ -110,10 +110,61 @@ export const removeFavoriteRecipe = async (req, res, next) => {
 };
 
 
+// @desc    Display recipes of favorite recipes by user and recipes userId === userRef avec pagination
+// @route   GET /api/recipes/AllFavoriteRecipes/
+// @access  Private (token)
+export const getAllFavoriteRecipes = async (req, res, next) => {
+  try {
+    // 0. Nombre d'éléments par page
+    const pageSize = 6;
+    const page = Number(req.query.pageNumber) || 1;
+    
+    // 1. Récupérer le user et populate ses savedRecipe
+    const user = await User.findById(req.user.id).populate({
+      path: 'savedRecipe',
+      select: 'name country category regime makingTime cookingTime imageUrl', 
+    });
+    
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    
+    console.log('Utilisateur et recettes sauvegardées : ', user);
+    
+    // 2. Récupérer les recettes où userId === userRef
+    const userRecipes = await Recipe.find({ userRef: req.user.id });
+    
+    // 3. Vérifier si le user a des savedRecipes et userRef (s'il a créé des recettes)
+    const favoriteRecipes = user.savedRecipe.concat(userRecipes);
+    
+    if (favoriteRecipes.length === 0) {
+      return res.status(200).json({ message: "Aucune recette favorite trouvée" });
+    }
+    
+    // 4. Appliquer la pagination sur toutes les recettes
+    const startIndex = (page - 1) * pageSize;
+    const paginatedRecipes = favoriteRecipes.slice(startIndex, startIndex + pageSize);
+    
+    // 5. Compter le nombre total de recettes favorites
+    const totalRecipes = favoriteRecipes.length;
+    
+    // 6. Retourner les recettes paginées avec les informations de pagination
+    res.status(200).json({
+      recipes: paginatedRecipes,
+      page,
+      pages: Math.ceil(totalRecipes / pageSize),
+      totalRecipes,
+    });
+  } catch (error) {
+    // 7. Message d'erreur en cas d'échec
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur, veuillez réessayer plus tard" });
+  }
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // old logique
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
 
 // @desc    Afficher toutes les recettes favorites avec pagination
 // @route   GET /api/recipes/favoriteRecipes
@@ -154,9 +205,7 @@ export const displayAllFavoriteRecipes = async (req, res, next) => {
   }
 };
 
-
-
-// @desc    Display 1 recipe of favorite recipes by user on ReadOneRecipe && signIn
+// @desc    Display  recipes of favorite recipes by user on ReadOneRecipe && signIn
 // @route   GET /api/recipes/favoriteOneRecipe/:id
 // @access  Private (token)
 export const displayOneFavoriteRecipe = async (req, res, next) => {
@@ -184,7 +233,6 @@ export const displayOneFavoriteRecipe = async (req, res, next) => {
     next(error);
   }
 };
-
 
 
 ///////////////////////////////////////////////////////////////////////////
