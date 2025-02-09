@@ -10,7 +10,11 @@ import { addFavoriteLocal, removeFavoriteLocal, setError } from "../../redux/fav
 import bookImage from "../../assets/homeBg2.png";
 import "./CardRecipe.css";
 
+///////////////////////////////////////////////////////////////////////////
+// Composant cardRecipe
+///////////////////////////////////////////////////////////////////////////
 function CardRecipe({ recipe }) {
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -19,6 +23,11 @@ function CardRecipe({ recipe }) {
 
   // Vérifier si la recette est dans les favoris
   const isFavorite = favoriteRecipes.some((fav) => fav._id === recipe._id);
+
+  // logique pour cacher le btn like si on est l'auteur
+  
+  const isOwner = currentUser?._id === recipe?.userRef?._id;
+
 
   const { refetch } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
   const [addFavoriteRecipe] = useAddFavoriteRecipeMutation();
@@ -69,6 +78,8 @@ function CardRecipe({ recipe }) {
         alt={recipe.name}
         style={{ height: "14rem", objectFit: "cover" }}
       />
+      {/* Pour que le Button pour qu'il ne s'affiche que si isOwner est false */}
+      {!isOwner && (
       <Button
         variant="transparent"
         className="like-btn"
@@ -86,6 +97,7 @@ function CardRecipe({ recipe }) {
       >
         {isFavorite ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
       </Button>
+      )}
       <Card.Body>
         <div className="d-flex">
           <Card.Text className="fs-6 my-0">⏱️ {recipe.cookingTime} min</Card.Text>
