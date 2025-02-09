@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 import "./Header.css";
 
 // icons
@@ -18,11 +18,41 @@ import { PiBooksDuotone } from "react-icons/pi";
 //element
 import SearchBar from "../shared/searchBar";
 
+///////////////////////////////////////////////////////////////////////
+// Header component
+///////////////////////////////////////////////////////////////////////
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
-  const location = useLocation(); // Use useLocation to get the current path
+  //ouvrir et fermer la page Profile avec la photo
+    const [forceUpdate, setForceUpdate] = useState(false);
+// Use useLocation to get the current path
+  const location = useLocation(); 
   const navigate = useNavigate();
 
+///////////////////////////////////////////////////////////////////////
+// fonction pour ouvrir et fermer la page Profile avec la photo
+///////////////////////////////////////////////////////////////////////
+/*
+const handleProflieBtn = () => {
+  if (currentUser) {
+    console.log("Bouton profil cliqué !");
+    console.log("Chemin actuel :", location.pathname);
+    console.log("Historique de navigation :", window.history.length);
+
+    if (location.pathname === "/profile") {
+      console.log("Retour en arrière...");
+      window.history.length > 2 ? navigate(-1) : navigate("/");
+      setForceUpdate(prev => !prev); // 👈 Forcer un re-render après navigation
+    } else {
+      console.log("Aller sur la page de profil...");
+      navigate("/profile");
+    }
+  }
+};
+*/
+///////////////////////////////////////////////////////////////////////
+// fonction pour pour gérer l'ouverture de la page d'accueil
+///////////////////////////////////////////////////////////////////////
   const handleHomeClick = () => {
     navigate("/");
     // Faire défiler jusqu'à la section HeroHome après un délai
@@ -41,6 +71,10 @@ function Header() {
     }, 100); // Le délai 
   };
 
+  ///////////////////////////////////////////////////////////////////////
+// fonction pour pour afficher les recettes
+///////////////////////////////////////////////////////////////////////
+
   const handleViewRecipeClick = () => {
     
     navigate("/");
@@ -51,6 +85,10 @@ function Header() {
       }
     }, 100); 
   };
+
+
+
+
 
   return (
     <Navbar
@@ -359,6 +397,7 @@ function Header() {
                 src={currentUser.profilePicture}
                 alt="profile"
                 roundedCircle
+                //onClick={handleProflieBtn}
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "defaultProfilePicture.png";

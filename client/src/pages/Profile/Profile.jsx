@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Image } from "react-bootstrap";
 import FormContainer from "../../components/shared/FormContainer";
+// composant réutilisable
+import BackButton from "../../components/shared/BackButton";
+// icones
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaUnlock } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
+import { RxCross1 } from "react-icons/rx";
+// firebase
 import {
   getDownloadURL,
   getStorage,
@@ -29,8 +34,11 @@ import {
   useDeleteUserMutation,
   useUpdateUserMutation,
 } from "../../redux/users/usersApiSlice";
-import './Profile.css'
+import "./Profile.css";
 
+//////////////////////////////////////////////////////////////////
+// Profile
+//////////////////////////////////////////////////////////////////
 export default function Profile() {
   const { currentUser, loading } = useSelector((state) => state.user);
   //console.log("Token JWT:", currentUser?.accessToken);
@@ -44,6 +52,7 @@ export default function Profile() {
     profilePicture: currentUser.profilePicture,
   });
 
+  const [isOpen, setIsOpen] = useState(true);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
   const [localError, setLocalError] = useState("");
@@ -65,7 +74,9 @@ export default function Profile() {
     }
   }, [image]);
 
+  ////////////////////////////////////////////
   //Update images
+  ////////////////////////////////////////////
   const handleFileUpload = async (image) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + image.name;
@@ -114,14 +125,18 @@ export default function Profile() {
 
   const fileRef = useRef(null);
 
+  ////////////////////////////////////////////
   // Fonction de gestion du changement de valeur des champs du formulaire
+  ////////////////////////////////////////////
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setLocalError("");
   };
   console.log(formData);
 
+  /////////////////////////////////////////////////
   // Fonction de validation de fichier (si erreur)
+  /////////////////////////////////////////////////
   const validateFile = (file) => {
     if (!file.type.startsWith("image/")) {
       setImageError("Le fichier doit être une image");
@@ -136,7 +151,9 @@ export default function Profile() {
     return true;
   };
 
+  ////////////////////////////////////////////
   // Fonction de soumission du formulaire
+  ////////////////////////////////////////////
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -176,7 +193,9 @@ export default function Profile() {
     }
   };
 
+  ////////////////////////////////////////////
   // Supprimer un compte User
+  /////////////////////////////////////////////
   const handleDeleteAccount = async () => {
     try {
       dispatch(deleteUserStart());
@@ -231,179 +250,211 @@ export default function Profile() {
       } else {
         console.log("Le cookie access_token a été supprimé avec succès.");
       }
-      
+
       navigate("/");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
     }
   };
 
+  ////////////////////////////////////////////
+  // fermer la page profile
+  /////////////////////////////////////////////
+  const handleClose = () => {
+    setIsOpen(false);
+    navigate('/');
+  };
+  
   const { username, email, password, passwordConfirm } = formData;
 
   return (
     <div className="SignInAndUpForm">
- <FormContainer >
-      <h1 className="d-flex justify-content-center text-dark">Profil</h1>
-      <Form onSubmit={handleSubmit}>
-        {/* Image de profil */}
-        <Form.Group className="mt-2 d-flex justify-content-center">
-  <div
-    className="position-relative d-flex flex-column align-items-center"
-    style={{ width: "100px", height: "130px" }}
-  >
-    <div
-      className="position-relative cursor-pointer"
-      style={{ width: "100px", height: "100px" }}
-      onClick={() => fileRef.current.click()}
-      onMouseEnter={() => setIsHovered(true)} // Détecte le survol
-      onMouseLeave={() => setIsHovered(false)} // Détecte la fin du survol
-    >
-      <Image
-        src={formData.profilePicture || currentUser.profilePicture}
-        alt="image de profil"
-        className="rounded-circle object-cover border border-dark cursor-pointer"
-        style={{ width: "100px", height: "100px" }}
-      />
-      {imagePercent > 0 && imagePercent < 100 && (
-        <div
-          className="position-absolute top-50 start-50 translate-middle"
-          style={{ width: "100px", height: "100px" }}
-        >
-          <RingLoader size={100} color="#208537" loading={true} />
+      {isOpen && ( // Conditionally render content
+        <div onClick={handleClose}>
+          {" "}
+          {/* Parent click handler (if needed) */}
+         
+          <FormContainer>
+            <h1 className="d-flex justify-content-center text-dark">Profil</h1>
+            <Button 
+            variant="outline-danger"
+            className="m-0 border border-danger border-2 rounded-circle"
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
+              boxShadow: "0 6px 12px rgba(0, 0, 0, 0.4)",
+            }}
+            onClick={handleClose}><RxCross1/>
+            </Button>
+            <Form onSubmit={handleSubmit}>
+              {/* Image de profil */}
+              <Form.Group className="mt-2 d-flex justify-content-center">
+                <div
+                  className="position-relative d-flex flex-column align-items-center"
+                  style={{ width: "100px", height: "130px" }}
+                >
+                  <div
+                    className="position-relative cursor-pointer"
+                    style={{ width: "100px", height: "100px" }}
+                    onClick={() => fileRef.current.click()}
+                    onMouseEnter={() => setIsHovered(true)} // Détecte le survol
+                    onMouseLeave={() => setIsHovered(false)} // Détecte la fin du survol
+                  >
+                    <Image
+                      src={
+                        formData.profilePicture || currentUser.profilePicture
+                      }
+                      alt="image de profil"
+                      className="rounded-circle object-cover border border-dark cursor-pointer"
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                    {imagePercent > 0 && imagePercent < 100 && (
+                      <div
+                        className="position-absolute top-50 start-50 translate-middle"
+                        style={{ width: "100px", height: "100px" }}
+                      >
+                        <RingLoader size={100} color="#208537" loading={true} />
+                      </div>
+                    )}
+                  </div>
+                  {isHovered && ( // Affichage conditionnel du message
+                    <h6 className="fst-italic mt-2">
+                      Modifier votre image de profil
+                    </h6>
+                  )}
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    ref={fileRef}
+                    hidden
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (validateFile(file)) {
+                        setImagePercent(0);
+                        setImage(file);
+                      }
+                    }}
+                  />
+                  {imageError && (
+                    <p className="text-danger text-center">{imageError}</p>
+                  )}
+                </div>
+              </Form.Group>
+
+              <Form.Group className="my-2">
+                <h6 className="fst-italic">Modifier votre pseudo :</h6>
+                <Form.Control
+                  type="text"
+                  id="username"
+                  placeholder="Pseudo"
+                  value={username}
+                  onChange={handleChange}
+                  autoComplete="username"
+                />
+              </Form.Group>
+
+              <Form.Group className="my-2">
+                <h6 className="fst-italic">Modifier votre email :</h6>
+                <Form.Control
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                />
+              </Form.Group>
+
+              <Form.Group className="my-2">
+                <h6 className="fst-italic">Modifier votre mot de passe :</h6>
+                <div className="d-flex">
+                  <Form.Control
+                    type={visiblePassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Mot de passe"
+                    value={password}
+                    onChange={handleChange}
+                    autoComplete="current-password"
+                    className="me-2"
+                  />
+                  {visiblePassword ? (
+                    <FaEyeSlash
+                      onClick={() => setVisiblePassword(false)}
+                      className="m-3"
+                      size={20}
+                    />
+                  ) : (
+                    <FaEye
+                      onClick={() => setVisiblePassword(true)}
+                      size={20}
+                      className="m-3"
+                    />
+                  )}
+                </div>
+              </Form.Group>
+
+              <Form.Group className="my-2">
+                <h6 className="fst-italic">Confirmer votre mot de passe :</h6>
+                <div className="d-flex">
+                  <Form.Control
+                    type={visibleConfirmPassword ? "text" : "password"}
+                    id="passwordConfirm"
+                    placeholder="Confirmation du mot de passe"
+                    value={passwordConfirm}
+                    onChange={handleChange}
+                    autoComplete="new-password"
+                    className="me-2"
+                  />
+                  {visibleConfirmPassword ? (
+                    <FaEyeSlash
+                      onClick={() => setVisibleConfirmPassword(false)}
+                      className="m-3"
+                      size={20}
+                    />
+                  ) : (
+                    <FaEye
+                      onClick={() => setVisibleConfirmPassword(true)}
+                      size={20}
+                      className="m-3"
+                    />
+                  )}
+                </div>
+              </Form.Group>
+
+              <Button
+                type="submit"
+                variant="outline-dark"
+                className="my-3 w-100 btnProfil"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Enregistrer"}
+              </Button>
+              <div className="d-flex justify-content-between mt-3">
+                <span
+                  className="btn text-danger "
+                  onClick={handleDeleteAccount}
+                >
+                  <FaTrashAlt /> Supprimer le compte
+                </span>
+                <span className="btn text-danger " onClick={handleSignOut}>
+                  <FaUnlock /> Déconnexion
+                </span>
+              </div>
+              <div>
+                <p className="text-danger mt-5">
+                  {localError && "Quelque chose ne va pas !"}
+                </p>
+                <p className="text-success mt-5">
+                  {updateSuccess &&
+                    "Les modifications sont mises à jour avec succès !"}
+                </p>
+              </div>
+            </Form>
+          </FormContainer>
         </div>
       )}
     </div>
-    {isHovered && ( // Affichage conditionnel du message
-      <h6 className="fst-italic mt-2">Modifier votre image de profil</h6>
-    )}
-    <Form.Control
-      type="file"
-      accept="image/*"
-      ref={fileRef}
-      hidden
-      onChange={(e) => {
-        const file = e.target.files[0];
-        if (validateFile(file)) {
-          setImagePercent(0);
-          setImage(file);
-        }
-      }}
-    />
-    {imageError && (
-      <p className="text-danger text-center">{imageError}</p>
-    )}
-  </div>
-</Form.Group>
-
-
-        <Form.Group className="my-2">
-        <h6 className="fst-italic">Modifier votre pseudo :</h6>
-          <Form.Control
-            type="text"
-            id="username"
-            placeholder="Pseudo"
-            value={username}
-            onChange={handleChange}
-            autoComplete="username"
-          />
-        </Form.Group>
-
-        <Form.Group className="my-2">
-        <h6 className="fst-italic">Modifier votre email :</h6>
-          <Form.Control
-            type="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleChange}
-            autoComplete="email"
-          />
-        </Form.Group>
-
-        <Form.Group className="my-2">
-        <h6 className="fst-italic">Modifier votre mot de passe :</h6>
-          <div className="d-flex">
-            <Form.Control
-              type={visiblePassword ? "text" : "password"}
-              id="password"
-              placeholder="Mot de passe"
-              value={password}
-              onChange={handleChange}
-              autoComplete="current-password"
-              className="me-2"
-            />
-            {visiblePassword ? (
-              <FaEyeSlash
-                onClick={() => setVisiblePassword(false)}
-                className="m-3"
-                size={20}
-              />
-            ) : (
-              <FaEye
-                onClick={() => setVisiblePassword(true)}
-                size={20}
-                className="m-3"
-              />
-            )}
-          </div>
-        </Form.Group>
-
-        <Form.Group className="my-2">
-        <h6 className="fst-italic">Confirmer votre mot de passe :</h6>
-          <div className="d-flex">
-            <Form.Control
-              type={visibleConfirmPassword ? "text" : "password"}
-              id="passwordConfirm"
-              placeholder="Confirmation du mot de passe"
-              value={passwordConfirm}
-              onChange={handleChange}
-              autoComplete="new-password"
-              className="me-2"
-            />
-            {visibleConfirmPassword ? (
-              <FaEyeSlash
-                onClick={() => setVisibleConfirmPassword(false)}
-                className="m-3"
-                size={20}
-              />
-            ) : (
-              <FaEye
-                onClick={() => setVisibleConfirmPassword(true)}
-                size={20}
-                className="m-3"
-              />
-            )}
-          </div>
-        </Form.Group>
-
-        <Button
-          type="submit"
-          variant="outline-dark"
-          className="my-3 w-100 btnProfil"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Enregistrer"}
-        </Button>
-        <div className="d-flex justify-content-between mt-3">
-          <span className="btn text-danger " onClick={handleDeleteAccount}>
-            <FaTrashAlt /> Supprimer le compte
-          </span>
-          <span className="btn text-danger " onClick={handleSignOut}>
-            <FaUnlock /> Déconnexion
-          </span>
-        </div>
-        <div>
-          <p className="text-danger mt-5">
-            {localError && "Quelque chose ne va pas !"}
-          </p>
-          <p className="text-success mt-5">
-            {updateSuccess &&
-              "Les modifications sont mises à jour avec succès !"}
-          </p>
-        </div>
-      </Form>
-    </FormContainer>
-    </div>
-   
   );
 }
