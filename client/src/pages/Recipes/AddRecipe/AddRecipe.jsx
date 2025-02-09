@@ -87,9 +87,9 @@ export default function AddRecipe() {
       setImageError("Le fichier doit être une image");
       return false;
     }
-    if (file.size > 2 * 1024 * 1024) {
+    if (file.size > 3.5 * 1024 * 1024) {
       // 2 MB
-      setImageError("L'image doit être inférieure à 2 Mo");
+      setImageError("L'image doit être inférieure à 3.5 Mo");
       return false;
     }
     setImageError(""); // Réinitialiser les erreurs
