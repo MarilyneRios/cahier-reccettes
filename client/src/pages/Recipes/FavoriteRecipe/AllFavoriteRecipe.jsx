@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
+// redux
 import { useGetAllFavoriteRecipesQuery } from "../../../redux/favorites/favoriteApiSlice";
+// composants
 import { Spinner, Button } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
+// CSS
 import "./allFavoriteRecipe.styles.css";
 import "../../../App.css";
+
 
 export default function AllFavoriteRecipe() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
 
   console.log("🔄 Rendu du composant - currentPage :", currentPage);
-  console.log(
-    `URL de la requête : /favorites?page=${currentPage}&size=${pageSize}`
-  );
+  console.log(`URL de la requête : /favorites?page=${currentPage}&size=${pageSize}`);
 
   const {
     data: recipesData,
@@ -22,6 +24,11 @@ export default function AllFavoriteRecipe() {
     refetch,
   } = useGetAllFavoriteRecipesQuery({ pageNumber: currentPage, pageSize });
 
+  console.log("🔍 Vérification de userRef recipe 0:", recipesData?.recipes[0]?.userRef);
+
+  
+
+  // pagination
   useEffect(() => {
     console.log(
       "🔄 useEffect déclenché - Rechargement des recettes pour page :",
@@ -30,16 +37,18 @@ export default function AllFavoriteRecipe() {
     refetch();
   }, [currentPage, refetch]);
 
+
   // Vérification de la structure des données reçues
   useEffect(() => {
     console.log("📡 Données reçues de l'API :", recipesData);
   }, [recipesData]);
 
+
   const recipes = recipesData?.recipes || [];
   const totalPages = recipesData?.pages || 1;
 
-  console.log("📌 Nombre total de pages :", totalPages);
-  console.log("📌 Nombre de recettes affichées :", recipes.length);
+  //console.log("📌 Nombre total de pages :", totalPages);
+  //console.log("📌 Nombre de recettes affichées :", recipes.length);
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -48,6 +57,9 @@ export default function AllFavoriteRecipe() {
     }
   };
 
+/////////////////////////////////////////////////////////////////////////////////////
+// message d'erreur
+////////////////////////////////////////////////////////////////////////////////////
   if (isLoading) {
     console.log("⏳ Chargement en cours...");
     return <Spinner animation="border" role="status" />;
@@ -56,9 +68,11 @@ export default function AllFavoriteRecipe() {
   if (isError) {
     console.error("❌ Erreur lors du chargement :", error);
     return (
-      <p className="text-danger">
+      <div className="w-100 d-flex Aucune-recipe-container ">
+      <p className="text-danger fs-4 border border-2 rounded  Aucune-recipe">
         Erreur : {error?.data?.message || "Impossible de charger les recettes."}
       </p>
+      </div>
     );
   }
 

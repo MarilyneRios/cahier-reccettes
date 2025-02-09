@@ -49,6 +49,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
        
       }),
     }),
+    getUserById: builder.query({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}`,
+        method: 'GET',
+      })
+    })
     
   }),
 });
@@ -61,4 +67,5 @@ export const {
   useGoogleSignInMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useGetUserByIdQuery, 
 } = userApiSlice;

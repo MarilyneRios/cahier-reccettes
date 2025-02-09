@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
-// Initialisation de l'état initial pour le slice Redux
 const initialState = {
   favorites: [],
   currentFavorite: null,

@@ -27,7 +27,7 @@ const persistConfig = {
   version: 1,
   storage,
   whitelist: ['user'], // Seuls les reducers spécifiés seront persistés
-  blacklist: ['recipe','Favorite'], // Ne pas persister les données de recette
+  blacklist: ['recipe','favorite'], // Ne pas persister les données de recette
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,67 +1,68 @@
 import { Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-//RTK redux
-import { useAddFavoriteRecipeMutation } from "../../redux/favorites/favoriteApiSlice";
-import { useRemoveFavoriteRecipeMutation } from "../../redux/favorites/favoriteApiSlice";
+// RTK Redux
+import { useAddFavoriteRecipeMutation, useRemoveFavoriteRecipeMutation, useGetAllFavoriteRecipesQuery } from "../../redux/favorites/favoriteApiSlice";
+import { addFavoriteLocal, removeFavoriteLocal, setError } from "../../redux/favorites/favoriteSlice";
 
 import bookImage from "../../assets/homeBg2.png";
 import "./CardRecipe.css";
 
 function CardRecipe({ recipe }) {
-  const [liked, setLiked] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  // Récupérer la liste des favoris depuis Redux
+  const favoriteRecipes = useSelector((state) => state.favorite.favorites);
 
-  //logique pour add favoriteRecipe
+  // Vérifier si la recette est dans les favoris
+  const isFavorite = favoriteRecipes.some((fav) => fav._id === recipe._id);
+
+  const { refetch } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
   const [addFavoriteRecipe] = useAddFavoriteRecipeMutation();
-  /**
-    const { data, error, isLoading } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
-    const [addFavoriteRecipe] = useAddFavoriteRecipeMutation();
-
-    const handleAddFavorite = (recipe) => {
-      addFavoriteRecipe(recipe._id).then(() => {
-        // Mettez à jour l'état local
-        dispatch(addFavoriteLocal(recipe));
-      }).catch((err) => {
-        dispatch(setError("Erreur lors de l'ajout aux favoris"));
-      });
-    };
-   */
-
-  //logique pour remove favoriteRecipe
   const [removeFavoriteRecipe] = useRemoveFavoriteRecipeMutation();
-  /**
-    const [removeFavoriteRecipe] = useRemoveFavoriteRecipeMutation();
 
-    const handleRemoveFavorite = (recipeId) => {
-      removeFavoriteRecipe(recipeId).then(() => {
-        // Mettez à jour l'état local
-        dispatch(removeFavoriteLocal(recipeId));
-      }).catch((err) => {
-        dispatch(setError("Erreur lors de la suppression du favori"));
-      });
-    };
-
-   */
-
-  const handleLike = (e) => {
-    e.stopPropagation(); // Empêche le clic de propager à la carte entière
-    setLiked(!liked);
+  // Fonction pour gérer le clic sur le coeur
+  const handleToggleFavorite = async (e) => {
+    e.stopPropagation();
+    try {
+      // Si la recette est déjà favorite.
+      if (isFavorite) {
+        // Supprime la recette des favoris via l'API.
+        await removeFavoriteRecipe(recipe._id);
+        // Supprime la recette des favoris dans le store Redux localement.
+        dispatch(removeFavoriteLocal(recipe._id));
+      } else {
+        // Ajoute la recette aux favoris via l'API.
+        await addFavoriteRecipe(recipe._id);
+        // Ajoute la recette aux favoris dans le store Redux localement.
+        dispatch(addFavoriteLocal(recipe));
+      }
+       // Rafraîchir les favoris après modification
+      await refetch();
+    } catch (err) {
+      // Envoie une action pour afficher un message d'erreur.
+      dispatch(setError("Erreur lors de la mise à jour des favoris"));
+    }
   };
 
+  // Fonction pour naviguer sur DisplayRecipe
   const handleNavigate = () => {
-    navigate(`/displayRecipe/${recipe._id}`); // Navigue vers la page avec l'ID de la recette
+    navigate(`/displayRecipe/${recipe._id}`);
   };
 
   return (
     <Card
+     // Clé unique pour chaque carte.
       key={recipe._id}
       style={{ width: "18rem", cursor: "pointer" }}
       className="cardRecipeHome"
-      onClick={handleNavigate} // Navigation au clic sur la carte
+      // Clic sur la carte pour naviguer sur DisplayRecipe
+      onClick={handleNavigate}
     >
+      {/* Image de la recette */}
       <Card.Img
         variant="top"
         src={recipe.imageUrl || bookImage}
@@ -80,23 +81,17 @@ function CardRecipe({ recipe }) {
           padding: "5px",
           zIndex: 1,
         }}
-        onClick={handleLike}
+        //  Clic sur le coeur pour add ou remove dans les favoris
+        onClick={handleToggleFavorite}
       >
-        {liked ? (
-          <FaHeart size={30} color="red" />
-        ) : (
-          <FaRegHeart size={30} color="black" />
-        )}
+        {isFavorite ? <FaHeart size={30} color="red" /> : <FaRegHeart size={30} color="black" />}
       </Button>
       <Card.Body>
         <div className="d-flex">
-          <Card.Text className="fs-6 my-0">
-            ⏱️ {recipe.cookingTime} min
-          </Card.Text>
-          <Card.Text className="text-muted my-0 mx-5">
-            Par {recipe?.userRef?.username || "Anonyme"}
-          </Card.Text>
+          <Card.Text className="fs-6 my-0">⏱️ {recipe.cookingTime} min</Card.Text>
+          <Card.Text className="text-muted my-0 mx-5">Par {recipe?.userRef?.username || "Anonyme"}</Card.Text>
         </div>
+        {/* Pays et nom de la recette */}
         <Card.Title className="fs-5 my-1">
           {recipe.country} | {recipe.name}
         </Card.Title>

@@ -122,17 +122,18 @@ export const getAllFavoriteRecipes = async (req, res, next) => {
     // 1. Récupérer le user et populate ses savedRecipe
     const user = await User.findById(req.user.id).populate({
       path: 'savedRecipe',
-      select: 'name country category regime makingTime cookingTime imageUrl', 
+      select: 'name country category regime makingTime cookingTime imageUrl',
+      populate: { path: 'userRef', select: 'username profilePicture' }, 
     });
     
     if (!user) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
-    
-    console.log('Utilisateur et recettes sauvegardées : ', user);
+    console.log('Utilisateur et recettes sauvegardées : ', user); 
     
     // 2. Récupérer les recettes où userId === userRef
-    const userRecipes = await Recipe.find({ userRef: req.user.id });
+    const userRecipes = await Recipe.find({ userRef: req.user.id })
+  .populate("userRef", "username profilePicture");
     
     // 3. Vérifier si le user a des savedRecipes et userRef (s'il a créé des recettes)
     const favoriteRecipes = user.savedRecipe.concat(userRecipes);

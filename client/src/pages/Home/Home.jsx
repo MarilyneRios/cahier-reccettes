@@ -45,14 +45,14 @@ export default function Home() {
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
-            &lt;
+            &lt; Précédent
           </Button>
           <span className="mx-3 fs-5">Page {currentPage}</span>
           <Button
             variant="outline-success"
             onClick={() => handlePageChange(currentPage + 1)}
           >
-            &gt;
+            Suivant &gt;
           </Button>
         </div>
       </section>
