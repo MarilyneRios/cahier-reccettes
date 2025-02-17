@@ -72,6 +72,18 @@
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.6); 
 }
 
+/* CKEditor styles */
+.quill-content p {
+    margin: 0.5em 0; /* Réduit l'espacement entre les paragraphes */
+    line-height: 0.8; 
+  }
+  
+  .quill-content br {
+    display: block;
+    margin: 0.2em 0; /* Réduit l'espacement pour les sauts de ligne */
+    content: "";
+  }
+  
 
 /* Pour les petits écrans */
 @media screen and (max-width: 780px) {

@@ -15,6 +15,8 @@ import FormContainer from "../../../components/shared/FormContainer";
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
 import bookImage from "../../../assets/homeBg2.png";
+import CKEditor from "../../../components/shared/CKEditor";
+
 // Image sur Firebase
 import {
   getDownloadURL,
@@ -30,12 +32,14 @@ import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice
 import { useDeleteRecipeMutation } from "../../../redux/recipes/recipesApiSlice";
 
 //notification
-import { toast  } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./changeRecipe.styles.css";
 
+/////////////////////////////////////////////////////////////////////////
+// composant ChangeRecipe.jsx
+/////////////////////////////////////////////////////////////////////////
 export default function ChangeRecipe() {
   //
   const { currentUser } = useSelector((state) => state.user);
@@ -72,7 +76,6 @@ export default function ChangeRecipe() {
   // Pour récupérer les datas du recipe
   const { data: recipeData, isError } = useDisplayOneRecipeQuery(id);
   console.log("Données complètes de la recette:", recipeData);
-
 
   // vérifier chaque étape du processus
   console.log("Données reçues du backend (recipeData):", recipeData);
@@ -275,24 +278,23 @@ export default function ChangeRecipe() {
   ////////////////////////////////////////////////////////
   // //Supp une recette
   ////////////////////////////////////////////////////////
-   // Modifier les datas de recipe
-   const [deleteRecipe] = useDeleteRecipeMutation(id);
+  // Modifier les datas de recipe
+  const [deleteRecipe] = useDeleteRecipeMutation(id);
 
   const handleDeleteRecipe = async () => {
     try {
       // Appel à la mutation pour supprimer la recette
       await deleteRecipe(id).unwrap();
       // Vous pouvez ajouter ici des actions après la suppression, comme la redirection ou la mise à jour de l'état
-      console.log('Recette supprimée avec succès');
+      console.log("Recette supprimée avec succès");
       console.log("Affichage de la notification...");
       toast.success("Recette supprimée avec succès!");
 
-      setTimeout(() => navigate('/'), 2000);
+      setTimeout(() => navigate("/"), 2000);
     } catch (error) {
-      console.error('Erreur lors de la suppression de la recette', error);
-      toast.error( "Erreur lors de la mise à jour !");
+      console.error("Erreur lors de la suppression de la recette", error);
+      toast.error("Erreur lors de la mise à jour !");
     }
-
   };
   ////////////////////////////////////////////////////////
   // // Soumettre le formulaire
@@ -305,10 +307,10 @@ export default function ChangeRecipe() {
       console.log("Données envoyées au backend:", recipe);
       await updateRecipe({ id, ...recipe });
       toast.success("Recette modifiée avec succès.");
-      navigate(-1); 
+      navigate(-1);
     } catch (error) {
       setError("Erreur lors de la mise à jour de la recette.");
-      toast.error( "Erreur lors de la  mise à jour de la recette !");
+      toast.error("Erreur lors de la  mise à jour de la recette !");
       setIsLoading(false);
     }
   };
@@ -316,10 +318,10 @@ export default function ChangeRecipe() {
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
       <FormContainer size="12">
-      <h1 className="text-center mb-4">
-  <span className="d-inline d-md-none">Modifier</span>
-  <span className="d-none d-md-inline">Modifier une recette</span>
-</h1>
+        <h1 className="text-center mb-4">
+          <span className="d-inline d-md-none">Modifier</span>
+          <span className="d-none d-md-inline">Modifier une recette</span>
+        </h1>
 
         <BackButton />
 
@@ -525,7 +527,7 @@ export default function ChangeRecipe() {
                                 e.target.value
                               )
                             }
-                            style={{ width: '80px' }} 
+                            style={{ width: "80px" }}
                             required
                           />
                         </Col>
@@ -540,7 +542,7 @@ export default function ChangeRecipe() {
                                 e.target.value
                               )
                             }
-                            style={{ width: '80px' }}
+                            style={{ width: "80px" }}
                             required
                           >
                             <option value="">Unité</option>
@@ -585,15 +587,12 @@ export default function ChangeRecipe() {
                     recipe.instructions.map((instruction, index) => (
                       <Row key={index} className="mb-2">
                         <Col xs={10} className="pe-0  w-75">
-                          <Form.Control
-                            type="text"
-                            as="textarea"
-                            rows={3}
-                            placeholder={`Étape de préparation ${index + 1}`}
-                            value={instruction}
-                            onChange={(e) =>
-                              handleInstructionChange(index, e.target.value)
-                            }
+                   
+                           <CKEditor
+                            index={index}
+                            comment={instruction}
+                            handleCommentChange={handleInstructionChange}
+                            className="quill-content"
                           />
                         </Col>
                         <Col xs={2} className="text-center">
@@ -625,23 +624,18 @@ export default function ChangeRecipe() {
                   ) : (
                     recipe.comments.map((comment, index) => (
                       <Row key={index} className="mb-2 align-items-center">
-                        <Col xs={10}  className="pe-0  w-75">
-                          <Form.Control
-                            type="text"
-                            as="textarea"
-                            rows={2}
-                            Col={5}
-                            placeholder={`Bienfait ${index + 1}`}
-                            value={comment}
-                            onChange={(e) =>
-                              handleCommentChange(index, e.target.value)
-                            }
+                        <Col xs={10} className="pe-0  w-75">
+                          <CKEditor
+                            index={index}
+                            comment={comment}
+                            handleCommentChange={handleCommentChange}
+                            className="quill-content"
                           />
                         </Col>
                         <Col xs={2} className="text-center">
                           <Button
                             variant="danger"
-                            className=" " 
+                            className=" "
                             onClick={() => handleRemoveComment(index)}
                           >
                             <RxCross1 />
@@ -672,7 +666,7 @@ export default function ChangeRecipe() {
             className=" my-3  fs-5 fs-md-6 "
             onClick={handleDeleteRecipe}
           >
-             <GoTrash />
+            <GoTrash />
           </Button>
         </Form>
       </FormContainer>

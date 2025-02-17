@@ -208,7 +208,8 @@ export default function DisplayRecipe() {
               <ol>
                 {recipe.instructions?.length > 0 ? (
                   recipe.instructions.map((step, index) => (
-                    <li key={index}>{step}</li>
+                    
+                    <li className="quill-content" key={index} dangerouslySetInnerHTML={{ __html: step }}></li>
                   ))
                 ) : (
                   <p>Aucune instruction disponible.</p>
@@ -221,7 +222,7 @@ export default function DisplayRecipe() {
               <ol>
                 {recipe.comments?.length > 0 ? (
                   recipe.comments.map((comment, index) => (
-                    <li key={index}>{comment}</li>
+                    <li className="quill-content" key={index} dangerouslySetInnerHTML={{ __html: comment }}></li>
                   ))
                 ) : (
                   <p>Aucune information disponible.</p>
