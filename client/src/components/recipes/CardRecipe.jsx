@@ -10,6 +10,9 @@ import {
   useGetAllFavoriteRecipesQuery 
 } from "../../redux/favorites/favoriteApiSlice";
 
+//composant réutilisable
+import CountryFlag from "../shared/CountryFlag";
+
 import bookImage from "../../assets/homeBg2.png";
 import "./CardRecipe.css";
 
@@ -104,7 +107,11 @@ function CardRecipe({ recipe }) {
         </div>
         {/* Pays et nom de la recette */}
         <Card.Title className="fs-5 my-1">
-          {recipe.country} | {recipe.name}
+        {recipe.country && (
+      <span title={recipe.country} className="ms-2">
+        <CountryFlag country={recipe.country} />
+      </span>
+    )}
         </Card.Title>
       </Card.Body>
     </Card>

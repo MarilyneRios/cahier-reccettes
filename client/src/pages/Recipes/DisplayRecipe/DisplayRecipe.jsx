@@ -9,6 +9,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 // Composants réutilisables
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
+import CountryFlag from "../../../components/shared/CountryFlag";
 
 // RTK query
 import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";
@@ -126,12 +127,18 @@ export default function DisplayRecipe() {
 
           {/* Partie gauche */}
           <section className="left-part custom-left-border bg-light w-100 w-md-50 m-0 p-3 rounded-top rounded-md-start">
-            <div className="recipe-header mb-2 text-center">
-              <h1 className="fs-2 title-border">{recipe.name}</h1>
-              <p className="fs-5 fst-italic">
-                Origine : {recipe.country || "Non précisée"}
-              </p>
-            </div>
+<div className="recipe-header mb-2 text-center">
+  <h1 className="fs-2 title-border">{recipe.name}</h1>
+  <p className="fs-5 fst-italic d-flex align-items-center justify-content-center">
+    Origine : 
+    {recipe.country && (
+      <span title={recipe.country} className="ms-2">
+        <CountryFlag country={recipe.country} />
+      </span>
+    )}
+  </p>
+</div>
+
             <figure className="text-center">
               <img
                 src={recipe.imageUrl || bookImage}

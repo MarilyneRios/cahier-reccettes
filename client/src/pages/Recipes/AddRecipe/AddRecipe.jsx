@@ -13,7 +13,7 @@ import FormContainer from "../../../components/shared/FormContainer";
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
 import CKEditor from "../../../components/shared/CKEditor";
-
+import CountryFlag from "../../../components/shared/CountryFlag";
 
 // Image sur Firebase
 import {
@@ -132,7 +132,7 @@ export default function AddRecipe() {
   ///////////////////////////////////////////////////////////////////////
   useEffect(() => {
     if (file) {
-      handleFileUpload(file); 
+      handleFileUpload(file);
     }
   }, [file]);
 
@@ -225,18 +225,20 @@ export default function AddRecipe() {
 
       // Si une image a été ajoutée, l'URL est déjà stockée dans `recipe.imageUrl`
       const createdRecipe = await addRecipe(recipeData).unwrap(); // Utilisation de la mutation
-      console.log("Recipe Data:", createdRecipe); 
+      console.log("Recipe Data:", createdRecipe);
 
       toast.success("Recette créée avec succès !");
 
-      if (createdRecipe && createdRecipe.savedRecipe && createdRecipe.savedRecipe._id) {
+      if (
+        createdRecipe &&
+        createdRecipe.savedRecipe &&
+        createdRecipe.savedRecipe._id
+      ) {
         console.log("ID de la recette créée :", createdRecipe.savedRecipe._id);
-        navigate(`/displayRecipe/${createdRecipe.savedRecipe._id}`); 
+        navigate(`/displayRecipe/${createdRecipe.savedRecipe._id}`);
       } else {
         console.error("Recipe ID not found in the response.");
       }
-      
-     
     } catch (error) {
       setError("Erreur lors de la création de la recette.");
       toast.error("Erreur lors de la création !");
@@ -277,6 +279,7 @@ export default function AddRecipe() {
                       />
                     </Form.Group>
 
+                    {/*pays */}
                     <Form.Group
                       controlId="country"
                       className="col-12 col-md-6 mb-2"
@@ -284,15 +287,24 @@ export default function AddRecipe() {
                       <Form.Label>Pays *</Form.Label>
                       <Form.Control
                         type="text"
+                        name="country"
+                        autocapitalize="words"
                         placeholder="Nationalité de la recette"
                         value={recipe.country}
-                        onChange={(e) =>
-                          setRecipe({ ...recipe, country: e.target.value })
-                        }
+                        onChange={(e) => {
+                          const formattedValue = e.target.value
+                            .toLowerCase()
+                            .replace(/\b\w/g, (char) => char.toUpperCase());
+                          setRecipe({ ...recipe, country: formattedValue });
+                        }}
                         required
                       />
+                      <div className="mt-2">
+                        <CountryFlag country={recipe.country} />
+                      </div>
                     </Form.Group>
                   </div>
+                  
                   {/* Mise en page pour Category et Regime */}
                   <div className="row">
                     <Form.Group
@@ -513,8 +525,7 @@ export default function AddRecipe() {
                     recipe.instructions.map((instruction, index) => (
                       <Row key={index} className="mb-2">
                         <Col xs={10}>
-          
-                           <CKEditor
+                          <CKEditor
                             index={index}
                             comment={instruction}
                             handleCommentChange={handleInstructionChange}
@@ -551,7 +562,7 @@ export default function AddRecipe() {
                     recipe.comments.map((comment, index) => (
                       <Row key={index} className="mb-2">
                         <Col xs={10}>
-                        <CKEditor
+                          <CKEditor
                             index={index}
                             comment={comment}
                             handleCommentChange={handleCommentChange}

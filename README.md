@@ -235,3 +235,168 @@ import {
 ## message pour user
  npm install --save react-toastify
 https://www.npmjs.com/package/react-toastify
+
+
+## CKEditor avec react-quill
+
+1. Info sur l'éditor
+
+https://www.npmjs.com/package/react-quill
+
+````
+npm install react-quill --save
+````
+
+2. création du composant
+
+````
+import { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; 
+import './CKEditor.styles.css';
+
+const CKEditor = ({ index, comment, handleCommentChange }) => {
+  const [editorContent, setEditorContent] = useState(comment);
+
+  const handleChange = (content) => {
+    setEditorContent(content);
+    handleCommentChange(index, content);
+  };
+
+  return (
+<div>
+      <ReactQuill
+        value={editorContent}
+        onChange={handleChange}
+        placeholder={`Bienfait ${index + 1}`}
+        className="quill-content"
+      />
+
+    </div>
+  );
+};
+
+export default CKEditor;
+````
+
+2. style.css pour espacement
+
+````
+.quill-content p {
+    margin: 0.5em 0; /* Réduit l'espacement entre les paragraphes */
+    line-height: 0.8; 
+  }
+  
+  .quill-content br {
+    display: block;
+    margin: 0.2em 0; /* Réduit l'espacement pour les sauts de ligne */
+    content: "";
+  }
+ ```` 
+
+ 3. intégration du compsant dans addRecipe et ChangeRecipe
+
+ ````
+  <CKEditor
+    index={index}
+   comment={comment}
+   handleCommentChange={handleCommentChange}
+   className="quill-content"
+/>
+````
+
+## react-country-flag
+
+1. info
+
+https://www.npmjs.com/package/react-country-flag
+
+````
+npm install --save react-country-flag
+````
+
+2. composant CountryFlag
+
+````
+import  { useState, useEffect } from 'react';
+import ReactCountryFlag from "react-country-flag";
+
+const CountryFlag = ({ country }) => {
+  const [flagUrl, setFlagUrl] = useState("");
+
+  // Mapping des noms de pays aux codes ISO
+  const countryCodeMap = {
+    // Pays Européens
+    "Albanie": "AL",
+    "Andorre": "AD",
+    "Autriche": "AT",
+    "Biélorussie": "BY",
+    // ....
+  
+  };
+  
+
+  useEffect(() => {
+    if (country && countryCodeMap[country]) {
+      const code = countryCodeMap[country].toLowerCase();
+      setFlagUrl(`https://flagcdn.com/w320/${code}.png`);
+    } else {
+      setFlagUrl("");
+    }
+  }, [country]);
+
+  return (
+    <div>
+      {flagUrl ? (
+        <img
+          src={flagUrl}
+          alt={`Drapeau de ${country}`}
+          style={{ marginTop: "1rem", width: "2.5rem", height: "auto" }}
+        />
+      ) : (
+        <p>Aucun drapeau trouvé</p>
+      )}
+    </div>
+  );
+};
+
+export default CountryFlag;
+
+````
+
+3. intégration dans AddRecipe et ChangeRecipe
+
+````
+  {/*pays */}
+                    <Form.Group
+                      controlId="country"
+                      className="col-12 col-md-6 mb-2"
+                    >
+                      <Form.Label>Pays *</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="country"
+                        autocapitalize="words"
+                        placeholder="Nationalité de la recette"
+                        value={recipe.country}
+                        onChange={(e) => {
+                          const formattedValue = e.target.value
+                            .toLowerCase()
+                            .replace(/\b\w/g, (char) => char.toUpperCase());
+                          setRecipe({ ...recipe, country: formattedValue });
+                        }}
+                        required
+                      />
+                      <div className="mt-2">
+                        <CountryFlag country={recipe.country} />
+                      </div>
+                    </Form.Group>
+````
+
+4. afficher les drapeau dans DisplayRecipe et cardRecipe
+
+````
+import CountryFlag from "../../../components/shared/CountryFlag";
+//....
+{recipe.country && <CountryFlag country={recipe.country} />}
+````

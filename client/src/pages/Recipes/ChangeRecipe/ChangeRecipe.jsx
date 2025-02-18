@@ -16,6 +16,7 @@ import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
 import bookImage from "../../../assets/homeBg2.png";
 import CKEditor from "../../../components/shared/CKEditor";
+import CountryFlag from "../../../components/shared/CountryFlag";
 
 // Image sur Firebase
 import {
@@ -351,19 +352,29 @@ export default function ChangeRecipe() {
                       />
                     </Form.Group>
 
-                    <Form.Group
+                     {/*pays */}
+                   <Form.Group
                       controlId="country"
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Pays *</Form.Label>
                       <Form.Control
                         type="text"
+                        name="country"
+                        autocapitalize="words"
                         placeholder="Nationalité de la recette"
                         value={recipe.country}
-                        onChange={handleChange}
-                        name="country"
+                        onChange={(e) => {
+                          const formattedValue = e.target.value
+                            .toLowerCase()
+                            .replace(/\b\w/g, (char) => char.toUpperCase());
+                          setRecipe({ ...recipe, country: formattedValue });
+                        }}
                         required
                       />
+                      <div className="mt-2">
+                        <CountryFlag country={recipe.country} />
+                      </div>
                     </Form.Group>
                   </div>
                   {/* Mise en page pour Category et Regime */}
