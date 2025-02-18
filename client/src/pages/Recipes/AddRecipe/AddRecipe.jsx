@@ -12,6 +12,8 @@ import { RxCross1 } from "react-icons/rx";
 import FormContainer from "../../../components/shared/FormContainer";
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
+import CKEditor from "../../../components/shared/CKEditor";
+
 
 // Image sur Firebase
 import {
@@ -511,15 +513,12 @@ export default function AddRecipe() {
                     recipe.instructions.map((instruction, index) => (
                       <Row key={index} className="mb-2">
                         <Col xs={10}>
-                          <Form.Control
-                            type="text"
-                            as="textarea"
-                            rows={3}
-                            placeholder={`Étape de préparation ${index + 1}`}
-                            value={instruction}
-                            onChange={(e) =>
-                              handleInstructionChange(index, e.target.value)
-                            }
+          
+                           <CKEditor
+                            index={index}
+                            comment={instruction}
+                            handleCommentChange={handleInstructionChange}
+                            className="quill-content"
                           />
                         </Col>
                         <Col xs={2}>
@@ -552,15 +551,11 @@ export default function AddRecipe() {
                     recipe.comments.map((comment, index) => (
                       <Row key={index} className="mb-2">
                         <Col xs={10}>
-                          <Form.Control
-                            type="text"
-                            as="textarea"
-                            rows={2}
-                            placeholder={`Bienfait ${index + 1}`}
-                            value={comment}
-                            onChange={(e) =>
-                              handleCommentChange(index, e.target.value)
-                            }
+                        <CKEditor
+                            index={index}
+                            comment={comment}
+                            handleCommentChange={handleCommentChange}
+                            className="quill-content"
                           />
                         </Col>
                         <Col xs={2}>
