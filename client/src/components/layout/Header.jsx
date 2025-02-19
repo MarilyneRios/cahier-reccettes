@@ -352,7 +352,7 @@ const handleProflieBtn = () => {
               aria-label="Toutes les recettes"
               title="Toutes les recettes"
               size={30}
-              className="mx-3 image3D rounded-pill p-1"
+              className="mx-2 image3D rounded-pill p-1"
             />
             <span className="tooltip-text">Les recettes</span>
           </Navbar.Brand>
@@ -380,7 +380,7 @@ const handleProflieBtn = () => {
               aria-label="A propos de nous"
               title="A propos de nous"
               size={25}
-              className="image3D rounded-pill"
+              className="image3D mx-2 rounded-pill"
             />
             <span className="tooltip-text">A propos de nous</span>
           </Navbar.Brand>

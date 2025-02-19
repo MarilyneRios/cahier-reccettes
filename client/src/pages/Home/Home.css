@@ -12,7 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 
@@ -20,13 +19,17 @@
 #ViewRecipesHome {
   max-width: 100%;
   min-height: 90vh;
+  position: relative; 
+  z-index: 1;
 }
 
 .header{
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   transform-style: preserve-3d;
   box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
-  z-index: 10; 
+  position: relative; 
+  /* passer par dessus viewRecipe*/
+  z-index: 1050;
 }
 
 
