@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import "./Header.css";
 
 // icons
@@ -23,33 +23,11 @@ import SearchBar from "../shared/searchBar";
 ///////////////////////////////////////////////////////////////////////
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
-  //ouvrir et fermer la page Profile avec la photo
-    const [forceUpdate, setForceUpdate] = useState(false);
+
 // Use useLocation to get the current path
   const location = useLocation(); 
   const navigate = useNavigate();
 
-///////////////////////////////////////////////////////////////////////
-// fonction pour ouvrir et fermer la page Profile avec la photo
-///////////////////////////////////////////////////////////////////////
-/*
-const handleProflieBtn = () => {
-  if (currentUser) {
-    console.log("Bouton profil cliqué !");
-    console.log("Chemin actuel :", location.pathname);
-    console.log("Historique de navigation :", window.history.length);
-
-    if (location.pathname === "/profile") {
-      console.log("Retour en arrière...");
-      window.history.length > 2 ? navigate(-1) : navigate("/");
-      setForceUpdate(prev => !prev); // 👈 Forcer un re-render après navigation
-    } else {
-      console.log("Aller sur la page de profil...");
-      navigate("/profile");
-    }
-  }
-};
-*/
 ///////////////////////////////////////////////////////////////////////
 // fonction pour pour gérer l'ouverture de la page d'accueil
 ///////////////////////////////////////////////////////////////////////
@@ -86,10 +64,6 @@ const handleProflieBtn = () => {
     }, 100); 
   };
 
-
-
-
-
   return (
     <Navbar
       expand="lg"
@@ -108,7 +82,7 @@ const handleProflieBtn = () => {
             <Dropdown.Toggle
               variant="success"
               id="dropdown-basic"
-              className="ms-2 image3D"
+              className="ms-2 btnNav"
             >
               <RxHamburgerMenu />
             </Dropdown.Toggle>
@@ -133,7 +107,8 @@ const handleProflieBtn = () => {
 
               <Dropdown.Item>
                 {/** search bar */}
-                <Form className="d-flex align-items-center  my-3 ">
+                <Form className="d-flex align-items-center  my-3 "
+                 onClick={(e) => e.stopPropagation()}>
                   <Form.Control
                     type="search"
                     placeholder="Chercher une recette"
@@ -158,7 +133,7 @@ const handleProflieBtn = () => {
                       size={22}
                       className={`mx-2 image3D rounded-pill p-2"`}
                     />{" "}
-                    Rechercher par catégorie :
+                    Par catégorie :
                   </Accordion.Header>
                   <Accordion.Body as={Link} to="/" className="accordionBody ">
                     Toutes
@@ -201,7 +176,7 @@ const handleProflieBtn = () => {
                       size={22}
                       className={`mx-2 image3D rounded-pill p-2"`}
                     />
-                    Par régime alimentaire :
+                    Par régime :
                   </Accordion.Header>
 
                   <Accordion.Body as={Link} className="accordionBody " to="/">
@@ -299,9 +274,9 @@ const handleProflieBtn = () => {
           <Navbar.Brand
             as={Link}
             to="/allFavoriteRecipe"
-            className="text-center link-navbarBrand image3D rounded-pill px-2 mb-1 border border-white"
+            className="text-center link-navbarBrand btnNav rounded-pill px-2 mb-1 border border-white"
           >
-            <span className="d-none d-sm-inline">
+            <span className="d-none d-sm-inline ">
               <FaBookOpenReader
                 aria-hidden="true"
                 aria-label="Mon cahier de recette"
@@ -322,7 +297,7 @@ const handleProflieBtn = () => {
         </div>
 
         {/* Centre : Barre de recherche*/}
-        <div className="d-none d-lg-flex flex-column align-items-center mx-auto image3D rounded-pill mb-1">
+        <div className="d-none d-lg-flex flex-column align-items-center mx-auto btnNav rounded-pill mb-1">
           <SearchBar />
         </div>
 
@@ -338,7 +313,7 @@ const handleProflieBtn = () => {
               aria-label="Maison"
               title="Accueil"
               size={30}
-              className="image3D rounded-pill p-1"
+              className="btnNav rounded-pill p-1"
             />
             <span className="tooltip-text">Accueil</span>
           </Navbar.Brand>
@@ -352,7 +327,7 @@ const handleProflieBtn = () => {
               aria-label="Toutes les recettes"
               title="Toutes les recettes"
               size={30}
-              className="mx-2 image3D rounded-pill p-1"
+              className="mx-2 btnNav rounded-pill p-1"
             />
             <span className="tooltip-text">Les recettes</span>
           </Navbar.Brand>
@@ -366,7 +341,7 @@ const handleProflieBtn = () => {
               aria-label="ajouter une recette"
               title="Ajouter une recette"
               size={25}
-              className="image3D rounded-pill"
+              className="btnNav rounded-pill"
             />
             <span className="tooltip-text">Ajouter une recette</span>
           </Navbar.Brand>
@@ -380,7 +355,7 @@ const handleProflieBtn = () => {
               aria-label="A propos de nous"
               title="A propos de nous"
               size={25}
-              className="image3D mx-2 rounded-pill"
+              className="btnNav mx-2 rounded-pill"
             />
             <span className="tooltip-text">A propos de nous</span>
           </Navbar.Brand>
@@ -402,12 +377,8 @@ const handleProflieBtn = () => {
                   e.target.onerror = null;
                   e.target.src = "defaultProfilePicture.png";
                 }}
-                className="border border-dark image3D btnNav"
-                style={{
-                  height: "3.5rem",
-                  width: "3.5rem",
-                  objectFit: "cover",
-                }}
+                className="border border-dark imageBtn btnNav img-fluid"
+              
               />
             </Link>
           ) : (

@@ -36,3 +36,11 @@
 .custom-text-shadow {
   text-shadow: 5px 5px 8px rgba(0, 0, 0, 0.75);
 }
+
+/* Styles for tablets (e.g., screens smaller than 768px) */
+@media (max-width: 768px) {
+  .header{
+    
+    margin-top: 2.5rem;;
+  }
+}
