@@ -229,3 +229,146 @@ export const deleteRecipe = async (req, res, next) => {
       next(error);
   }
 };
+
+///////////////////////////////////////////////////////////////////////////
+// Search et filtrer
+///////////////////////////////////////////////////////////////////////////
+
+// @desc    Search recipes & display one recipe on homeScreen
+// @route   GET /api/recipes/search/:query
+// @access  Public
+// by name recipe, name author and ingredient
+export const searchRecipe = async (req, res, next) => {
+  try {
+    // 1. Récupération du terme de recherche dans les paramètres
+    const searchTerm = req.params.query;
+    console.log('searchTerm is', searchTerm);
+
+    // 2. Si aucun terme de recherche n'est fourni
+    if (!searchTerm) {
+      return res.status(400).json({
+        success: false,
+        message: "Le paramètre 'query' est requis.",
+        statusCode: 400,
+      });
+    }
+
+    // 3. Recherche insensible à la casse
+    const searchRegex = new RegExp(searchTerm, "i");
+
+     // 4. Rechercher l'utilisateur correspondant au terme (par nom)
+     let user = null;
+     if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
+       // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
+       user = await User.findOne({ username: { $regex: searchRegex } });
+       console.log('user found:', user);
+     }
+
+    // 5. Recherche des recettes par nom, pays ou userRef (si user trouvé)
+    const recipes = await Recipe.find({
+      $or: [
+        { name: { $regex: searchRegex } },
+        { country: { $regex: searchRegex } },
+        { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
+      ].filter(condition => condition), // Supprimer les conditions nulles
+    }).populate("userRef", "username"); // On récupère aussi le username de l'utilisateur via `userRef`
+
+
+    // 6. Si aucune recette n'est trouvée
+    if (recipes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Aucune recette trouvée pour le terme recherché.",
+        statusCode: 404,
+      });
+    }
+
+    // 7. Retourner les recettes trouvées
+    res.status(200).json({
+      success: true,
+      recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Filter recipes by category & diplay one recipe on homeScreen
+// @route   GET /api/recipes/category/:category
+// @access  Public
+export const filtreCategoryRecipe = async (req, res, next) => {
+  try {
+    // 1. Récupérer le paramètre de catégorie dans les query params
+    const category = req.query.category;
+    console.log(category);
+    
+    // 2. Vérifier si la catégorie est fournie
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: "Le paramètre 'category' est requis.",
+        statusCode: 400,
+      });
+    }
+
+    //3. Filtrer les recettes par catégorie
+    const recipes = await Recipe.find({ category: category });
+
+    // Si aucune recette n'est trouvée
+    if (recipes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Aucune recette trouvée pour la catégorie spécifiée.",
+        statusCode: 404,
+      });
+    }
+
+    //4. Retourner les recettes filtrées
+    res.status(200).json({
+      success: true,
+      recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Filter recipes by regime & diplay one recipe on homeScreen
+// @route   GET /api/recipes/regime/:regime
+// @access  Public
+export const filtreRegimeRecipe = async (req, res, next) => {
+  try {
+    // 1. Récupérer le paramètre de regime dans les query params
+    const regime = req.query.regime;
+    console.log(regime);
+    
+    // 2. Vérifier si le regime est fournie
+    if (!regime) {
+      return res.status(400).json({
+        success: false,
+        message: "Le paramètre 'regime' est requis.",
+        statusCode: 400,
+      });
+    }
+
+    //3. Filtrer les recettes par regime
+    const recipes = await Recipe.find({ regime: regime });
+
+    // Si aucune recette n'est trouvée
+    if (recipes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Aucune recette trouvée pour le regime spécifié.",
+        statusCode: 404,
+      });
+    }
+
+    //4. Retourner les recettes filtrées
+    res.status(200).json({
+      success: true,
+      recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

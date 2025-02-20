@@ -6,13 +6,10 @@ import {
     displayOneRecipe, 
     updateRecipe, 
     deleteRecipe, 
+    searchRecipe, 
+    filtreCategoryRecipe, 
+    filtreRegimeRecipe 
 } from '../controllers/recipeController.js';
-
-/* 
-  searchRecipe, 
-  filtreCategoryRecipe, 
-  filtreRegimeRecipe 
-*/
 
 import { verifyToken } from '../utils/verifyUser.js';
 
@@ -33,14 +30,13 @@ router.delete ('/deleteRecipe/:id', verifyToken, deleteRecipe) // DELETE: http:/
 ///////////////////////////////////////////////////////////////////////////
 // Search 
 ///////////////////////////////////////////////////////////////////////////
-
-//router.get('/search/:query', verifyToken, searchRecipe); // GET http://localhost:3000/api/recipes/search/salade
+router.get('/search/:query', verifyToken, searchRecipe); // GET http://localhost:3000/api/recipes/search/salade
 
 
 ///////////////////////////////////////////////////////////////////////////
 // filtrer
 ///////////////////////////////////////////////////////////////////////////
-//router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
-//router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
+router.get('/filter/category', verifyToken,filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
+router.get('/filter/regime', verifyToken,filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
 
 export default router;

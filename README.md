@@ -368,29 +368,29 @@ export default CountryFlag;
 
 ````
   {/*pays */}
-                    <Form.Group
-                      controlId="country"
-                      className="col-12 col-md-6 mb-2"
-                    >
-                      <Form.Label>Pays *</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="country"
-                        autocapitalize="words"
-                        placeholder="Nationalité de la recette"
-                        value={recipe.country}
-                        onChange={(e) => {
-                          const formattedValue = e.target.value
-                            .toLowerCase()
-                            .replace(/\b\w/g, (char) => char.toUpperCase());
-                          setRecipe({ ...recipe, country: formattedValue });
-                        }}
-                        required
-                      />
-                      <div className="mt-2">
-                        <CountryFlag country={recipe.country} />
-                      </div>
-                    </Form.Group>
+  <Form.Group
+    controlId="country"
+    className="col-12 col-md-6 mb-2"
+  >
+  <Form.Label>Pays *</Form.Label>
+    <Form.Control
+      type="text"
+      name="country"
+      autocapitalize="words"
+      placeholder="Nationalité de la recette"
+      value={recipe.country}
+      onChange={(e) => {
+        const formattedValue = e.target.value
+          .toLowerCase()
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+           setRecipe({ ...recipe, country: formattedValue });
+      }}
+        required
+    />
+    <div className="mt-2">
+      <CountryFlag country={recipe.country} />
+    </div>
+  </Form.Group>
 ````
 
 4. afficher les drapeau dans DisplayRecipe et cardRecipe
