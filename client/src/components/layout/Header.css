@@ -14,11 +14,14 @@
   box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
   /* passer par dessus favorite recipe*/
   z-index: 1050; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /*Largeur du menu*/
 .custom-dropdown-menu {
-  min-width: 250px;
+  min-width: 200px;
   min-height: 90vh;
 }
 /* Couleur des liens pdt survol */
@@ -77,6 +80,13 @@
 }
 
 /*********************************/
+
+.search-bar-container{
+ 
+}
+
+
+/*********************************/
 /*image de profil*/
 .btnNav {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -101,7 +111,7 @@
 @media (max-width: 768px) {
 
   .btnNav{
-    height: 1.8rem;
+    height: 2.5rem;
     width: 3rem;
   }
   .btnNav:hover {

@@ -105,22 +105,6 @@ function Header() {
                 Accueil
               </Dropdown.Item>
 
-              <Dropdown.Item>
-                {/** search bar */}
-                <Form className="d-flex align-items-center  my-3 "
-                 onClick={(e) => e.stopPropagation()}>
-                  <Form.Control
-                    type="search"
-                    placeholder="Chercher une recette"
-                    className="form-control mx-3 image3D rounded-pill  "
-                    aria-label="Search"
-                  />
-                  <Button variant="success" className="btn btn-sm image3D rounded-pill">
-                    <FaSearch aria-hidden="true" aria-label="Loupe" size={28} />
-                  </Button>
-                </Form>
-              </Dropdown.Item>
-
               <Dropdown.Divider />
 
               {/* Accordéon pour les catégories */}
@@ -270,7 +254,7 @@ function Header() {
         {/* Centered Brand */}
 
         {/* Centre : Liens */}
-        <div className="d-lg-flex flex-row align-items-center mx-auto">
+        <div className=" d-none d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand
             as={Link}
             to="/allFavoriteRecipe"
@@ -284,22 +268,22 @@ function Header() {
                 className=" mb-2  mx-1 "
               />
             </span>
-            {/* Affiché uniquement sur les smartphones */}
-            <span className="fs-6 d-inline d-sm-none  ">
-              Mon cahier de recettes
-            </span>
-
-            {/* Affiché sur les écrans plus grands */}
             <span className="fs-5 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline mx-1 ">
               Mon cahier de recettes
             </span>
           </Navbar.Brand>
         </div>
 
-        {/* Centre : Barre de recherche*/}
-        <div className="d-none d-lg-flex flex-column align-items-center mx-auto btnNav rounded-pill mb-1">
-          <SearchBar />
+     {/* Centre : Barre de recherche */}
+     <div className="d-flex justify-content-center align-items-center mx-auto  my-2">
+          <SearchBar  />
         </div>
+
+        {/* Affiché uniquement sur les smartphones
+        <span className=" fs-6 d-inline d-sm-none m-1">
+          <SearchBar />
+        </span> */}
+     
 
         <div className="d-none d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand
@@ -313,7 +297,7 @@ function Header() {
               aria-label="Maison"
               title="Accueil"
               size={30}
-              className="btnNav rounded-pill p-1"
+              className="btnNav rounded-pill p-1 border border-white"
             />
             <span className="tooltip-text">Accueil</span>
           </Navbar.Brand>
@@ -327,7 +311,7 @@ function Header() {
               aria-label="Toutes les recettes"
               title="Toutes les recettes"
               size={30}
-              className="mx-2 btnNav rounded-pill p-1"
+              className="mx-2 btnNav rounded-pill p-1 border border-white"
             />
             <span className="tooltip-text">Les recettes</span>
           </Navbar.Brand>
@@ -340,7 +324,7 @@ function Header() {
               aria-hidden="true"
               aria-label="ajouter une recette"
               title="Ajouter une recette"
-              size={25}
+              size={30}
               className="btnNav rounded-pill"
             />
             <span className="tooltip-text">Ajouter une recette</span>
@@ -354,7 +338,7 @@ function Header() {
               aria-hidden="true"
               aria-label="A propos de nous"
               title="A propos de nous"
-              size={25}
+              size={30}
               className="btnNav mx-2 rounded-pill"
             />
             <span className="tooltip-text">A propos de nous</span>
@@ -377,7 +361,7 @@ function Header() {
                   e.target.onerror = null;
                   e.target.src = "defaultProfilePicture.png";
                 }}
-                className="border border-dark imageBtn btnNav img-fluid"
+                className="border border-dark imageBtn btnNav"
               
               />
             </Link>
