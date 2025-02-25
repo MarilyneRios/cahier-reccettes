@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container";
 import { Navbar, Nav, Dropdown, Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+
 import { Link, useLocation } from "react-router-dom"; 
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -49,7 +49,7 @@ function Header() {
     }, 100); // Le délai 
   };
 
-  ///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 // fonction pour pour afficher les recettes
 ///////////////////////////////////////////////////////////////////////
 
@@ -278,12 +278,6 @@ function Header() {
      <div className="d-flex justify-content-center align-items-center mx-auto  my-2">
           <SearchBar  />
         </div>
-
-        {/* Affiché uniquement sur les smartphones
-        <span className=" fs-6 d-inline d-sm-none m-1">
-          <SearchBar />
-        </span> */}
-     
 
         <div className="d-none d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand

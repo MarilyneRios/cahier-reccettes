@@ -76,7 +76,7 @@ const Flag = ({ country }) => {
         <Card.Img
           src={flagUrl}
           alt={`Drapeau de ${country}`}
-          style={{ marginTop: "1rem", width: "2.5rem" }}
+          style={{ marginTop: "0.5rem", width: "2rem" }}
         />
       )}
     </div>

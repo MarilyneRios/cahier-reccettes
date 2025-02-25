@@ -5,6 +5,7 @@ const RECIPES_URL = '/api/recipes';
 
 export const recipesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // Nouvel endpoint pour le CRUD 
     addRecipe: builder.mutation({
       query: (Recipe) => ({
         url: `${RECIPES_URL}/`,
@@ -47,8 +48,34 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Recipe'],
     }),
 
- 
+  // Nouvel endpoint pour la recherche
+  searchRecipes: builder.query({
+    query: (query) => ({
+      url: `${RECIPES_URL}/search/${query}`,
+      method: 'GET',
+    }),
+    providesTags: ['Recipe'],
   }),
+
+  // Nouvel endpoint pour filtrer par catégorie
+  filterByCategory: builder.query({
+    query: (category) => ({
+      url: `${RECIPES_URL}/filter/category?category=${category}`,
+      method: 'GET',
+    }),
+    providesTags: ['Recipe'],
+  }),
+
+  // Nouvel endpoint pour filtrer par régime
+  filterByRegime: builder.query({
+    query: (regime) => ({
+      url: `${RECIPES_URL}/filter/regime?regime=${regime}`,
+      method: 'GET',
+    }),
+    providesTags: ['Recipe'],
+  }),
+}),
+  
 });
 
 export const {
@@ -57,5 +84,7 @@ export const {
   useDisplayOneRecipeQuery,
   useUpdateRecipeMutation,
   useDeleteRecipeMutation,
-  
+  useSearchRecipesQuery, 
+  useFilterByCategoryQuery, 
+  useFilterByRegimeQuery, 
 } = recipesApiSlice;

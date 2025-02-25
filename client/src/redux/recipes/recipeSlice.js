@@ -20,6 +20,7 @@ const initialState = {
   currentRecipe: null,
   loading: false,
   error: false,
+  searchResults: [],
 };
 
 const recipeSlice = createSlice({
@@ -41,9 +42,12 @@ const recipeSlice = createSlice({
     setCurrentRecipe: (state, action) => {
       state.currentRecipe = action.payload;
     },
+    setSearchResults: (state, action) => {
+      state.searchResults = action.payload;
+    },
   },
 });
 
-export const { setRecipe, resetRecipeInfo,setUserId,setCurrentRecipe } = recipeSlice.actions;
+export const { setRecipe, resetRecipeInfo,setUserId,setCurrentRecipe,setSearchResults } = recipeSlice.actions;
 
 export default recipeSlice.reducer;

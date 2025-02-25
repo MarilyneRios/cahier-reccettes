@@ -67,10 +67,11 @@ export default function DisplayRecipe() {
   console.log("L'utilisateur est-il le créateur ?", isCreator);
 
   // gestion des likes
-  const favoriteState = useSelector((state) => state.favorite || { favorites: [] });
+  const favoriteState = useSelector(
+    (state) => state.favorite || { favorites: [] }
+  );
   const favoriteRecipes = favoriteState.favorites;
 
-  
   //console.log("Données complètes de  favoriteRecipes:", recipeData);
 
   const isFavorite = favoriteRecipes.includes(id);
@@ -127,17 +128,17 @@ export default function DisplayRecipe() {
 
           {/* Partie gauche */}
           <section className="left-part custom-left-border bg-light w-100 w-md-50 m-0 p-3 rounded-top rounded-md-start">
-<div className="recipe-header mb-2 text-center">
-  <h1 className="fs-2 title-border">{recipe.name}</h1>
-  <p className="fs-5 fst-italic d-flex align-items-center justify-content-center">
-    Origine : 
-    {recipe.country && (
-      <span title={recipe.country} className="ms-2">
-        <CountryFlag country={recipe.country} />
-      </span>
-    )}
-  </p>
-</div>
+            <div className="recipe-header mb-2 text-center">
+              <h1 className="fs-2 title-border">{recipe.name}</h1>
+              <p className="fs-5 fst-italic d-flex align-items-center justify-content-center">
+                Origine :
+                {recipe.country && (
+                  <span title={recipe.country} className="ms-2">
+                    <CountryFlag country={recipe.country} />
+                  </span>
+                )}
+              </p>
+            </div>
 
             <figure className="text-center">
               <img
@@ -215,8 +216,11 @@ export default function DisplayRecipe() {
               <ol>
                 {recipe.instructions?.length > 0 ? (
                   recipe.instructions.map((step, index) => (
-                    
-                    <li className="quill-content" key={index} dangerouslySetInnerHTML={{ __html: step }}></li>
+                    <li
+                      className="quill-content"
+                      key={index}
+                      dangerouslySetInnerHTML={{ __html: step }}
+                    ></li>
                   ))
                 ) : (
                   <p>Aucune instruction disponible.</p>
@@ -229,7 +233,11 @@ export default function DisplayRecipe() {
               <ol>
                 {recipe.comments?.length > 0 ? (
                   recipe.comments.map((comment, index) => (
-                    <li className="quill-content" key={index} dangerouslySetInnerHTML={{ __html: comment }}></li>
+                    <li
+                      className="quill-content"
+                      key={index}
+                      dangerouslySetInnerHTML={{ __html: comment }}
+                    ></li>
                   ))
                 ) : (
                   <p>Aucune information disponible.</p>

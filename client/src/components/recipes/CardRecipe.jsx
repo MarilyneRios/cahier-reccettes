@@ -106,12 +106,13 @@ function CardRecipe({ recipe }) {
           <Card.Text className="text-muted my-0 mx-5">Par {recipe?.userRef?.username || "Anonyme"}</Card.Text>
         </div>
         {/* Pays et nom de la recette */}
-        <Card.Title className="fs-5 my-1">
+        <Card.Title className="fs-5 my-1 d-flex align-items-center">
         {recipe.country && (
-      <span title={recipe.country} className="ms-2">
+      <span title={recipe.country} className="ms-2 mx-2">
         <CountryFlag country={recipe.country} />
       </span>
     )}
+    {recipe.name}
         </Card.Title>
       </Card.Body>
     </Card>
