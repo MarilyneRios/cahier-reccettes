@@ -101,9 +101,9 @@ function CardRecipe({ recipe }) {
       )}
 
       <Card.Body>
-        <div className="d-flex  justify-content-around">
-          <Card.Text className="fs-6 my-2">⏱️ {recipe.cookingTime} min</Card.Text>
-          <Card.Text className="text-muted my-2 mx-3">Par {recipe?.userRef?.username || "Anonyme"}</Card.Text>
+        <div className="d-flex  align-items-start ">
+          <Card.Text className="fs-6 ms-2 mx-2 ">⏱️ {recipe.cookingTime} min</Card.Text>
+          <Card.Text className="text-muted ">Par {recipe?.userRef?.username || "Anonyme"}</Card.Text>
         </div>
         {/* Pays et nom de la recette */}
         <Card.Title className="fs-5 my-1 d-flex  align-items-start ">
