@@ -269,6 +269,7 @@ export const searchRecipe = async (req, res, next) => {
       $or: [
         { name: { $regex: searchRegex } },
         { country: { $regex: searchRegex } },
+        { "ingredients.name": { $regex: searchRegex } },
         { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
       ].filter(condition => condition), // Supprimer les conditions nulles
     }).populate("userRef", "username"); // On récupère aussi le username de l'utilisateur via `userRef`
