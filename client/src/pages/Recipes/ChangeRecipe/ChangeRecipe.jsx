@@ -317,7 +317,8 @@ export default function ChangeRecipe() {
   };
 
   return (
-    <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
+    <section className="bg-Recipe d-flex flex-column align-items-center py-3">
+      
       <FormContainer size="12">
         <h1 className="text-center mb-4">
           <span className="d-inline d-md-none">Modifier</span>

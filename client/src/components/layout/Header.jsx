@@ -6,7 +6,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {  useState } from "react";
 import "./Header.css";
 
 // icons

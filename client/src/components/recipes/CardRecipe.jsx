@@ -73,7 +73,7 @@ function CardRecipe({ recipe }) {
         variant="top"
         src={recipe.imageUrl || bookImage}
         alt={recipe.name}
-        style={{ height: "14rem", objectFit: "cover" }}
+       className="cardRecipeImage"
       />
 
       {/* Bouton cœur : visible uniquement si l'utilisateur n'est pas l'auteur de la recette */}
@@ -101,12 +101,12 @@ function CardRecipe({ recipe }) {
       )}
 
       <Card.Body>
-        <div className="d-flex">
-          <Card.Text className="fs-6 my-0">⏱️ {recipe.cookingTime} min</Card.Text>
-          <Card.Text className="text-muted my-0 mx-5">Par {recipe?.userRef?.username || "Anonyme"}</Card.Text>
+        <div className="d-flex  justify-content-around">
+          <Card.Text className="fs-6 my-2">⏱️ {recipe.cookingTime} min</Card.Text>
+          <Card.Text className="text-muted my-2 mx-3">Par {recipe?.userRef?.username || "Anonyme"}</Card.Text>
         </div>
         {/* Pays et nom de la recette */}
-        <Card.Title className="fs-5 my-1 d-flex align-items-center">
+        <Card.Title className="fs-5 my-1 d-flex  align-items-start ">
         {recipe.country && (
       <span title={recipe.country} className="ms-2 mx-2">
         <CountryFlag country={recipe.country} />

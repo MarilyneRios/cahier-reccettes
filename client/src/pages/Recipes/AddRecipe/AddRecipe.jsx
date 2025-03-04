@@ -247,7 +247,7 @@ export default function AddRecipe() {
   };
 
   return (
-    <section className="bg-Recipe d-flex flex-column align-items-center pb-3">
+    <section className="bg-Recipe d-flex flex-column align-items-center p-5 ">
       <FormContainer size="12">
         <h1 className="text-center mb-4">Créer une recette</h1>
         <BackButton />

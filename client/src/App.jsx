@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation  } from "react-router-dom";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { useEffect} from "react";
@@ -12,7 +12,11 @@ function App() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  
+  const location = useLocation();
+
+  ////////////////////////////////////////////////////////////////////////////
+  // gérer la déconnexion automatique avec use effect
+  ////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     if (currentUser?.token) {
       try {
@@ -41,11 +45,16 @@ function App() {
     }
   }, [currentUser, dispatch, navigate]);
 
+  ////////////////////////////////////////////////////////////////////////////
+  // header fixed en haut de page pour home seulemnt
+  ////////////////////////////////////////////////////////////////////////////
+  const isHomePage = location.pathname === '/';
+
   return (
     <div className="App">
       <div id="bgGenerale" className="backgroundHome"></div>
-
-      <header>
+    
+      <header className={isHomePage ? 'fixed-header' : ''}>
         <Header />
       </header>
 

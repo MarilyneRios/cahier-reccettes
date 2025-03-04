@@ -21,6 +21,7 @@ const initialState = {
   loading: false,
   error: false,
   searchResults: [],
+  searchTerm: "",
 };
 
 const recipeSlice = createSlice({
@@ -42,12 +43,15 @@ const recipeSlice = createSlice({
     setCurrentRecipe: (state, action) => {
       state.currentRecipe = action.payload;
     },
-    setSearchResults: (state, action) => {
+    setSearchResults: (state, action) => { //pour transmettre les recherches au back
       state.searchResults = action.payload;
+    },
+    setSearchTerm: (state, action) => { // pour synchroniser les 2 hearders
+      state.searchTerm = action.payload;
     },
   },
 });
 
-export const { setRecipe, resetRecipeInfo,setUserId,setCurrentRecipe,setSearchResults } = recipeSlice.actions;
+export const { setRecipe, resetRecipeInfo,setUserId,setCurrentRecipe, setSearchResults, setSearchTerm } = recipeSlice.actions;
 
 export default recipeSlice.reducer;

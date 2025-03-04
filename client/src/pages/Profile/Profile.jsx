@@ -268,12 +268,8 @@ export default function Profile() {
   const { username, email, password, passwordConfirm } = formData;
 
   return (
-    <div className="SignInAndUpForm">
-      {isOpen && ( // Conditionally render content
-        <div onClick={handleClose}>
-          {" "}
-          {/* Parent click handler (if needed) */}
-         
+    <div className="SignInAndUpForm m-4">
+      <div className=""></div>         
           <FormContainer>
             <h1 className="d-flex justify-content-center text-dark">Profil</h1>
             <Button 
@@ -453,8 +449,8 @@ export default function Profile() {
               </div>
             </Form>
           </FormContainer>
-        </div>
-      )}
+        
+      
     </div>
   );
 }

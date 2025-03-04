@@ -129,7 +129,7 @@ export default function DisplayRecipe() {
           {/* Partie gauche */}
           <section className="left-part custom-left-border bg-light w-100 w-md-50 m-0 p-3 rounded-top rounded-md-start">
             <div className="recipe-header mb-2 text-center">
-              <h1 className="fs-2 title-border">{recipe.name}</h1>
+              <h3 className="fs-3 title-border">{recipe.name}</h3>
               <p className="fs-5 fst-italic d-flex align-items-center justify-content-center">
                 Origine :
                 {recipe.country && (
@@ -164,7 +164,7 @@ export default function DisplayRecipe() {
               </figcaption>
             </figure>
             <figcaption className="recipe-info">
-              <p className="fs-5 fst-italic">
+              <p className="fs-5 text-center fst-italic">
                 <strong>Auteur :</strong> {recipe.pseudo || "Anonyme"}
               </p>
             </figcaption>
@@ -194,9 +194,9 @@ export default function DisplayRecipe() {
               </Button>
 
               <div className="recipe-ingredients listDisplay">
-                <h2 className="recipe-header title-border text-center">
+                <h4 className="recipe-header title-border text-center">
                   Ingrédients
-                </h2>
+                </h4>
                 <ul>
                   {recipe.ingredients?.length > 0 ? (
                     recipe.ingredients.map(({ name, quantity, unit, _id }) => (
@@ -212,7 +212,7 @@ export default function DisplayRecipe() {
             </div>
 
             <div className="recipe-instructions listDisplay">
-              <h2 className="title-border">Préparation</h2>
+              <h4 className="title-border text-center">Préparation</h4>
               <ol>
                 {recipe.instructions?.length > 0 ? (
                   recipe.instructions.map((step, index) => (
@@ -229,7 +229,7 @@ export default function DisplayRecipe() {
             </div>
 
             <div className="recipe-comments listDisplay ">
-              <h2 className="title-border">Bienfaits</h2>
+              <h4 className="title-border text-center">Bienfaits</h4>
               <ol>
                 {recipe.comments?.length > 0 ? (
                   recipe.comments.map((comment, index) => (

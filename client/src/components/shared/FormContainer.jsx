@@ -4,7 +4,7 @@ import "./FormContainer.css";
 const FormContainer = ({ children, size = 6, className = "" }) => {
   return (
     <Container>
-         <Row className='justify-content-md-center my-5'>
+         <Row className='justify-content-md-center my-3'>
       {/** Pour petits écrans (xs) => 12 colonnes  */}
       {/** Pour petits écrans (md) => 6 colonnes  */}
         <Col xs={12} 

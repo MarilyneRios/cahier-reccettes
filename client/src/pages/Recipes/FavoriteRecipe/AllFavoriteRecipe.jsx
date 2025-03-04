@@ -77,13 +77,14 @@ export default function AllFavoriteRecipe() {
   }
 
   return (
-    <div className="d-flex flex-column align-items-center">
-      <h2 className="fst-italic text-center p-3 w-100 shadow-lg title custom-text-shadow">
+    <div className="d-flex flex-column align-items-center mb-3 Container-Favorite">
+     
+      <h2 className="fst-italic text-center p-2 w-100 shadow-lg title custom-text-shadow">
         Toutes vos recettes préférées
       </h2>
       <div
-        className="row row-cols-1 row-cols-md-3 g-4 my-3"
-        style={{ width: "80%" }}
+        className="row row-cols-1 row-cols-md-3 g-4 my-5"
+        style={{ width: "80%",  }}
       >
         {recipes.length > 0 ? (
           recipes.map((recipe) => (

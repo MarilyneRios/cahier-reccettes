@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from "./users/userSlice.js"; 
 import recipeReducer from "./recipes/recipeSlice.js";
 import favoriteReducer from "./favorites/favoriteSlice.js";
+
 // import api
 import { apiSlice } from './apiSlice.js';
 import {recipesApiSlice} from './recipes/recipesApiSlice.js';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   recipe: recipeReducer,
   favorite: favoriteReducer,
+
   [apiSlice.reducerPath]: apiSlice.reducer,
   [recipesApiSlice.reducerPath]: recipesApiSlice.reducer,
   [favoriteApiSlice.reducerPath]: favoriteApiSlice.reducer,   

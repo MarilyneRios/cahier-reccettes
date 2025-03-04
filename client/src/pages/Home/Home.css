@@ -1,14 +1,14 @@
 /* Home.css */
 
 #HeroHome {
-  min-height: 70vh; 
+  min-height:90vh;
   max-width: 100%;
   position: relative;
 
 }
 
 .MiseEnFormeHome {
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,14 +22,8 @@
   position: relative; 
   z-index: 1;
 }
-
-.header{
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  transform-style: preserve-3d;
-  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
-  position: relative; 
-  /* passer par dessus viewRecipe*/
-  z-index: 1050;
+.HeaderPlace{
+  height: 4rem;
 }
 
 

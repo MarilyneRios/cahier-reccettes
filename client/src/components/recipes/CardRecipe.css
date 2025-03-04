@@ -1,19 +1,23 @@
 /* CardRecipes.css */
 
-
-.cardRecipeHome:hover {
-    transform: translateY(-10px) rotateY(5deg) rotateX(5deg) scale(1.1)!important;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2)!important; 
-}
-
+ 
 .cardRecipeHome {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   transform-style: preserve-3d;
   box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+.cardRecipeHome:hover {
+  transform: translateY(-10px) rotateY(5deg) rotateX(5deg) scale(1.1) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2) !important;
 }
 
 
+.cardRecipeHome .card-img-top {
+  height: 8rem;
+  object-fit: cover;
+}
 
-
- 
-  

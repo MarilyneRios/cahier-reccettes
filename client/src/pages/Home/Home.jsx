@@ -32,9 +32,9 @@ export default function Home() {
       {/* Section des recettes */}
       <section
         id="ViewRecipesHome"
-        className="flex flex-col justify-center items-center pt-8 my-4"
+        className="flex flex-col justify-center items-center pt-8 my-5"
       >
-        <div className="header"> <Header className="w-100" /> </div>
+        <div className="HeaderPlace"></div>
         <h2 className="fst-italic text-center mt-3 shadow-lg title custom-text-shadow">Toutes nos recettes</h2>
         <ViewRecipes currentPage={currentPage} />
 

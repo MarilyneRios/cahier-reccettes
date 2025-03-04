@@ -71,6 +71,17 @@ blockquote {
   background-image: url("./assets/bgBanner.png");
 }
 
+
+
+/*header*/
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Assurez-vous que le header est au-dessus des autres éléments */
+}
+
+
 /* style card hero et about*/
 .cardBg {
   background: rgba(0, 0, 0, 0.7);
