@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import { Navbar, Nav, Dropdown, Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-import { Link, useLocation } from "react-router-dom"; 
+import { Link, useLocation } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -23,13 +23,13 @@ import SearchBar from "../shared/searchBar";
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
 
-// Use useLocation to get the current path
-  const location = useLocation(); 
+  // Use useLocation to get the current path
+  const location = useLocation();
   const navigate = useNavigate();
 
-///////////////////////////////////////////////////////////////////////
-// fonction pour pour gérer l'ouverture de la page d'accueil
-///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+  // fonction pour pour gérer l'ouverture de la page d'accueil
+  ///////////////////////////////////////////////////////////////////////
   const handleHomeClick = () => {
     navigate("/");
     // Faire défiler jusqu'à la section HeroHome après un délai
@@ -37,30 +37,30 @@ function Header() {
       const section = document.getElementById("HeroHome");
       if (section) {
         const offset = -100; // Ajustez pour voir le header du haut
-        const elementPosition = section.getBoundingClientRect().top + window.scrollY;
+        const elementPosition =
+          section.getBoundingClientRect().top + window.scrollY;
         const offsetPosition = elementPosition + offset;
-  
+
         window.scrollTo({
           top: offsetPosition,
           behavior: "smooth",
         });
       }
-    }, 100); // Le délai 
+    }, 100); // Le délai
   };
 
-///////////////////////////////////////////////////////////////////////
-// fonction pour pour afficher les recettes
-///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+  // fonction pour pour afficher les recettes
+  ///////////////////////////////////////////////////////////////////////
 
   const handleViewRecipeClick = () => {
-    
     navigate("/");
     setTimeout(() => {
       const section = document.getElementById("ViewRecipesHome");
       if (section) {
         section.scrollIntoView({ behavior: "smooth" });
       }
-    }, 100); 
+    }, 100);
   };
 
   return (
@@ -107,7 +107,7 @@ function Header() {
               <Dropdown.Divider />
 
               {/* Accordéon pour les catégories */}
-              <Accordion >
+              <Accordion>
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>
                     <FaSearch
@@ -273,15 +273,18 @@ function Header() {
           </Navbar.Brand>
         </div>
 
-     {/* Centre : Barre de recherche */}
-     <div className="d-flex justify-content-center align-items-center mx-auto  my-2">
-          <SearchBar  />
+        {/* Centre : Barre de recherche */}
+        <div className="d-flex justify-content-center align-items-center w-50  m-3">
+          <div className="w-100">         
+            <div className="">
+              <SearchBar />
+            </div>
+          </div>
         </div>
 
         <div className="d-none d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand
             as={Link}
-            
             onClick={handleHomeClick}
             className="text-center textWithShadowNavbarBrand fs-1 link-navbarBrand"
           >
@@ -355,7 +358,6 @@ function Header() {
                   e.target.src = "defaultProfilePicture.png";
                 }}
                 className="border border-dark imageBtn btnNav"
-              
               />
             </Link>
           ) : (

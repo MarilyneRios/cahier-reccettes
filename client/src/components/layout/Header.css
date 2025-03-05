@@ -24,6 +24,7 @@
   min-width: 200px;
   min-height: 90vh;
 }
+
 /* Couleur des liens pdt survol */
 .custom-dropdown-menu .dropdown-item:hover {
   background-color: #d4edda;
