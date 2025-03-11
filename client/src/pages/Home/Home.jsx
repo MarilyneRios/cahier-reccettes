@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import ViewRecipes from "../Recipes/ViewRecipes/ViewRecipes";
-import Header from "../../components/layout/Header";
 import Hero from "../../components/heros/Hero";
 import HeroConnect from "../../components/heros/HeroConnect";
 import Loader from "../../components/shared/Loader";

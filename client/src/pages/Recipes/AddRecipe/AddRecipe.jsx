@@ -288,7 +288,7 @@ export default function AddRecipe() {
                       <Form.Control
                         type="text"
                         name="country"
-                        autocapitalize="words"
+                        autoCapitalize="words"
                         placeholder="Nationalité de la recette"
                         value={recipe.country}
                         onChange={(e) => {
@@ -304,7 +304,7 @@ export default function AddRecipe() {
                       </div>
                     </Form.Group>
                   </div>
-                  
+
                   {/* Mise en page pour Category et Regime */}
                   <div className="row">
                     <Form.Group
@@ -321,11 +321,13 @@ export default function AddRecipe() {
                         required
                       >
                         <option value="">Sélectionner une catégorie</option>
-                        <option value="aperitif">Apéritif</option>
-                        <option value="starter">Entrée</option>
-                        <option value="main">Plat</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="boisson">Boisson</option>
+                        <option value="aperitifs">Apéritifs</option>
+                        <option value="entrees">Entrées</option>
+                        <option value="plats">Plats</option>
+                        <option value="desserts">Desserts</option>
+                        <option value="boissons">Boissons</option>
+                        <option value="salades">Salades</option>
+                        <option value="autres">Autres...</option>
                       </Form.Control>
                     </Form.Group>
 
@@ -343,10 +345,12 @@ export default function AddRecipe() {
                         required
                       >
                         <option value="">Sélectionner un régime</option>
-                        <option value="traditionnal">Traditionnelle</option>
-                        <option value="vegetarian">Végétarien</option>
+                        <option value="traditionnelle">Traditionnelle</option>
+                        <option value="vegetarien">Végétarien</option>
                         <option value="vegan">Végan</option>
-                        <option value="gluten-free">Sans gluten</option>
+                        <option value="sans-gluten">Sans gluten</option>
+                        <option value="sans-lactose">Sans lactose</option>
+                        <option value="autres">autres ...</option>
                       </Form.Control>
                     </Form.Group>
                   </div>
@@ -356,46 +360,44 @@ export default function AddRecipe() {
               <Card className="mb-3" id="Temps_de_préparation_et_cuisson">
                 <Card.Header>Temps de préparation et cuisson</Card.Header>
                 <Card.Body>
-                  <Form>
-                    <div className="row">
-                      <Form.Group
-                        controlId="makingTime"
-                        className="col-12 col-md-6 mb-2"
-                      >
-                        <Form.Label>Préparation (en min) *</Form.Label>
-                        <Form.Control
-                          type="number"
-                          min="0"
-                          placeholder="Temps de préparation"
-                          value={recipe.makingTime}
-                          onChange={(e) =>
-                            setRecipe({ ...recipe, makingTime: e.target.value })
-                          }
-                          required
-                        />
-                      </Form.Group>
+                  <div className="row">
+                    <Form.Group
+                      controlId="makingTime"
+                      className="col-12 col-md-6 mb-2"
+                    >
+                      <Form.Label>Préparation (en min) *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="Temps de préparation"
+                        value={recipe.makingTime}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, makingTime: e.target.value })
+                        }
+                        required
+                      />
+                    </Form.Group>
 
-                      <Form.Group
-                        controlId="cookingTime"
-                        className="col-12 col-md-6 mb-2"
-                      >
-                        <Form.Label>Cuisson (en min) *</Form.Label>
-                        <Form.Control
-                          type="number"
-                          min="0"
-                          placeholder="Temps de cuisson"
-                          value={recipe.cookingTime}
-                          onChange={(e) =>
-                            setRecipe({
-                              ...recipe,
-                              cookingTime: e.target.value,
-                            })
-                          }
-                          required
-                        />
-                      </Form.Group>
-                    </div>
-                  </Form>
+                    <Form.Group
+                      controlId="cookingTime"
+                      className="col-12 col-md-6 mb-2"
+                    >
+                      <Form.Label>Cuisson (en min) *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="Temps de cuisson"
+                        value={recipe.cookingTime}
+                        onChange={(e) =>
+                          setRecipe({
+                            ...recipe,
+                            cookingTime: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </Form.Group>
+                  </div>
                 </Card.Body>
               </Card>
 

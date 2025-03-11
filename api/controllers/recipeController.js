@@ -42,6 +42,25 @@ export const createRecipe = async (req, res, next) => {
     return res.status(400).json({ message: 'Tous les champs requis doivent être remplis, y compris userId.' });
   }
 
+   // Validation de la catégorie
+   const validCategories = ['aperitifs', 'entrees', 'plats', 'desserts', 'boissons', 'salades', 'autres'];
+
+   if (!validCategories.includes(category)) {
+     return res.status(400).json({
+       success: false,
+       message: "Catégorie invalide.",
+     });
+   }
+ 
+   // Validation du régime
+   const validRegimes = ['traditionnelle','vegetarien','vegan','sans-gluten','sans-lactose','autres',];
+   if (!validRegimes.includes(regime)) {
+     return res.status(400).json({
+       success: false,
+       message: "Régime invalide.",
+     });
+   }
+
   // Créer la nouvelle recette
   const newRecipe = new Recipe({
     name,
@@ -269,6 +288,8 @@ export const searchRecipe = async (req, res, next) => {
       $or: [
         { name: { $regex: searchRegex } },
         { country: { $regex: searchRegex } },
+        { category: { $regex: searchRegex } },
+        { regime: { $regex: searchRegex } },
         { "ingredients.name": { $regex: searchRegex } },
         { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
       ].filter(condition => condition), // Supprimer les conditions nulles

@@ -223,7 +223,7 @@ const CountryFlag = ({ country }) => {
         />
       </OverlayTrigger>
     ) : (
-      <p>Aucun drapeau trouvé</p>
+      <div>Aucun drapeau</div>
     )}
   </div>
   );

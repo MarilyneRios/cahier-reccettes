@@ -15,7 +15,14 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { PiBooksDuotone } from "react-icons/pi";
 
 //element
+import FilterComponent from "../shared/FilterComponent";
 import SearchBar from "../shared/searchBar";
+
+//redux RTK
+import {
+  useFilterByCategoryQuery,
+  useFilterByRegimeQuery,
+} from "../../redux/recipes/recipesApiSlice";
 
 ///////////////////////////////////////////////////////////////////////
 // Header component
@@ -28,7 +35,7 @@ function Header() {
   const navigate = useNavigate();
 
   ///////////////////////////////////////////////////////////////////////
-  // fonction pour pour gérer l'ouverture de la page d'accueil
+  // fonction pour  gérer l'ouverture de la page d'accueil
   ///////////////////////////////////////////////////////////////////////
   const handleHomeClick = () => {
     navigate("/");
@@ -50,7 +57,7 @@ function Header() {
   };
 
   ///////////////////////////////////////////////////////////////////////
-  // fonction pour pour afficher les recettes
+  // fonction pour afficher les recettes
   ///////////////////////////////////////////////////////////////////////
 
   const handleViewRecipeClick = () => {
@@ -62,6 +69,14 @@ function Header() {
       }
     }, 100);
   };
+
+  ///////////////////////////////////////////////////////////////////////
+  // fonction pour trier les  categories
+  ///////////////////////////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////////////////////////////
+  // fonction pour trier les regimes
+  ///////////////////////////////////////////////////////////////////////
 
   return (
     <Navbar
@@ -106,128 +121,58 @@ function Header() {
 
               <Dropdown.Divider />
 
-              {/* Accordéon pour les catégories */}
-              <Accordion>
-                <Accordion.Item eventKey="0">
-                  <Accordion.Header>
-                    <FaSearch
-                      aria-hidden="true"
-                      aria-label="Loupe"
-                      size={22}
-                      className={`mx-2 image3D rounded-pill p-2"`}
-                    />{" "}
-                    Par catégorie :
-                  </Accordion.Header>
-                  <Accordion.Body as={Link} to="/" className="accordionBody ">
-                    Toutes
-                  </Accordion.Body>
+              {/* les filters (Accordéon) dans le toggle  */}
+              <FilterComponent />
 
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Apéritifs
-                  </Accordion.Body>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Boissons
-                  </Accordion.Body>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Entrées
-                  </Accordion.Body>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Salades
-                  </Accordion.Body>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Plats
-                  </Accordion.Body>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Desserts
-                  </Accordion.Body>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Autres...
-                  </Accordion.Body>
-                </Accordion.Item>
-
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header>
-                    <FaSearch
-                      aria-hidden="true"
-                      aria-label="Loupe"
-                      size={22}
-                      className={`mx-2 image3D rounded-pill p-2"`}
-                    />
-                    Par régime :
-                  </Accordion.Header>
-
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Traditionnelle
-                  </Accordion.Body>
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Végétarien
-                  </Accordion.Body>
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Végane
-                  </Accordion.Body>
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Sans gluten
-                  </Accordion.Body>
-                  <Accordion.Body as={Link} className="accordionBody " to="/">
-                    Autres...
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
-
+               {/* les liens dans le toggle */}
               <Dropdown.Divider />
-              <Dropdown.Item
-                as={Link}
-                onClick={handleViewRecipeClick}
-                className={`my-auto text-dark ${
-                  location.pathname === "/viewRecipes" && "active"
-                }`}
-              >
-                <PiBooksDuotone
-                  aria-hidden="true"
-                  aria-label="ajouter une recette"
-                  size={25}
-                  className="mx-2 text-black image3D rounded-pill p-1"
-                />
-                Toutes les recettes
-              </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  onClick={handleViewRecipeClick}
+                  className={`my-auto text-dark ${
+                    location.pathname === "/viewRecipes" && "active"
+                  }`}
+                >
+                  <PiBooksDuotone
+                    aria-hidden="true"
+                    aria-label="ajouter une recette"
+                    size={25}
+                    className="mx-2 text-black image3D rounded-pill p-1"
+                  />
+                  Toutes les recettes
+                </Dropdown.Item>
 
-              <Dropdown.Item
-                as={Link}
-                to="/allFavoriteRecipe"
-                className={`my-auto text-dark ${
-                  location.pathname === "/mon-cahier" && "active"
-                }`}
-              >
-                <FaBookOpenReader
-                  aria-hidden="true"
-                  aria-label="Mon cahier"
-                  size={25}
-                  className="mx-2 image3D rounded-pill p-1"
-                />
-                Mon cahier de recettes
-              </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  to="/allFavoriteRecipe"
+                  className={`my-auto text-dark ${
+                    location.pathname === "/mon-cahier" && "active"
+                  }`}
+                >
+                  <FaBookOpenReader
+                    aria-hidden="true"
+                    aria-label="Mon cahier"
+                    size={25}
+                    className="mx-2 image3D rounded-pill p-1"
+                  />
+                  Mon cahier de recettes
+                </Dropdown.Item>
 
-              <Dropdown.Item
-                as={Link}
-                to="/addRecipe"
-                className={`my-auto text-dark ${
-                  location.pathname === "/ajouter-recette" && "active"
-                }`}
-              >
-                <FaCirclePlus
-                  aria-hidden="true"
-                  aria-label="ajouter une recette"
-                  size={25}
-                  className="mx-2 image3D rounded-pill p-1"
-                />
-                Ajouter une recette
-              </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  to="/addRecipe"
+                  className={`my-auto text-dark ${
+                    location.pathname === "/ajouter-recette" && "active"
+                  }`}
+                >
+                  <FaCirclePlus
+                    aria-hidden="true"
+                    aria-label="ajouter une recette"
+                    size={25}
+                    className="mx-2 image3D rounded-pill p-1"
+                  />
+                  Ajouter une recette
+                </Dropdown.Item>
 
               <Dropdown.Divider />
 
@@ -252,7 +197,7 @@ function Header() {
 
         {/* Centered Brand */}
 
-        {/* Centre : Liens */}
+        {/* plus liens favoris */}
         <div className=" d-none d-lg-flex flex-row align-items-center mx-auto">
           <Navbar.Brand
             as={Link}
@@ -275,7 +220,7 @@ function Header() {
 
         {/* Centre : Barre de recherche */}
         <div className="d-flex justify-content-center align-items-center w-50  m-3">
-          <div className="w-100">         
+          <div className="w-100">
             <div className="">
               <SearchBar />
             </div>

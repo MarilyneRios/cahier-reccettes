@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 // Initialisation de l'état initial pour le slice Redux
 const initialState = {
@@ -20,18 +20,23 @@ const initialState = {
   currentRecipe: null,
   loading: false,
   error: false,
+  // searchBar
   searchResults: [],
   searchTerm: "",
+  // filter
+  filteredResults: [],
+  selectedCategories: [],
+  selectedRegimes: [],
 };
 
 const recipeSlice = createSlice({
-  name: 'recipe',
+  name: "recipe",
   initialState,
   reducers: {
     setRecipe: (state, action) => {
       state.recipeInfo = {
         ...state.recipeInfo,
-        ...action.payload, 
+        ...action.payload,
       };
     },
     resetRecipeInfo: (state) => {
@@ -43,15 +48,37 @@ const recipeSlice = createSlice({
     setCurrentRecipe: (state, action) => {
       state.currentRecipe = action.payload;
     },
-    setSearchResults: (state, action) => { //pour transmettre les recherches au back
+    setSearchResults: (state, action) => {
+      //pour transmettre les recherches au back
       state.searchResults = action.payload;
     },
-    setSearchTerm: (state, action) => { // pour synchroniser les 2 hearders
+    setSearchTerm: (state, action) => {
+      // pour synchroniser les 2 hearders
       state.searchTerm = action.payload;
+    },
+    setSelectedCategories: (state, action) => {
+      state.selectedCategories = action.payload;
+    },
+    setSelectedRegimes: (state, action) => {
+      state.selectedRegimes = action.payload;
+    },
+    setFilteredResults: (state, action) => {
+      // Ajouté pour gérer les résultats filtrés
+      state.filteredResults = action.payload;
     },
   },
 });
 
-export const { setRecipe, resetRecipeInfo,setUserId,setCurrentRecipe, setSearchResults, setSearchTerm } = recipeSlice.actions;
+export const {
+  setRecipe,
+  resetRecipeInfo,
+  setUserId,
+  setCurrentRecipe,
+  setSearchResults,
+  setSearchTerm,
+  setSelectedRegimes,
+  setSelectedCategories,
+  setFilteredResults,
+} = recipeSlice.actions;
 
 export default recipeSlice.reducer;

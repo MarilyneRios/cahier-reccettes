@@ -393,11 +393,13 @@ export default function ChangeRecipe() {
                         required
                       >
                         <option value="">Sélectionner une catégorie</option>
-                        <option value="aperitif">Apéritif</option>
-                        <option value="starter">Entrée</option>
-                        <option value="main">Plat</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="boisson">Boisson</option>
+                        <option value="aperitifs">Apéritifs</option>
+                        <option value="entrees">Entrées</option>
+                        <option value="salades">Salades</option>
+                        <option value="plats">Plats</option>
+                        <option value="desserts">Desserts</option>
+                        <option value="boissons">Boissons</option>
+                       
                       </Form.Control>
                     </Form.Group>
 
@@ -414,10 +416,12 @@ export default function ChangeRecipe() {
                         required
                       >
                         <option value="">Sélectionner un régime</option>
-                        <option value="traditionnal">Traditionnelle</option>
-                        <option value="vegetarian">Végétarien</option>
+                        <option value="traditionnelle">Traditionnelle</option>
+                        <option value="vegetarien">Végétarien</option>
                         <option value="vegan">Végan</option>
-                        <option value="gluten-free">Sans gluten</option>
+                        <option value="sans-gluten">Sans gluten</option>
+                        <option value="sans-lactose'">Sans lactose</option>
+                        <option value="autres">Autres</option>
                       </Form.Control>
                     </Form.Group>
                   </div>

@@ -5,6 +5,11 @@ import CardRecipe from "../../../components/recipes/CardRecipe";
 import "./ViewRecipes.css";
 
 export default function ViewRecipes({ currentPage }) {
+  const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || []);
+  console.log("Search results from Redux store:", searchResults); // Log des résultats de recherche
+
+
+  
   const {
     data: recipesData,
     isLoading,
@@ -13,15 +18,13 @@ export default function ViewRecipes({ currentPage }) {
   } = useDisplayAllRecipesQuery({
     pageNumber: currentPage,
     pageSize: 6,
+    skip: searchResults.length > 0,
   });
 
-  console.log("Recipes Data:", recipesData); // Log des données de recettes
-
-  const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || []);
-  console.log("Search Results:", searchResults); // Log des résultats de recherche
+  console.log("Recipes Data ViewRecipe:", recipesData); // Log des données de recettes
 
   const displayedRecipes = searchResults.length > 0 ? searchResults : recipesData?.recipes || [];
-  console.log("Displayed Recipes:", displayedRecipes); // Log des recettes affichées
+  console.log("Displayed Recipes ViewRecipe:", displayedRecipes); // Log des recettes affichées
 
   if (displayedRecipes.length === 0) {
     return (

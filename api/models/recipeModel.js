@@ -24,10 +24,14 @@ const recipeSchema = new mongoose.Schema(
     },
     category: {
       type: String,
+      enum: ['aperitifs', 'entrees', 'plats', 'desserts', 'boissons', 'salades', 'autres'],
+      required: true,
       trim: true,
     },
     regime: {
       type: String,
+      enum: ['traditionnelle','vegetarien','vegan','sans-gluten','sans-lactose','autres'],
+      required: true,
       trim: true,
     },
     makingTime: {
