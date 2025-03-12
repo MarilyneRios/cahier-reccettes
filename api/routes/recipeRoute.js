@@ -7,13 +7,15 @@ import {
     updateRecipe, 
     deleteRecipe, 
     searchRecipe, 
-    filtreCategoryRecipe, 
-    filtreRegimeRecipe 
+
 } from '../controllers/recipeController.js';
 
 import { verifyToken } from '../utils/verifyUser.js';
 
-
+/*
+    filtreCategoryRecipe, 
+    filtreRegimeRecipe 
+*/
 
 const router = express.Router();
 router.get ('/', display) // routes test
@@ -36,7 +38,7 @@ router.get('/search/:query', searchRecipe); // GET http://localhost:3000/api/rec
 ///////////////////////////////////////////////////////////////////////////
 // filtrer
 ///////////////////////////////////////////////////////////////////////////
-router.get('/filter/category', filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
-router.get('/filter/regime', filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
+//router.get('/filter/category', filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
+//router.get('/filter/regime', filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
 
 export default router;

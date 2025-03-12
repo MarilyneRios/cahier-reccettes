@@ -274,6 +274,9 @@ export const searchFavoriteRecipe = async (req, res, next) => {
       $or: [
         { name: { $regex: searchRegex } },
         { country: { $regex: searchRegex } },
+        { category: { $regex: searchRegex } },
+        { regime: { $regex: searchRegex } },
+        { "ingredients.name": { $regex: searchRegex } },
         { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
       ].filter(condition => condition), // Supprimer les conditions nulles
     }).populate("userRef", "username"); // On récupère aussi le username de l'utilisateur via `userRef`
@@ -298,6 +301,9 @@ export const searchFavoriteRecipe = async (req, res, next) => {
   }
 };
 
+/*
+// Par soucis de réduire les requêtes elles ne sont pas utilisées
+// Bien que fonctionnelles dans insomnia
 // @desc    Filter recipes by category & diplay one recipe on homeScreen
 // @route   GET /api/recipes/category/:category
 // @access  Public
@@ -377,3 +383,4 @@ export const filtreRegimeFavoriteRecipe = async (req, res, next) => {
     next(error);
   }
 };
+*/

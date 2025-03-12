@@ -315,6 +315,9 @@ export const searchRecipe = async (req, res, next) => {
   }
 };
 
+/*
+// Par soucis de réduire les requêtes elles ne sont pas utilisées
+// Bien que fonctionnelles dans insomnia
 // @desc    Filter recipes by category & diplay one recipe on homeScreen
 // @route   GET /api/recipes/category/:category
 // @access  Public
@@ -394,3 +397,4 @@ export const filtreRegimeRecipe = async (req, res, next) => {
     next(error);
   }
 };
+*/

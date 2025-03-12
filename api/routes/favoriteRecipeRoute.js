@@ -1,14 +1,12 @@
 import express from 'express';
 
 import { 
-   // displayAllFavoriteRecipes, 
-   // displayOneFavoriteRecipe, 
    getAllFavoriteRecipes,
     addFavoriteRecipe, 
     removeFavoriteRecipe, 
     searchFavoriteRecipe, 
-    filtreCategoryFavoriteRecipe, 
-    filtreRegimeFavoriteRecipe 
+    //filtreCategoryFavoriteRecipe, 
+    //filtreRegimeFavoriteRecipe 
   } from '../controllers/favoriteRecipeController.js';
 
 import { verifyToken } from '../utils/verifyUser.js';
@@ -38,7 +36,7 @@ router.get('/search/:query', searchFavoriteRecipe); // GET http://localhost:3000
 //filtrer
 ///////////////////////////////////////////////////////////////////////////
 
-router.get('/filter/category', verifyToken,filtreCategoryFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filter/category?category=starter
-router.get('/filter/regime', verifyToken,filtreRegimeFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filter/regime?regime=balance
+//router.get('/filter/category', verifyToken,filtreCategoryFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filter/category?category=starter
+//router.get('/filter/regime', verifyToken,filtreRegimeFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filter/regime?regime=balance
 
 export default router;
