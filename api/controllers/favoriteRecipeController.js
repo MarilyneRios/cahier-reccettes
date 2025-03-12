@@ -3,10 +3,6 @@ import mongoose from 'mongoose';
 //importation models
 import User from "../models/userModel.js";
 import Recipe from "../models/recipeModel.js";
-// importation sécurité
-import { errorHandler } from "../utils/error.js";
-import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 
 // @desc    Add one recipe to favorites

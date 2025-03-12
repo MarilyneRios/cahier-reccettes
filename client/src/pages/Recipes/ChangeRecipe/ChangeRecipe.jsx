@@ -121,13 +121,20 @@ export default function ChangeRecipe() {
 
   // Pour gérer les changements dans les champs du formulaire
   const handleChange = (e) => {
+    const { name, value } = e.target;
     console.log(
-      "Changement détecté dans le champ:",
-      e.target.name,
-      "Nouvelle valeur:",
-      e.target.value
+      `Changement détecté dans le champ: ${name}, Nouvelle valeur: ${value}`
     );
-    setRecipe({ ...recipe, [e.target.name]: e.target.value });
+
+    // Vérifiez si la valeur est un nombre pour les champs de temps
+    if (name === "makingTime" || name === "cookingTime") {
+      if (isNaN(value) || value < 0) {
+        console.error(`Valeur invalide pour ${name}: ${value}`);
+        return;
+      }
+    }
+
+    setRecipe({ ...recipe, [name]: value });
   };
 
   //////////////////////////////////////////////////
@@ -318,7 +325,6 @@ export default function ChangeRecipe() {
 
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center py-3">
-      
       <FormContainer size="12">
         <h1 className="text-center mb-4">
           <span className="d-inline d-md-none">Modifier</span>
@@ -353,8 +359,8 @@ export default function ChangeRecipe() {
                       />
                     </Form.Group>
 
-                     {/*pays */}
-                   <Form.Group
+                    {/*pays */}
+                    <Form.Group
                       controlId="country"
                       className="col-12 col-md-6 mb-2"
                     >
@@ -399,7 +405,6 @@ export default function ChangeRecipe() {
                         <option value="plats">Plats</option>
                         <option value="desserts">Desserts</option>
                         <option value="boissons">Boissons</option>
-                       
                       </Form.Control>
                     </Form.Group>
 
@@ -603,8 +608,7 @@ export default function ChangeRecipe() {
                     recipe.instructions.map((instruction, index) => (
                       <Row key={index} className="mb-2">
                         <Col xs={10} className="pe-0  w-75">
-                   
-                           <CKEditor
+                          <CKEditor
                             index={index}
                             comment={instruction}
                             handleCommentChange={handleInstructionChange}

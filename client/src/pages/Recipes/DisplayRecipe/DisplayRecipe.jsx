@@ -119,6 +119,12 @@ export default function DisplayRecipe() {
     );
   }
 
+  
+      console.log("Making Time:", recipe.makingTime);
+      console.log("Cooking Time:", recipe.cookingTime);
+    
+  
+
   return (
     <div className="backgroundDisplayRecipe my-3">
       <section className="DisplayRecipe-container">
@@ -156,11 +162,9 @@ export default function DisplayRecipe() {
                 </p>
                 <p>
                   <strong>Préparation :</strong>{" "}
-                  <cite>{recipe.makingTime || "?"} min</cite>
-                  <span className="mx-2"></span>
+                  <cite>{recipe.makingTime !== undefined && recipe.makingTime !== null ? `${recipe.makingTime} min` : "?"}</cite>                  <span className="mx-2"></span>
                   <strong>Cuisson :</strong>{" "}
-                  <cite>{recipe.cookingTime || "?"} min</cite>
-                </p>
+                  <cite>{recipe.cookingTime !== undefined && recipe.cookingTime !== null ? `${recipe.cookingTime} min` : "?"}</cite>                </p>
               </figcaption>
             </figure>
             <figcaption className="recipe-info">

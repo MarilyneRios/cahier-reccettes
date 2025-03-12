@@ -36,11 +36,11 @@ const recipeSchema = new mongoose.Schema(
     },
     makingTime: {
       type: Number,
-      min: 0,
+      min: -1,
     },
     cookingTime: {
       type: Number,
-      min: 0,
+      min: -1,
     },
     imageUrl: {
       type: String,

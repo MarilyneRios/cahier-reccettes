@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import Recipe from '../models/recipeModel.js';
 import User from '../models/userModel.js';
-import { errorHandler } from '../utils/error.js';
-import { verifyToken } from '../utils/verifyUser.js';
+
 
 //test
 export const display = (req, res) => {
