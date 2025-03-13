@@ -1,12 +1,8 @@
-import { useState, useEffect } from "react";
-import { Card } from "react-bootstrap";
-
 const Flag = ({ country }) => {
   const [flagUrl, setFlagUrl] = useState("");
 
   useEffect(() => {
     const countryCodes = {
-      // Europe
       france: "fr",
       allemagne: "de",
       italie: "it",
@@ -32,7 +28,6 @@ const Flag = ({ country }) => {
       bulgarie: "bg",
       slovaquie: "sk",
       moldavie: "md",
-      // Asie
       russie: "ru",
       chine: "cn",
       inde: "in",
@@ -41,17 +36,14 @@ const Flag = ({ country }) => {
       indonésie: "id",
       turquie: "tr",
       thaïlande: "th",
-      // Amérique du Nord
       étatsunis: "us",
       canada: "ca",
       mexique: "mx",
-      // Amérique du Sud
       brésil: "br",
       argentine: "ar",
       colombie: "co",
       chili: "cl",
       cuba: "cu",
-      // Afrique
       nigeria: "ng",
       algérie: "dz",
       maroc: "ma",
@@ -71,15 +63,15 @@ const Flag = ({ country }) => {
   }, [country]);
 
   return (
-    <div>
+    <span>
       {flagUrl && (
-        <Card.Img
+        <img
           src={flagUrl}
           alt={`Drapeau de ${country}`}
           style={{ marginTop: "0.5rem", width: "2rem" }}
         />
       )}
-    </div>
+    </span>
   );
 };
 

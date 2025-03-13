@@ -58,6 +58,7 @@ export default function ChangeRecipe() {
     country: "",
     category: "",
     regime: "",
+    piece:"",
     ingredients: [],
     instructions: [],
     comments: [],
@@ -100,6 +101,7 @@ export default function ChangeRecipe() {
           country: recipeData.recipe.country || "",
           category: recipeData.recipe.category || "",
           regime: recipeData.recipe.regime || "",
+          piece: recipeData.recipe.piece || "",
           ingredients: Array.isArray(recipeData.recipe.ingredients)
             ? recipeData.recipe.ingredients
             : [],
@@ -223,16 +225,26 @@ export default function ChangeRecipe() {
     });
   };
 
-  const handleIngredientChange = (index, field, value) => {
-    const newIngredients = [...recipe.ingredients];
-    newIngredients[index][field] = value;
-    setRecipe({ ...recipe, ingredients: newIngredients });
-  };
+  console.log("État actuel des ingrédients :", recipe.ingredients);
+  console.log(Object.isFrozen(recipe.ingredients[0])); // True ou False ?
 
-  const handleRemoveIngredient = (index) => {
-    const newIngredients = recipe.ingredients.filter((_, i) => i !== index);
-    setRecipe({ ...recipe, ingredients: newIngredients });
+
+  const handleIngredientChange = (index, field, value) => {
+    // Forcer une copie avant de manipuler
+    const updatedIngredients = [...recipe.ingredients]; // Copie le tableau
+    const updatedIngredient = { ...updatedIngredients[index] }; // Copie l'objet
+    updatedIngredient[field] = value; // Change la propriété
+  
+    updatedIngredients[index] = updatedIngredient;
+  
+    setRecipe({ ...recipe, ingredients: updatedIngredients });
   };
+  
+  
+  useEffect(() => {
+    console.log("Mise à jour des ingrédients :", recipe.ingredients);
+  }, [recipe.ingredients]);
+  
 
   ////////////////////////////////////////////////////////
   // // instuctions
@@ -366,26 +378,25 @@ export default function ChangeRecipe() {
                     >
                       <Form.Label>Pays *</Form.Label>
                       <div className="d-flex align-items-center">
-                      <Form.Control
-                        type="text"
-                        name="country"
-                        autoCapitalize="words"
-                        placeholder="Nationalité de la recette"
-                        value={recipe.country}
-                        onChange={(e) => {
-                          const formattedValue = e.target.value
-                            .toLowerCase()
-                            .replace(/\b\w/g, (char) => char.toUpperCase());
-                          setRecipe({ ...recipe, country: formattedValue });
-                        }}
-                        className="w-50"
-                        required
-                      />
-                      <div className=" mx-5">
-                        <CountryFlag country={recipe.country} />
+                        <Form.Control
+                          type="text"
+                          name="country"
+                          autoCapitalize="words"
+                          placeholder="Nationalité de la recette"
+                          value={recipe.country}
+                          onChange={(e) => {
+                            const formattedValue = e.target.value
+                              .toLowerCase()
+                              .replace(/\b\w/g, (char) => char.toUpperCase());
+                            setRecipe({ ...recipe, country: formattedValue });
+                          }}
+                          className="w-50"
+                          required
+                        />
+                        <div className=" mx-5">
+                          <CountryFlag country={recipe.country} />
+                        </div>
                       </div>
-                      </div>
-                      
                     </Form.Group>
                   </div>
                   {/* Mise en page pour Category et Regime */}
@@ -434,23 +445,23 @@ export default function ChangeRecipe() {
                       </Form.Control>
                     </Form.Group>
                   </div>
-                   {/* Nombre de part*/}
-                                    <div className="piece d-flex align-items-center">
-                                      <Form.Group className="d-flex align-items-center gap-2 col-md-6 mb-2">
-                                        <Form.Label className="mb-0">Nombre de part *</Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          min="0"
-                                          placeholder="nombre de part"
-                                          value={recipe.piece}
-                                          onChange={(e) =>
-                                            setRecipe({ ...recipe, piece: e.target.value })
-                                          }
-                                          className="w-25 mx-2"
-                                          required
-                                        />
-                                      </Form.Group>
-                                    </div>
+                  {/* Nombre de part*/}
+                  <div className="piece d-flex align-items-center">
+                    <Form.Group className="d-flex align-items-center gap-2 col-md-6 mb-2">
+                      <Form.Label className="mb-0">Nombre de part *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="nombre de part"
+                        value={recipe.piece}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, piece: e.target.value })
+                        }
+                        className="w-25 mx-2"
+                        required
+                      />
+                    </Form.Group>
+                  </div>
                 </Card.Body>
               </Card>
 
