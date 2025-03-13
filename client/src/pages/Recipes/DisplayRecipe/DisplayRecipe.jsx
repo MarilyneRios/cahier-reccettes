@@ -154,12 +154,14 @@ export default function DisplayRecipe() {
                 style={{ maxHeight: "250px", objectFit: "cover" }}
               />
               <figcaption className="blockquote-image my-1">
+                 {/* Catégorie */}
                 <p>
                   <strong>Catégorie :</strong> <cite>{recipe.category}</cite>
                   <span className="mx-3">
                     <strong>Régime :</strong> <cite>{recipe.regime}</cite>
                   </span>
                 </p>
+                 {/* Préparation */}
                 <p>
                   <strong>Préparation :</strong>{" "}
                   <cite>{recipe.makingTime !== undefined && recipe.makingTime !== null ? `${recipe.makingTime} min` : "?"}</cite>                  <span className="mx-2"></span>
@@ -167,11 +169,35 @@ export default function DisplayRecipe() {
                   <cite>{recipe.cookingTime !== undefined && recipe.cookingTime !== null ? `${recipe.cookingTime} min` : "?"}</cite>                </p>
               </figcaption>
             </figure>
+
+             {/* auteur */}
             <figcaption className="recipe-info">
-              <p className="fs-5 text-center fst-italic">
+              <p className="fs-5  fst-italic">
                 <strong>Auteur :</strong> {recipe.pseudo || "Anonyme"}
               </p>
+               {/* nbre de parts */}
+              <p className="fs-5 fst-italic">
+              Pour <strong> {recipe.piece || "??"} </strong>personnes  :
+              </p>
+
             </figcaption>
+             {/* ingrédients */}
+            <div className="recipe-ingredients listDisplay">
+                <h4 className="recipe-header title-border text-center">
+                  Ingrédients
+                </h4>
+                <ul>
+                  {recipe.ingredients?.length > 0 ? (
+                    recipe.ingredients.map(({ name, quantity, unit, _id }) => (
+                      <li key={_id}>
+                        {quantity} {unit} de {name}
+                      </li>
+                    ))
+                  ) : (
+                    <p>Aucun ingrédient disponible.</p>
+                  )}
+                </ul>
+              </div>
           </section>
 
           {/* Partie droite */}
@@ -197,22 +223,7 @@ export default function DisplayRecipe() {
                 )}{" "}
               </Button>
 
-              <div className="recipe-ingredients listDisplay">
-                <h4 className="recipe-header title-border text-center">
-                  Ingrédients
-                </h4>
-                <ul>
-                  {recipe.ingredients?.length > 0 ? (
-                    recipe.ingredients.map(({ name, quantity, unit, _id }) => (
-                      <li key={_id}>
-                        {quantity} {unit} de {name}
-                      </li>
-                    ))
-                  ) : (
-                    <p>Aucun ingrédient disponible.</p>
-                  )}
-                </ul>
-              </div>
+
             </div>
 
             <div className="recipe-instructions listDisplay">
@@ -221,7 +232,7 @@ export default function DisplayRecipe() {
                 {recipe.instructions?.length > 0 ? (
                   recipe.instructions.map((step, index) => (
                     <li
-                      className="quill-content"
+                      className="quill-content-Display"
                       key={index}
                       dangerouslySetInnerHTML={{ __html: step }}
                     ></li>
@@ -238,7 +249,7 @@ export default function DisplayRecipe() {
                 {recipe.comments?.length > 0 ? (
                   recipe.comments.map((comment, index) => (
                     <li
-                      className="quill-content"
+                      className="quill-content-Display"
                       key={index}
                       dangerouslySetInnerHTML={{ __html: comment }}
                     ></li>
@@ -255,7 +266,7 @@ export default function DisplayRecipe() {
                 <Button
                   type="submit"
                   variant="success"
-                  className="w-100 mt-3 btnDisplayRecipe"
+                  className="w-100 my-3 btnDisplayRecipe"
                   onClick={handleSubmit}
                 >
                   {isLoading ? <Loader /> : "Modifier la recette"}

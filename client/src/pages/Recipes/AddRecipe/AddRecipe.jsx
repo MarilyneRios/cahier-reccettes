@@ -285,6 +285,7 @@ export default function AddRecipe() {
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Pays *</Form.Label>
+                      <div className="d-flex align-items-center">
                       <Form.Control
                         type="text"
                         name="country"
@@ -297,11 +298,14 @@ export default function AddRecipe() {
                             .replace(/\b\w/g, (char) => char.toUpperCase());
                           setRecipe({ ...recipe, country: formattedValue });
                         }}
+                        className="w-50"
                         required
                       />
-                      <div className="mt-2">
+                      <div className=" mx-5">
                         <CountryFlag country={recipe.country} />
                       </div>
+                      </div>
+                      
                     </Form.Group>
                   </div>
 
@@ -354,6 +358,23 @@ export default function AddRecipe() {
                       </Form.Control>
                     </Form.Group>
                   </div>
+                  <div className="piece d-flex align-items-center">
+                    <Form.Group className="d-flex align-items-center gap-2 col-md-6 mb-2">
+                      <Form.Label className="mb-0">Nombre de part *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        placeholder="nombre de part"
+                        value={recipe.piece}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, piece: e.target.value })
+                        }
+                        className="w-25 mx-2"
+                        required
+                      />
+                    </Form.Group>
+                  </div>
+
                 </Card.Body>
               </Card>
 

@@ -28,6 +28,7 @@ export const createRecipe = async (req, res, next) => {
     regime,
     makingTime,
     cookingTime,
+    piece,
     imageUrl,
     instructions,
     ingredients, // Liste des ingrédients avec leurs quantités et unités
@@ -37,7 +38,7 @@ export const createRecipe = async (req, res, next) => {
   } = req.body;
 
   // Validation des champs
-  if (!name || !country || !category || !regime || !ingredients || !instructions || !userId) {
+  if (!name || !country || !category || !piece|| !regime || !ingredients || !instructions || !userId) {
     return res.status(400).json({ message: 'Tous les champs requis doivent être remplis, y compris userId.' });
   }
 
@@ -68,6 +69,7 @@ export const createRecipe = async (req, res, next) => {
     regime,
     makingTime,
     cookingTime,
+    piece,
     imageUrl,
     instructions,
     ingredients,
@@ -182,6 +184,7 @@ export const updateRecipe = async (req, res, next) => {
     if (req.body.instructions) updatedFields.instructions = req.body.instructions;
     if (req.body.makingTime) updatedFields.makingTime = req.body.makingTime;
     if (req.body.cookingTime) updatedFields.cookingTime = req.body.cookingTime;
+    if (req.body.piece) updatedFields.piece = req.body.piece;
     if (req.body.pseudo) updatedFields.pseudo = req.body.pseudo;
     if (req.body.comments) updatedFields.comments = req.body.comments;
     if (req.body.imageUrl) updatedFields.imageUrl = req.body.imageUrl;
@@ -202,6 +205,7 @@ export const updateRecipe = async (req, res, next) => {
       instructions: updatedRecipe.instructions,
       makingTime: updatedRecipe.makingTime,
       cookingTime: updatedRecipe.cookingTime,
+      piece: updatedRecipe.piece,
       pseudo: updatedRecipe.pseudo,
       comments: updatedRecipe.comments,
       imageUrl: updatedRecipe.imageUrl,

@@ -42,6 +42,10 @@ const recipeSchema = new mongoose.Schema(
       type: Number,
       min: -1,
     },
+    piece:{
+      type: Number,
+      min: -1,
+    },
     imageUrl: {
       type: String,
       default: 'https://firebasestorage.googleapis.com/v0/b/cahier-recette.appspot.com/o/1736092969670homeBg2.png?alt=media&token=86b7c025-6e2a-4bc4-be65-36ef1083c75c',
