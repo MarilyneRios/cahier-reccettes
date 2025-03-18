@@ -28,7 +28,7 @@ export default function HeroConnect() {
           </h1>
 
           <div className="d-flex mt-3 bg-white p-3 rounded">
-            <Link to="/about"
+            <Link to="/allFavoriteRecipe"
              className="d-flex flex-column align-items-center mx-3">
               <FaBookOpenReader
                 aria-hidden="true"

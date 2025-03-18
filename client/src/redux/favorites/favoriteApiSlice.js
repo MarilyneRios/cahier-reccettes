@@ -4,7 +4,7 @@ const FAVORITES_URL = '/api/favoriteRecipes';
 
 export const favoriteApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Afficher toutes les recettes avec la pagination
+    // Récupérer toutes les recettes favorites avec pagination
     getAllFavoriteRecipes: builder.query({
         query: ({ pageNumber = 1, pageSize = 6 }) => ({
             url: `${FAVORITES_URL}/?pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -12,6 +12,7 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
         }),
         providesTags: ['Favorite'],
         }),
+    // Ajouter une recette aux favoris
     addFavoriteRecipe: builder.mutation({
       query: (recipeId) => ({
         url: `${FAVORITES_URL}/add`,
@@ -20,6 +21,7 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Favorite"],
     }),
+     // Supprimer une recette des favoris
     removeFavoriteRecipe: builder.mutation({
       query: (recipeId) => ({
         url: `${FAVORITES_URL}/${recipeId}`,
@@ -27,6 +29,14 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Favorite"],
     }),
+      // Rechercher une recette favorite
+      searchFavoriteRecipe: builder.query({
+    query: (query) => ({
+      url: `${FAVORITES_URL}/search/${query}`,
+      method: 'GET',
+    }),
+    providesTags: ['Favorite'],
+  }),
   }),
 });
 
@@ -35,4 +45,5 @@ export const {
   useGetAllFavoriteRecipesQuery,
   useAddFavoriteRecipeMutation,
   useRemoveFavoriteRecipeMutation,
+  useSearchFavoriteRecipeQuery, 
 } = favoriteApiSlice;

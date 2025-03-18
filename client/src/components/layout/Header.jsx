@@ -1,5 +1,5 @@
 import Container from "react-bootstrap/Container";
-import { Navbar, Nav, Dropdown, Accordion } from "react-bootstrap";
+import { Navbar, Nav, Dropdown,  } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 import { Link, useLocation } from "react-router-dom";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "./Header.css";
 
 // icons
-import { FaUserCircle, FaSearch, FaHome, FaInfoCircle } from "react-icons/fa";
+import { FaUserCircle, FaHome, FaInfoCircle } from "react-icons/fa";
 import { FaCirclePlus, FaBookOpenReader } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiBooksDuotone } from "react-icons/pi";
@@ -18,11 +18,7 @@ import { PiBooksDuotone } from "react-icons/pi";
 import FilterComponent from "../shared/FilterComponent";
 import SearchBar from "../shared/searchBar";
 
-//redux RTK
-import {
-  useFilterByCategoryQuery,
-  useFilterByRegimeQuery,
-} from "../../redux/recipes/recipesApiSlice";
+
 
 ///////////////////////////////////////////////////////////////////////
 // Header component

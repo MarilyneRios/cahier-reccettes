@@ -5,6 +5,8 @@ const initialState = {
   currentFavorite: null,
   loading: false,
   error: false,
+  searchResults: [],
+  searchTerm: "",
 };
 
 const favoriteSlice = createSlice({
@@ -17,7 +19,9 @@ const favoriteSlice = createSlice({
       }
     },
     removeFavoriteLocal: (state, action) => {
-      state.favorites = state.favorites.filter((fav) => fav._id !== action.payload);
+      state.favorites = state.favorites.filter(
+        (fav) => fav._id !== action.payload
+      );
     },
     setFavorites: (state, action) => {
       state.favorites = action.payload;
@@ -31,9 +35,20 @@ const favoriteSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setFavoriteSearchResults: (state, action) => {
+      state.searchResults = action.payload;
+    },
   },
 });
 
-export const { addFavoriteLocal, removeFavoriteLocal, setFavorites, setFavoriteRecipe, setLoading, setError } = favoriteSlice.actions;
+export const {
+  addFavoriteLocal,
+  removeFavoriteLocal,
+  setFavorites,
+  setFavoriteRecipe,
+  setLoading,
+  setError,
+  setFavoriteSearchResults,
+} = favoriteSlice.actions;
 
 export default favoriteSlice.reducer;

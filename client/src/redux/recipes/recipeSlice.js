@@ -53,8 +53,7 @@ const recipeSlice = createSlice({
       state.searchResults = action.payload;
     },
     setSearchTerm: (state, action) => {
-      // pour synchroniser les 2 hearders
-      state.searchTerm = action.payload;
+       state.searchTerm = action.payload;
     },
     setSelectedCategories: (state, action) => {
       state.selectedCategories = action.payload;

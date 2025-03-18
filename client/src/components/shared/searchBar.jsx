@@ -75,7 +75,7 @@ const [searchTerm, setSearchTerm] = useState("");
       <input
         className="form-control text-white rounded-pill border-0 bg-transparent flex-grow-1 search-input "
         type="search"
-        placeholder="Chercher une recette ..."
+        placeholder="Toutes les recettes ..."
         aria-label="Search"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
