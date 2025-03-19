@@ -5,11 +5,12 @@ import { useGetAllFavoriteRecipesQuery } from "../../../redux/favorites/favorite
 // composants
 import { Spinner, Button } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
-import { Link } from "react-router-dom";
+import RecipeFilters from "../../../components/shared/search/RecipeFilters";
+import FavoriteFilterComponent from "../../../components/shared/search/FavoriteFilterComponent";
 // CSS
 import "./allFavoriteRecipe.styles.css";
 import "../../../App.css";
-import SearchBarFavorite from "../../../components/shared/SearchBarFavorite";
+import SearchBarFavorite from "../../../components/shared/search/SearchBarFavorite";
 
 export default function AllFavoriteRecipe() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +34,18 @@ export default function AllFavoriteRecipe() {
  // Vérifier si une recherche est active
   const isSearchActive = Array.isArray(searchResults) && searchResults.length > 0;
   console.log("🔍 Recherche active :", isSearchActive);
+
+  // filters
+  const [filters, setFilters] = useState({
+    categories: [],
+    diets: [],
+  });
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    // Appliquez les filtres à vos recettes ici
+    console.log("Filtres appliqués :", newFilters);
+  };
 
   // pagination
   useEffect(() => {
@@ -78,7 +91,7 @@ export default function AllFavoriteRecipe() {
           <SearchBarFavorite />
         </div>
         <div className="filtersFavorite W-75">
-          futur filtres
+        <FavoriteFilterComponent />
         </div>
       </div>
 

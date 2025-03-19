@@ -10,8 +10,8 @@ import { MdFilterList } from "react-icons/md";
 
 // Importation des requêtes RTK
 import { useDispatch } from "react-redux";
-import { useSearchRecipesQuery } from "../../redux/recipes/recipesApiSlice";
-import { setSearchResults } from "../../redux/recipes/recipeSlice";
+import { useSearchRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
+import { setSearchResults } from "../../../redux/recipes/recipeSlice";
 
 // Mapping pour UX (avec accents)
 const categoryMapping = {

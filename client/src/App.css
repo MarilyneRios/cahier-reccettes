@@ -1,5 +1,14 @@
 /* App.css */
+:root {
+  --bgcolor: linear-gradient(
+    to right,
+    #a4a28a 0%,
+    rgba(192, 189, 184, 0.8) 70%,
+    #9c9c8c 100%
+  );
+}
 
+/* css de base pour l'App*/
 * {
   margin: 0;
   padding: 0;
@@ -8,12 +17,7 @@
 
 body {
   font-family: serif, sans-serif;
-  background: linear-gradient(
-    to right,
-    #a4a28a 0%,
-    rgba(192, 189, 184, 0.8) 70%,
-    #9c9c8c 100%
-  );
+  background: var(--bgcolor);
   color: #fff;
   width: 100%;
 }

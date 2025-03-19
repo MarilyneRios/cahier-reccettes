@@ -15,8 +15,8 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { PiBooksDuotone } from "react-icons/pi";
 
 //element
-import FilterComponent from "../shared/FilterComponent";
-import SearchBar from "../shared/searchBar";
+import FilterComponent from "../shared/search/FilterComponent";
+import SearchBar from "../shared/search/searchBar";
 
 
 
@@ -198,6 +198,7 @@ function Header() {
           <Navbar.Brand
             as={Link}
             to="/allFavoriteRecipe"
+            style={{ background: "var(--bgcolor)" }}
             className="text-center link-navbarBrand btnNav rounded-pill px-2 mb-1 border border-white"
           >
             <span className="d-none d-sm-inline ">
@@ -205,7 +206,7 @@ function Header() {
                 aria-hidden="true"
                 aria-label="Mon cahier de recette"
                 size={22}
-                className=" mb-2  mx-1 "
+                className=" mb-2  mx-1"
               />
             </span>
             <span className="fs-5 fs-sm-5 fs-md-4 fs-lg-3 d-none d-sm-inline mx-1 ">
@@ -234,6 +235,7 @@ function Header() {
               aria-label="Maison"
               title="Accueil"
               size={30}
+              style={{ background: "var(--bgcolor)" }}
               className="btnNav rounded-pill p-1 border border-white"
             />
             <span className="tooltip-text">Accueil</span>
@@ -248,6 +250,7 @@ function Header() {
               aria-label="Toutes les recettes"
               title="Toutes les recettes"
               size={30}
+              style={{ background: "var(--bgcolor)" }}
               className="mx-2 btnNav rounded-pill p-1 border border-white"
             />
             <span className="tooltip-text">Les recettes</span>
@@ -262,6 +265,7 @@ function Header() {
               aria-label="ajouter une recette"
               title="Ajouter une recette"
               size={30}
+              style={{ background: "var(--bgcolor)" }}
               className="btnNav rounded-pill"
             />
             <span className="tooltip-text">Ajouter une recette</span>
@@ -276,6 +280,7 @@ function Header() {
               aria-label="A propos de nous"
               title="A propos de nous"
               size={30}
+              style={{ background: "var(--bgcolor)" }}
               className="btnNav mx-2 rounded-pill"
             />
             <span className="tooltip-text">A propos de nous</span>

@@ -5,8 +5,13 @@ const initialState = {
   currentFavorite: null,
   loading: false,
   error: false,
+  //searchBar
   searchResults: [],
   searchTerm: "",
+    // filter
+    filteredResults: [],
+    selectedCategories: [],
+    selectedRegimes: [],
 };
 
 const favoriteSlice = createSlice({
@@ -37,6 +42,15 @@ const favoriteSlice = createSlice({
     },
     setFavoriteSearchResults: (state, action) => {
       state.searchResults = action.payload;
+    },
+    setSelectedCategories: (state, action) => {
+      state.selectedCategories = action.payload;
+    },
+    setSelectedRegimes: (state, action) => {
+      state.selectedRegimes = action.payload;
+    },
+    setFilteredResults: (state, action) => {
+      state.filteredResults = action.payload;
     },
   },
 });

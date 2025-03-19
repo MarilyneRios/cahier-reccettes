@@ -9,7 +9,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 // Composants réutilisables
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
-import CountryFlag from "../../../components/shared/CountryFlag";
+import CountryFlag from "../../../components/shared/flag/CountryFlag";
 
 // RTK query
 import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";

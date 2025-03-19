@@ -3,9 +3,9 @@ import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 // redux
 import { useDispatch } from "react-redux";
-import { setSearchResults } from "../../redux/recipes/recipeSlice";
+import { setSearchResults } from "../../../redux/recipes/recipeSlice";
 //redux RTK
-import { useSearchRecipesQuery, } from "../../redux/recipes/recipesApiSlice";
+import { useSearchRecipesQuery, } from "../../../redux/recipes/recipesApiSlice";
 //react-router-dom
 import { useNavigate } from "react-router-dom";
 

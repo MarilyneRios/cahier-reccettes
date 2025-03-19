@@ -12,8 +12,8 @@ import { RxCross1 } from "react-icons/rx";
 import FormContainer from "../../../components/shared/FormContainer";
 import Loader from "../../../components/shared/Loader";
 import BackButton from "../../../components/shared/BackButton";
-import CKEditor from "../../../components/shared/CKEditor";
-import CountryFlag from "../../../components/shared/CountryFlag";
+import CKEditor from "../../../components/shared/editor/CKEditor";
+import CountryFlag from "../../../components/shared/flag/CountryFlag";
 
 // Image sur Firebase
 import {

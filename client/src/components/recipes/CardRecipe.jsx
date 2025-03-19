@@ -11,7 +11,7 @@ import {
 } from "../../redux/favorites/favoriteApiSlice";
 
 //composant réutilisable
-import CountryFlag from "../shared/CountryFlag";
+import CountryFlag from "../shared/flag/CountryFlag";
 
 import bookImage from "../../assets/homeBg2.png";
 import "./CardRecipe.css";

@@ -3,9 +3,9 @@ import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 // redux
 import { useDispatch } from "react-redux";
-import { setFavoriteSearchResults  } from "../../redux/favorites/favoriteSlice";
+import { setFavoriteSearchResults  } from "../../../redux/favorites/favoriteSlice";
 //redux RTK
-import { useSearchFavoriteRecipeQuery } from "../../redux/favorites/favoriteApiSlice";
+import { useSearchFavoriteRecipeQuery } from "../../../redux/favorites/favoriteApiSlice";
 //react-router-dom
 import { useNavigate } from "react-router-dom";
 
