@@ -38,3 +38,6 @@
     content: "";
   }
   
+  .input-flag{
+    max-width: 150px;
+   }

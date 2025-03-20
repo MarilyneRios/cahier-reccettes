@@ -215,15 +215,21 @@ const CountryFlag = ({ country }) => {
       <OverlayTrigger
         placement="top" // Position de l'infobulle (peut être "top", "right", "bottom", "left")
         overlay={<Tooltip id="flag-tooltip">{` ${country}`}</Tooltip>}
+        
       >
         <img
           src={flagUrl}
           alt={`Drapeau de ${country}`}
-          style={{ marginTop: "0.1rem", width: "2.5rem", height: "auto", cursor: "pointer" }}
+          style={{ marginTop: "0.1rem", width: "2.8rem", height: "auto", cursor: "pointer" }}
+          
         />
       </OverlayTrigger>
     ) : (
-      <div>Aucun drapeau</div>
+      <div className='d-flex align-item-center '
+      style={{ marginTop: "0.1rem", width: "100px", height: "auto", cursor: "pointer" }}
+      >
+       Aucun drapeau
+      </div>
     )}
   </div>
   );

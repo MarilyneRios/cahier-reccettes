@@ -285,27 +285,28 @@ export default function AddRecipe() {
                       className="col-12 col-md-6 mb-2"
                     >
                       <Form.Label>Pays *</Form.Label>
-                      <div className="d-flex align-items-center">
-                      <Form.Control
-                        type="text"
-                        name="country"
-                        autoCapitalize="words"
-                        placeholder="Nationalité de la recette"
-                        value={recipe.country}
-                        onChange={(e) => {
-                          const formattedValue = e.target.value
-                            .toLowerCase()
-                            .replace(/\b\w/g, (char) => char.toUpperCase());
-                          setRecipe({ ...recipe, country: formattedValue });
-                        }}
-                        className="w-50"
-                        required
-                      />
-                      <div className=" mx-5">
-                        <CountryFlag country={recipe.country} />
+                      <div className="d-flex flex-column flex-md-row align-items-center gap-2 col-md-12 mb-2 p-2">
+                        {" "}
+                        <Form.Control
+                          type="text"
+                          name="country"
+                          autoCapitalize="words"
+                          placeholder="Nationalité de la recette"
+                          value={recipe.country}
+                          onChange={(e) => {
+                            const formattedValue = e.target.value
+                              .toLowerCase()
+                              .replace(/\b\w/g, (char) => char.toUpperCase());
+                            setRecipe({ ...recipe, country: formattedValue });
+                          }}
+                          className="input-flag "
+                          required
+                        />
+                        <div className=" w-100 w-md-25 d-flex justify-content-center p-2">
+                          {" "}
+                          <CountryFlag country={recipe.country} />
+                        </div>
                       </div>
-                      </div>
-                      
                     </Form.Group>
                   </div>
 
@@ -358,9 +359,11 @@ export default function AddRecipe() {
                       </Form.Control>
                     </Form.Group>
                   </div>
+                  {/**nombre de part */}
                   <div className="piece d-flex align-items-center">
-                    <Form.Group className="d-flex align-items-center gap-2 col-md-6 mb-2">
-                      <Form.Label className="mb-0">Nombre de part *</Form.Label>
+                  <Form.Group className="d-flex flex-column flex-md-row align-items-center gap-2 col-md-6 mb-2">                      <Form.Label className="mb-0">
+                    Nombre de part *
+                    </Form.Label>
                       <Form.Control
                         type="number"
                         min="0"
@@ -369,12 +372,11 @@ export default function AddRecipe() {
                         onChange={(e) =>
                           setRecipe({ ...recipe, piece: e.target.value })
                         }
-                        className="w-25 mx-2"
+                        className="w-50  w-md-25 mx-2"
                         required
                       />
                     </Form.Group>
                   </div>
-
                 </Card.Body>
               </Card>
 
