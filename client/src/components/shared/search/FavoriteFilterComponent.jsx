@@ -34,6 +34,7 @@ export default function FavoriteFilterComponent() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedRegime, setSelectedRegime] = useState("");
 
+  //
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -87,7 +88,8 @@ export default function FavoriteFilterComponent() {
           name="category"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border border-2 border-success"
+          className="border border-3 border-success px-2"
+          style={{width:"120px"}}
         >
           <option value="">Catégorie</option>
           {Object.keys(categoryMapping).map((key) => (
@@ -99,13 +101,14 @@ export default function FavoriteFilterComponent() {
       </Form.Group>
 
       {/* Sélection du régime */}
-      <Form.Group controlId="regime" className="col-12 col-md-6 mb-2">
+      <Form.Group controlId="regime" className="col-12 col-md-6 mb-2 ">
         <Form.Control
           as="select"
           name="regime"
           value={selectedRegime}
           onChange={(e) => setSelectedRegime(e.target.value)}
-          className="border border-2 border-success"
+          className="border border-3 border-success px-2"
+          style={{width:"120px"}}
         >
           <option value="">Régime</option>
           {Object.keys(regimeMapping).map((key) => (

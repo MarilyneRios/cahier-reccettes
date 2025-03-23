@@ -86,11 +86,11 @@ export default function AllFavoriteRecipe() {
       </h2>
 
       {/** Search bar et filtres */}
-      <div className="search-favorite-container d-flex justify-content-center align-items-center w-100 border border-2">
-        <div className="SearchBarFavorite mx-2  p-2 W-100 ">
+      <div className="search-favorite-container d-flex justify-content-center align-items-center w-100 ">
+        <div className="SearchBarFavorite mx-2  px-1 W-100 ">
           <SearchBarFavorite />
         </div>
-        <div className="filtersFavorite mx-2 p-2 W-100 border border-2">
+        <div className="filtersFavorite mx-2 px-1 W-100 ">
         <FavoriteFilterComponent />
         </div>
       </div>
