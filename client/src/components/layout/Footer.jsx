@@ -76,10 +76,10 @@ function Footer() {
               href="mailto:rios.marilyne@gmail.com"
               className="text-success text-decoration-underline"
             >
-              rios.marilyne@gmail.com
+              rios.marilyne.dev@gmail.com
             </a>
           </p>
-          <p>Téléphone : +33 1 23 45 67 89</p>
+          <p>Téléphone : +33 7 81 14 19 69</p>
         </div>
       </div>
 

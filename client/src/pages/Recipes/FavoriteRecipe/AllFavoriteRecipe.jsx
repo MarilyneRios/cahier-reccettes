@@ -5,12 +5,12 @@ import { useGetAllFavoriteRecipesQuery } from "../../../redux/favorites/favorite
 // composants
 import { Spinner, Button } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
-import RecipeFilters from "../../../components/shared/search/RecipeFilters";
 import FavoriteFilterComponent from "../../../components/shared/search/FavoriteFilterComponent";
+import SearchBarFavorite from "../../../components/shared/search/SearchBarFavorite";
 // CSS
 import "./allFavoriteRecipe.styles.css";
 import "../../../App.css";
-import SearchBarFavorite from "../../../components/shared/search/SearchBarFavorite";
+
 
 export default function AllFavoriteRecipe() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,11 +86,11 @@ export default function AllFavoriteRecipe() {
       </h2>
 
       {/** Search bar et filtres */}
-      <div className="search-favorite-container d-flex justify-content-center align-items-center w-100">
-        <div className="SearchBarFavorite mx-3 W-75 ">
+      <div className="search-favorite-container d-flex justify-content-center align-items-center w-100 border border-2">
+        <div className="SearchBarFavorite mx-2  p-2 W-100 ">
           <SearchBarFavorite />
         </div>
-        <div className="filtersFavorite W-75">
+        <div className="filtersFavorite mx-2 p-2 W-100 border border-2">
         <FavoriteFilterComponent />
         </div>
       </div>
@@ -133,17 +133,19 @@ export default function AllFavoriteRecipe() {
           {totalPages > 1 && (
             <div className="d-flex justify-content-center align-items-center mt-4">
               <Button
-                variant="outline-success"
+                variant=" "
                 disabled={currentPage === 1}
+                className="pagination-btn fs-5"
                 onClick={() => handlePageChange(currentPage - 1)}
               >
                 &lt; Précédent
               </Button>
-              <span className="mx-3 fs-5">
+              <span className="mx-3 fs-4">
                 Page {currentPage} / {totalPages}
               </span>
               <Button
-                variant="outline-success"
+                variant=""
+                 className="pagination-btn fs-5"
                 disabled={currentPage === totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
               >

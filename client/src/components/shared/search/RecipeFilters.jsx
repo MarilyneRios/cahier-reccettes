@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const RecipeFilters = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
@@ -37,7 +37,7 @@ const RecipeFilters = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="recipe-filters">
+    <div className="recipe-filters mx-3">
       <div className="filter-section">
         <h4>Catégories</h4>
         {categories.map((category) => (
