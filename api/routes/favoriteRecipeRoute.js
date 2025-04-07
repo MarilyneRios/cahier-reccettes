@@ -5,8 +5,7 @@ import {
     addFavoriteRecipe, 
     removeFavoriteRecipe, 
     searchFavoriteRecipe, 
-    //filtreCategoryFavoriteRecipe, 
-    //filtreRegimeFavoriteRecipe 
+    filtreFavoriteRecipe
   } from '../controllers/favoriteRecipeController.js';
 
 import { verifyToken } from '../utils/verifyUser.js';
@@ -29,14 +28,14 @@ router.delete('/:id', verifyToken, removeFavoriteRecipe);// DELETE: http://local
 // Search
 ///////////////////////////////////////////////////////////////////////////
 
-router.get('/search/:query', searchFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/search/salade
+router.get('/search/:query',verifyToken, searchFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/search/salade
 
 
 ///////////////////////////////////////////////////////////////////////////
 //filtrer
 ///////////////////////////////////////////////////////////////////////////
 
-//router.get('/filter/category', verifyToken,filtreCategoryFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filter/category?category=starter
-//router.get('/filter/regime', verifyToken,filtreRegimeFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filter/regime?regime=balance
+router.get('/filterFavorite',verifyToken,  filtreFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filterFavorite?category=desserts&country=France ok
+
 
 export default router;

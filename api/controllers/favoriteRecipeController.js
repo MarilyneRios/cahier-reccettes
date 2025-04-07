@@ -159,9 +159,140 @@ export const getAllFavoriteRecipes = async (req, res, next) => {
   }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// old logique
-///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+// Search et filtrer
+///////////////////////////////////////////////////////////////////////////
+
+// @desc    Search recipes & display one recipe on homeScreen
+// @route   GET /api/favoriteRecipes/search/query
+// @access   Private (token)
+export const searchFavoriteRecipe = async (req, res, next) => {
+  try {
+    // 1. Récupération du terme de recherche dans les paramètres
+    const searchTerm = req.params.query;
+    console.log('searchTerm is', searchTerm);
+
+    // 2. Si aucun terme de recherche n'est fourni
+    if (!searchTerm) {
+      return res.status(400).json({
+        success: false,
+        message: "Le paramètre 'query' est requis.",
+        statusCode: 400,
+      });
+    }
+
+    // 3. Recherche insensible à la casse
+    const searchRegex = new RegExp(searchTerm, "i");
+
+    // 4. Récupérer tous les utilisateurs avec leurs recettes favorites peuplées
+    const usersWithFavorites = await User.find()
+    .populate({
+      path: 'savedRecipe',
+      populate: { path: 'userRef', select: 'username' },
+    });
+
+
+    // 5. Rassembler toutes les recettes favorites dans un seul tableau
+    let matchingRecipes = [];
+    for (const user of usersWithFavorites) {
+      const filtered = user.savedRecipe.filter((recipe) => {
+        return (
+          searchRegex.test(recipe.name) ||
+          searchRegex.test(recipe.country) ||
+          searchRegex.test(recipe.category) ||
+          searchRegex.test(recipe.regime) ||
+          searchRegex.test(recipe.modeCook) ||
+          recipe.ingredients?.some((ing) => searchRegex.test(ing.name)) ||
+          searchRegex.test(recipe.userRef?.username || '')
+        );
+      });
+      matchingRecipes.push(...filtered);
+    }
+
+    // 6. Si aucune recette n'est trouvée
+
+    if (matchingRecipes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Aucune recette favorite trouvée pour le terme recherché.',
+        statusCode: 404,
+      });
+    }
+
+    // 7. Retourner les recettes trouvées
+    res.status(200).json({
+      success: true,
+      recipes: matchingRecipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Filter favorite recipes by multiple criteria and display them on the home screen
+// @route   GET /api/favoriteRecipes/filterFavorite?category=desserts&country=France
+// @access  Private (requires authentication token)
+export const filtreFavoriteRecipe = async (req, res, next) => {
+  try {
+    // 1. Recuperer query parameters 
+    const { name, country, category, regime, ingredient, pseudo, modeCook } = req.query;
+    console.log(name, country, category, regime, ingredient, pseudo, modeCook);
+
+    // 2. Definir une function insensible à la case (regex)
+    const regexFilter = (value) => new RegExp(value, 'i');
+
+    // 3. Initialiser l'objet filter 
+    let usersQuery = {};
+    if (pseudo) {
+      // Ajouter un regex filter pour le username 
+      usersQuery.username = { $regex: regexFilter(pseudo) };
+    }
+
+    // 4. trouver users qui match avec le pseudo pseudo et populate les saved recipes
+    const users = await User.find(usersQuery).populate({
+      path: 'savedRecipe',
+      populate: { path: 'userRef', select: 'username' },
+    });
+
+    // 5. Initialiser un tableau pour les recettes favoris qui match avec les critères
+    let matchingRecipes = [];
+
+    // 6. Iteratuion sur chaque each user's saved recipes et appliquer les filtres
+    for (const user of users) {
+      const filtered = user.savedRecipe.filter((recipe) => {
+        return (
+          (!name || regexFilter(name).test(recipe.name)) &&
+          (!country || regexFilter(country).test(recipe.country)) &&
+          (!category || regexFilter(category).test(recipe.category)) &&
+          (!regime || regexFilter(regime).test(recipe.regime)) &&
+          (!modeCook || regexFilter(modeCook).test(recipe.modeCook)) &&
+          (!ingredient || recipe.ingredients?.some((ing) => regexFilter(ingredient).test(ing.name)))
+        );
+      });
+      // 7. Ajouter les recettes filtrés  dans le tableau matchingRecipes
+      matchingRecipes.push(...filtered);
+    }
+
+    // 8. Verifie si aucune recette match avec les criteres
+    if (matchingRecipes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No favorite recipes found for the provided criteria.',
+        statusCode: 404,
+      });
+    }
+
+    // 9. Retour/envoie 
+    res.status(200).json({
+      success: true,
+      recipes: matchingRecipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 // @desc    Afficher toutes les recettes favorites avec pagination
 // @route   GET /api/recipes/favoriteRecipes
@@ -230,153 +361,3 @@ export const displayOneFavoriteRecipe = async (req, res, next) => {
     next(error);
   }
 };
-
-
-///////////////////////////////////////////////////////////////////////////
-// Search et filtrer
-///////////////////////////////////////////////////////////////////////////
-
-// @desc    Search recipes & display one recipe on homeScreen
-// @route   GET /api/recipes/search/:query
-// @access  Public
-export const searchFavoriteRecipe = async (req, res, next) => {
-  try {
-    // 1. Récupération du terme de recherche dans les paramètres
-    const searchTerm = req.params.query;
-    console.log('searchTerm is', searchTerm);
-
-    // 2. Si aucun terme de recherche n'est fourni
-    if (!searchTerm) {
-      return res.status(400).json({
-        success: false,
-        message: "Le paramètre 'query' est requis.",
-        statusCode: 400,
-      });
-    }
-
-    // 3. Recherche insensible à la casse
-    const searchRegex = new RegExp(searchTerm, "i");
-
-     // 4. Rechercher l'utilisateur correspondant au terme (par nom)
-     let user = null;
-     if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
-       // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
-       user = await User.findOne({ username: { $regex: searchRegex } });
-       console.log('user found:', user);
-     }
-
-    // 5. Recherche des recettes par nom, pays ou userRef (si user trouvé)
-    const recipes = await Recipe.find({
-      $or: [
-        { name: { $regex: searchRegex } },
-        { country: { $regex: searchRegex } },
-        { category: { $regex: searchRegex } },
-        { regime: { $regex: searchRegex } },
-        { "ingredients.name": { $regex: searchRegex } },
-        { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
-      ].filter(condition => condition), // Supprimer les conditions nulles
-    }).populate("userRef", "username"); // On récupère aussi le username de l'utilisateur via `userRef`
-
-
-    // 6. Si aucune recette n'est trouvée
-    if (recipes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Aucune recette trouvée pour le terme recherché.",
-        statusCode: 404,
-      });
-    }
-
-    // 7. Retourner les recettes trouvées
-    res.status(200).json({
-      success: true,
-      recipes,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-/*
-// Par soucis de réduire les requêtes elles ne sont pas utilisées
-// Bien que fonctionnelles dans insomnia
-// @desc    Filter recipes by category & diplay one recipe on homeScreen
-// @route   GET /api/recipes/category/:category
-// @access  Public
-export const filtreCategoryFavoriteRecipe = async (req, res, next) => {
-  try {
-    // 1. Récupérer le paramètre de catégorie dans les query params
-    const category = req.query.category;
-    console.log(category);
-    
-    // 2. Vérifier si la catégorie est fournie
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        message: "Le paramètre 'category' est requis.",
-        statusCode: 400,
-      });
-    }
-
-    //3. Filtrer les recettes par catégorie
-    const recipes = await Recipe.find({ category: category });
-
-    // Si aucune recette n'est trouvée
-    if (recipes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Aucune recette trouvée pour la catégorie spécifiée.",
-        statusCode: 404,
-      });
-    }
-
-    //4. Retourner les recettes filtrées
-    res.status(200).json({
-      success: true,
-      recipes,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// @desc    Filter recipes by regime & diplay one recipe on homeScreen
-// @route   GET /api/recipes/regime/:regime
-// @access  Public
-export const filtreRegimeFavoriteRecipe = async (req, res, next) => {
-  try {
-    // 1. Récupérer le paramètre de regime dans les query params
-    const regime = req.query.regime;
-    console.log(regime);
-    
-    // 2. Vérifier si le regime est fournie
-    if (!regime) {
-      return res.status(400).json({
-        success: false,
-        message: "Le paramètre 'regime' est requis.",
-        statusCode: 400,
-      });
-    }
-
-    //3. Filtrer les recettes par regime
-    const recipes = await Recipe.find({ regime: regime });
-
-    // Si aucune recette n'est trouvée
-    if (recipes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Aucune recette trouvée pour le regime spécifié.",
-        statusCode: 404,
-      });
-    }
-
-    //4. Retourner les recettes filtrées
-    res.status(200).json({
-      success: true,
-      recipes,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-*/

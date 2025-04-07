@@ -34,6 +34,7 @@ const regimeMapping = {
   Toutes: ""
 };
 
+
 // Mapping pour API (sans accents)
 const apiCategoryMapping = { ...categoryMapping };
 const apiRegimeMapping = { ...regimeMapping };

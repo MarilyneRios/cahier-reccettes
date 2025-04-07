@@ -3,13 +3,6 @@ import Recipe from '../models/recipeModel.js';
 import User from '../models/userModel.js';
 
 
-//test
-export const display = (req, res) => {
-  res.json({
-    message: 'hello world on api/reicpeRoutes and repiceController ok',
-  });
-};
-
 ///////////////////////////////////////////////////////////////////////////
 // recipes
 ///////////////////////////////////////////////////////////////////////////
@@ -17,9 +10,12 @@ export const display = (req, res) => {
 // @desc    create 1 recipe && signIn
 // @route   POST /api/recipes
 // @access  Private (token)
+// @desc    create 1 recipe && signIn
+// @route   POST /api/recipes
+// @access  Private (token)
 export const createRecipe = async (req, res, next) => {
-  // Extraire le userId depuis req.user 
-  const userId = req.user.id; 
+  // Extraire le userId depuis req.user
+  const userId = req.user.id;
   // Récupérer le body du front
   const {
     name,
@@ -28,38 +24,47 @@ export const createRecipe = async (req, res, next) => {
     regime,
     makingTime,
     cookingTime,
+    modeCook,
     piece,
     imageUrl,
     instructions,
     ingredients, // Liste des ingrédients avec leurs quantités et unités
     comments,
+    commentsRecipe,
     pseudo,
-
   } = req.body;
 
   // Validation des champs
-  if (!name || !country || !category || !piece|| !regime || !ingredients || !instructions || !userId) {
+  if (!name || !country || !category || !modeCook || !piece || !regime || !ingredients || !instructions || !userId) {
     return res.status(400).json({ message: 'Tous les champs requis doivent être remplis, y compris userId.' });
   }
 
-   // Validation de la catégorie
-   const validCategories = ['aperitifs', 'entrees', 'plats', 'desserts', 'boissons', 'salades', 'autres'];
+  // Validation de la catégorie
+  const validCategories = ['aperitifs', 'entrees', 'plats', 'desserts', 'boissons', 'salades', 'autres'];
+  if (!validCategories.includes(category)) {
+    return res.status(400).json({
+      success: false,
+      message: "Catégorie invalide.",
+    });
+  }
 
-   if (!validCategories.includes(category)) {
-     return res.status(400).json({
-       success: false,
-       message: "Catégorie invalide.",
-     });
-   }
- 
-   // Validation du régime
-   const validRegimes = ['traditionnelle','vegetarien','vegan','sans-gluten','sans-lactose','autres',];
-   if (!validRegimes.includes(regime)) {
-     return res.status(400).json({
-       success: false,
-       message: "Régime invalide.",
-     });
-   }
+  // Validation du régime
+  const validRegimes = ['traditionnelle', 'vegetarien', 'vegan', 'sans-gluten', 'sans-lactose', 'autres'];
+  if (!validRegimes.includes(regime)) {
+    return res.status(400).json({
+      success: false,
+      message: "Régime invalide.",
+    });
+  }
+
+  // Validation du mode de cuisson
+  const validModeCook = ['vapeur', 'airFryer', 'griller', 'four', 'autoCuiseur', 'déshydrater', 'sauté', 'mijoter', 'bouillir', 'rôtir', 'pocher', 'frire', 'autres'];
+  if (!validModeCook.includes(modeCook)) {
+    return res.status(400).json({
+      success: false,
+      message: "Mode de cuisson invalide.",
+    });
+  }
 
   // Créer la nouvelle recette
   const newRecipe = new Recipe({
@@ -69,11 +74,13 @@ export const createRecipe = async (req, res, next) => {
     regime,
     makingTime,
     cookingTime,
+    modeCook,
     piece,
     imageUrl,
     instructions,
     ingredients,
     comments: comments || [],  // Si 'comments' est vide, le mettre par défaut à un tableau vide
+    commentsRecipe: commentsRecipe || [],  // Si 'commentsRecipe' est vide, le mettre par défaut à un tableau vide
     pseudo,
     userRef: userId,  // Utilisateur qui crée la recette
   });
@@ -89,6 +96,7 @@ export const createRecipe = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // @desc    recipes & display all recipes with piscture, title and author on Home
 // @route   GET /api/recipes/
@@ -188,6 +196,7 @@ export const updateRecipe = async (req, res, next) => {
     if (req.body.pseudo) updatedFields.pseudo = req.body.pseudo;
     if (req.body.comments) updatedFields.comments = req.body.comments;
     if (req.body.imageUrl) updatedFields.imageUrl = req.body.imageUrl;
+    if (req.body.modeCook) updatedFields.modeCook = req.body.modeCook; // Ajout de la mise à jour pour modeCook
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(
       recipeId,
@@ -209,6 +218,7 @@ export const updateRecipe = async (req, res, next) => {
       pseudo: updatedRecipe.pseudo,
       comments: updatedRecipe.comments,
       imageUrl: updatedRecipe.imageUrl,
+      modeCook: updatedRecipe.modeCook, // Ajout de modeCook dans la réponse
       message: "Recette mise à jour avec succès",
     });
   } catch (error) {
@@ -216,6 +226,7 @@ export const updateRecipe = async (req, res, next) => {
     res.status(500).json({ message: 'Erreur du serveur' });
   }
 };
+
 
 // @desc    Delete 1 recipe
 // @route   DELETE /api/recipes/:id
@@ -255,7 +266,109 @@ export const deleteRecipe = async (req, res, next) => {
 ///////////////////////////////////////////////////////////////////////////
 // Search et filtrer
 ///////////////////////////////////////////////////////////////////////////
+/*
+export const searchRecipe = async (req, res, next) => {
+  try {
+    // Affiche la requête reçue avec les paramètres
+    console.log("🔍 Requête reçue avec query :", req.query);
 
+    // Récupération des critères de recherche
+    const { name, country, category, regime, ingredient, pseudo } = req.query;
+
+    // Vérification si aucun critère n'est fourni
+    if (!name && !country && !category && !regime && !ingredient && !pseudo) {
+      console.log("❌ Aucun critère de recherche fourni");
+      return res.status(400).json({
+        success: false,
+        message: "Aucun critère de recherche fourni.",
+        statusCode: 400,
+      });
+    }
+
+    // Initialisation de l'objet filter pour la recherche
+    let filter = {};
+
+    // Fonction pour générer une regex permettant la recherche avec plusieurs mots
+    const createMultiWordRegex = (query) => {
+      console.log(`📌 Création de regex pour "${query}"`);
+      const words = query.trim().split(/\s+/); // Sépare par espace
+      return new RegExp(words.join("&"), "i"); // Recherche "OU" entre les mots
+    };
+
+    // Application des filtres sur chaque critère fourni
+    if (name) {
+      filter.name = { $regex: createMultiWordRegex(name) };
+      console.log("📝 Filtre ajouté - name :", filter.name);
+    }
+    if (country) {
+      filter.country = { $regex: createMultiWordRegex(country) };
+      console.log("🌍 Filtre ajouté - country :", filter.country);
+    }
+    if (category) {
+      filter.category = { $regex: createMultiWordRegex(category) };
+      console.log("🍽️ Filtre ajouté - category :", filter.category);
+    }
+    if (regime) {
+      filter.regime = { $regex: createMultiWordRegex(regime) };
+      console.log("🥗 Filtre ajouté - regime :", filter.regime);
+    }
+    if (ingredient) {
+      filter["ingredients.name"] = { $regex: createMultiWordRegex(ingredient) };
+      console.log("🥕 Filtre ajouté - ingredient :", filter["ingredients.name"]);
+    }
+
+    // Recherche de l'utilisateur si le pseudo est spécifié
+    if (pseudo) {
+      console.log("👤 Recherche de l'auteur :", pseudo);
+      const user = await User.findOne({ username: { $regex: createMultiWordRegex(pseudo) } });
+      console.log("👤 Auteur trouvé :", user);
+      if (user) {
+        filter.userRef = user._id;
+        console.log("🔗 Filtre ajouté - userRef :", filter.userRef);
+      } else {
+        console.log("❌ Auteur non trouvé");
+      }
+    }
+
+    // Affiche le filtre final avant la recherche
+    console.log("🔍 Filtre final :", filter);
+
+    // Recherche des recettes avec les filtres dynamiques
+    const recipes = await Recipe.find(filter).populate("userRef", "username");
+
+    // Affiche le nombre de recettes trouvées
+    console.log("📜 Nombre de recettes trouvées :", recipes.length);
+
+    // Si aucune recette n'est trouvée, on renvoie un message d'erreur
+    if (recipes.length === 0) {
+      console.log("❌ Aucune recette trouvée");
+      return res.status(404).json({
+        success: false,
+        message: "Aucune recette trouvée pour les critères fournis.",
+        statusCode: 404,
+      });
+    }
+
+    // Retourner les résultats si des recettes sont trouvées
+    console.log("✅ Envoi des résultats :", recipes);
+    res.status(200).json({
+      success: true,
+      recipes,
+    });
+  } catch (error) {
+    // Si une erreur survient, on l'affiche dans la console
+    console.error("❌ Erreur dans la recherche :", error);
+    next(error);
+  }
+};
+
+*/
+
+
+
+///////////////////////////////////////////////////////////////////////////
+//  old Search et filtrer
+///////////////////////////////////////////////////////////////////////////
 // @desc    Search recipes & display one recipe on homeScreen
 // @route   GET /api/recipes/search/:query
 // @access  Public
@@ -278,26 +391,26 @@ export const searchRecipe = async (req, res, next) => {
     // 3. Recherche insensible à la casse
     const searchRegex = new RegExp(searchTerm, "i");
 
-     // 4. Rechercher l'utilisateur correspondant au terme (par nom)
-     let user = null;
-     if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
-       // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
-       user = await User.findOne({ username: { $regex: searchRegex } });
-       console.log('user found:', user);
-     }
+    // 4. Rechercher l'utilisateur correspondant au terme (par nom)
+    let user = null;
+    if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
+      // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
+      user = await User.findOne({ username: { $regex: searchRegex } });
+      console.log('user found:', user);
+    }
 
-    // 5. Recherche des recettes par nom, pays ou userRef (si user trouvé)
+    // 5. Recherche des recettes par nom, pays, modeCook ou userRef (si user trouvé)
     const recipes = await Recipe.find({
       $or: [
         { name: { $regex: searchRegex } },
         { country: { $regex: searchRegex } },
         { category: { $regex: searchRegex } },
         { regime: { $regex: searchRegex } },
+        { modeCook: { $regex: searchRegex } }, // Ajout du filtre pour modeCook
         { "ingredients.name": { $regex: searchRegex } },
         { userRef: user ? user._id : null }, // Si user trouvé, chercher par userRef
       ].filter(condition => condition), // Supprimer les conditions nulles
     }).populate("userRef", "username"); // On récupère aussi le username de l'utilisateur via `userRef`
-
 
     // 6. Si aucune recette n'est trouvée
     if (recipes.length === 0) {
@@ -318,40 +431,49 @@ export const searchRecipe = async (req, res, next) => {
   }
 };
 
-/*
-// Par soucis de réduire les requêtes elles ne sont pas utilisées
-// Bien que fonctionnelles dans insomnia
-// @desc    Filter recipes by category & diplay one recipe on homeScreen
-// @route   GET /api/recipes/category/:category
+
+
+
+// @desc    Filter recipes by many critères & diplay one recipe on homeScreen
+// @route   GET /api/recipes/filter?category=desserts&country=France
 // @access  Public
-export const filtreCategoryRecipe = async (req, res, next) => {
+export const filtreRecipe = async (req, res, next) => {
   try {
-    // 1. Récupérer le paramètre de catégorie dans les query params
-    const category = req.query.category;
-    console.log(category);
-    
-    // 2. Vérifier si la catégorie est fournie
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        message: "Le paramètre 'category' est requis.",
-        statusCode: 400,
-      });
+    // Récupérer les paramètres de requête
+    const { name, country, category, regime, ingredient, pseudo, modeCook } = req.query;
+    console.log(name, country, category, regime, ingredient, pseudo, modeCook);
+
+    // Initialisation de l'objet filter
+    let filter = {};
+
+    // Ajouter des conditions au filtre si les critères sont fournis
+    if (name) filter.name = { $regex: new RegExp(name, "i") };
+    if (country) filter.country = { $regex: new RegExp(country, "i") };
+    if (category) filter.category = { $regex: new RegExp(category, "i") };
+    if (regime) filter.regime = { $regex: new RegExp(regime, "i") };
+    if (ingredient) filter["ingredients.name"] = { $regex: new RegExp(ingredient, "i") };
+    if (modeCook) filter.modeCook = { $regex: new RegExp(modeCook, "i") }; // Ajout du filtre pour modeCook
+
+    // Recherche de l'utilisateur si le pseudo est spécifié
+    if (pseudo) {
+      const user = await User.findOne({ username: { $regex: new RegExp(pseudo, "i") } });
+      if (user) {
+        filter.userRef = user._id;
+      }
     }
 
-    //3. Filtrer les recettes par catégorie
-    const recipes = await Recipe.find({ category: category });
+    // Recherche des recettes avec les filtres dynamiques
+    const recipes = await Recipe.find(filter).populate("userRef", "username");
 
-    // Si aucune recette n'est trouvée
     if (recipes.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "Aucune recette trouvée pour la catégorie spécifiée.",
+        message: "Aucune recette trouvée pour les critères fournis.",
         statusCode: 404,
       });
     }
 
-    //4. Retourner les recettes filtrées
+    // Retourner les recettes filtrées
     res.status(200).json({
       success: true,
       recipes,
@@ -361,6 +483,12 @@ export const filtreCategoryRecipe = async (req, res, next) => {
   }
 };
 
+
+
+
+/*
+// Par soucis de réduire les requêtes elles ne sont pas utilisées
+// Bien que fonctionnelles dans insomnia
 // @desc    Filter recipes by regime & diplay one recipe on homeScreen
 // @route   GET /api/recipes/regime/:regime
 // @access  Public

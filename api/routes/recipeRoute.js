@@ -1,24 +1,21 @@
 import express from 'express';
 
 import { 
-    createRecipe, display,
+    createRecipe, 
     displayAllRecipes, 
     displayOneRecipe, 
     updateRecipe, 
     deleteRecipe, 
     searchRecipe, 
+    filtreRecipe,
 
 } from '../controllers/recipeController.js';
 
 import { verifyToken } from '../utils/verifyUser.js';
 
-/*
-    filtreCategoryRecipe, 
-    filtreRegimeRecipe 
-*/
 
 const router = express.Router();
-router.get ('/', display) // routes test
+
 ///////////////////////////////////////////////////////////////////////////
 // routes protégées avec verifyToken
 ///////////////////////////////////////////////////////////////////////////
@@ -32,13 +29,14 @@ router.delete ('/deleteRecipe/:id', verifyToken, deleteRecipe) // DELETE: http:/
 ///////////////////////////////////////////////////////////////////////////
 // Search 
 ///////////////////////////////////////////////////////////////////////////
-router.get('/search/:query', searchRecipe); // GET http://localhost:3000/api/recipes/search/salade
+router.get('/search/:query', searchRecipe); // GET http://localhost:3000/api/recipes/search/salade ok
+
+//router.get('/search', searchRecipe); //http://localhost:3000/api/recipes/search?name=tarte&country=France
 
 
 ///////////////////////////////////////////////////////////////////////////
 // filtrer
 ///////////////////////////////////////////////////////////////////////////
-//router.get('/filter/category', filtreCategoryRecipe); // GET http://localhost:3000/api/recipes/filter/category?category=starter
-//router.get('/filter/regime', filtreRegimeRecipe); // GET http://localhost:3000/api/recipes/filter/regime?regime=balance
+router.get('/filter', filtreRecipe); // GET http://localhost:3000/api/recipes/filter?category=desserts&country=France ok
 
 export default router;
