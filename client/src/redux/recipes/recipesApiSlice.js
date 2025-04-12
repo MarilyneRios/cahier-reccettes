@@ -18,7 +18,7 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
     // Afficher toutes les recettes avec la pagination
     displayAllRecipes: builder.query({
       query: ({ pageNumber = 1, pageSize = 6 }) => ({
-        url: `${RECIPES_URL}/displayAllRecipes?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        url: `${RECIPES_URL}/?pageNumber=${pageNumber}&pageSize=${pageSize}`,
         method: "GET",
       }),
       providesTags: ["Recipe"],

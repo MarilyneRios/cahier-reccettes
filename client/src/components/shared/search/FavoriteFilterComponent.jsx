@@ -1,14 +1,11 @@
-// Importation des modules nécessaires depuis React
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// React-Bootstrap
 import { Form } from "react-bootstrap";
-// Importation des requêtes RTK
 import { useDispatch } from "react-redux";
-import { useSearchFavoriteRecipeQuery } from "../../../redux/favorites/favoriteApiSlice";
+import { useFilterFavorisRecipesQuery } from "../../../redux/favorites/favoriteApiSlice";
 import { setFavoriteSearchResults } from "../../../redux/favorites/favoriteSlice";
 
-// Mapping pour UX (avec accents)
+// Mappings avec accents
 const categoryMapping = {
   Apéritifs: "aperitifs",
   Entrées: "entrees",
@@ -29,50 +26,59 @@ const regimeMapping = {
   Toutes: "",
 };
 
+const modeCookMapping = {
+  Vapeur: "vapeur",
+  AirFryer: "airFryer",
+  Griller: "griller",
+  Four: "four",
+  "Auto-cuisseur": "autoCuiseur",
+  Déshydrater: "deshydrater",
+  Sauté: "saute",
+  Mijoter: "mijoter",
+  Bouillir: "bouillir",
+  Rôtir: "rotir",
+  Pocher: "pocher",
+  Frire: "frire",
+  Autres: "autres",
+};
+
 export default function FavoriteFilterComponent() {
-  // États locaux pour la recherche et les filtres
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedRegime, setSelectedRegime] = useState("");
+  const [selectedModecook, setSelectedModecook] = useState("");
+  const [searchTermCountry, setSearchTermCountry] = useState("");
 
-  //
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Construire la requête de recherche en combinant catégorie et régime
   const searchQuery = [
     selectedCategory ? categoryMapping[selectedCategory] : "",
     selectedRegime ? regimeMapping[selectedRegime] : "",
+    selectedModecook ? modeCookMapping[selectedModecook] : "",
+    searchTermCountry ? searchTermCountry.toLowerCase() : ""
   ]
     .filter(Boolean)
     .join(" ");
 
-  // RTK Query pour récupérer les résultats
-  const { data: searchResults, refetch } = useSearchFavoriteRecipeQuery(searchQuery, {
-    skip: !searchQuery, // Éviter la requête si la recherche est vide
+  const { data: searchResults, refetch } = useFilterFavorisRecipesQuery(searchQuery, {
+    skip: !searchQuery,
   });
 
-  // Effet pour récupérer et stocker les résultats de recherche
   useEffect(() => {
     const fetchResults = async () => {
       if (searchQuery) {
-        console.log("Search term for filter favorite submitted:", searchQuery);
+        console.log("Search term:", searchQuery);
         const results = await refetch();
-        console.log("Search results for filter favorite:", results);
-        
         if (results.data?.recipes) {
-          console.log("Dispatching search results for favorite:", results.data.recipes);
           dispatch(setFavoriteSearchResults(results.data.recipes));
           navigate("/allFavoriteRecipe");
-        } else {
-          console.log("No data received from search query.");
         }
       }
     };
 
     fetchResults();
-  }, [searchQuery, dispatch, navigate, refetch]);
+  }, [searchQuery, refetch, dispatch, navigate]);
 
-  // Effet pour réinitialiser les résultats si la recherche est effacée
   useEffect(() => {
     if (!searchQuery) {
       dispatch(setFavoriteSearchResults([]));
@@ -80,16 +86,13 @@ export default function FavoriteFilterComponent() {
   }, [searchQuery, dispatch]);
 
   return (
-    <div className="row mt-2">
-      {/* Sélection de la catégorie */}
-      <Form.Group controlId="category" className="col-12 col-md-6 mb-2">
-        <Form.Control
-          as="select"
-          name="category"
+    <div className="d-flex cardBg  row mt-2 p-2 ">
+      {/* Catégorie */}
+      <Form.Group controlId="category" className="col-12 col-md-3 ">
+        <Form.Select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="border border-3 border-success px-2"
-          style={{width:"120px"}}
         >
           <option value="">Catégorie</option>
           {Object.keys(categoryMapping).map((key) => (
@@ -97,18 +100,15 @@ export default function FavoriteFilterComponent() {
               {key}
             </option>
           ))}
-        </Form.Control>
+        </Form.Select>
       </Form.Group>
 
-      {/* Sélection du régime */}
-      <Form.Group controlId="regime" className="col-12 col-md-6 mb-2 ">
-        <Form.Control
-          as="select"
-          name="regime"
+      {/* Régime */}
+      <Form.Group controlId="regime" className="col-12 col-md-3 ">
+        <Form.Select
           value={selectedRegime}
           onChange={(e) => setSelectedRegime(e.target.value)}
           className="border border-3 border-success px-2"
-          style={{width:"120px"}}
         >
           <option value="">Régime</option>
           {Object.keys(regimeMapping).map((key) => (
@@ -116,7 +116,34 @@ export default function FavoriteFilterComponent() {
               {key}
             </option>
           ))}
-        </Form.Control>
+        </Form.Select>
+      </Form.Group>
+
+      {/* Mode de cuisson */}
+      <Form.Group controlId="modecook" className="col-12 col-md-3 ">
+        <Form.Select
+          value={selectedModecook}
+          onChange={(e) => setSelectedModecook(e.target.value)}
+          className="border border-3 border-success px-2"
+        >
+          <option value="">Cuisson</option>
+          {Object.keys(modeCookMapping).map((key) => (
+            <option key={key} value={key}>
+              {key}
+            </option>
+          ))}
+        </Form.Select>
+      </Form.Group>
+
+      {/* Pays */}
+      <Form.Group controlId="country" className="col-12 col-md-3 ">
+        <Form.Control
+          type="text"
+          placeholder="Pays"
+          value={searchTermCountry}
+          onChange={(e) => setSearchTermCountry(e.target.value)}
+          className="border border-3 border-success px-2"
+        />
       </Form.Group>
     </div>
   );

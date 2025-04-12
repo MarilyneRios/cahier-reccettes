@@ -211,26 +211,17 @@ const CountryFlag = ({ country }) => {
 
   return (
     <div>
-    {flagUrl ? (
+   
       <OverlayTrigger
         placement="top" // Position de l'infobulle (peut être "top", "right", "bottom", "left")
-        overlay={<Tooltip id="flag-tooltip">{` ${country}`}</Tooltip>}
-        
+        overlay={<Tooltip id="flag-tooltip">{` ${country}`}</Tooltip>} 
       >
         <img
           src={flagUrl}
-          alt={`Drapeau de ${country}`}
-          style={{ marginTop: "0.1rem", width: "2.8rem", height: "auto", cursor: "pointer" }}
-          
-        />
+          style={{ marginTop: "0rem", width: "2.8rem", height: "auto", cursor: "pointer" }}
+          placeholder={'Pays'}        />
       </OverlayTrigger>
-    ) : (
-      <div className='d-flex align-item-center '
-      style={{ marginTop: "0.1rem", width: "100px", height: "auto", cursor: "pointer" }}
-      >
-       Aucun drapeau
-      </div>
-    )}
+   
   </div>
   );
 };

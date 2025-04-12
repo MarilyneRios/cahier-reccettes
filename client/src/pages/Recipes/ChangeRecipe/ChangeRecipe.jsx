@@ -56,6 +56,7 @@ export default function ChangeRecipe() {
   const [recipe, setRecipe] = useState({
     name: "",
     country: "",
+    modeCook:"",
     category: "",
     regime: "",
     piece:"",
@@ -101,6 +102,7 @@ export default function ChangeRecipe() {
           country: recipeData.recipe.country || "",
           category: recipeData.recipe.category || "",
           regime: recipeData.recipe.regime || "",
+          modeCook: recipeData.recipe.modeCook || "",
           piece: recipeData.recipe.piece || "",
           ingredients: Array.isArray(recipeData.recipe.ingredients)
             ? recipeData.recipe.ingredients
@@ -446,9 +448,11 @@ export default function ChangeRecipe() {
                     </Form.Group>
                   </div>
                   {/* Nombre de part*/}
-                  <div className="piece d-flex align-items-center">
-                    <Form.Group className="d-flex align-items-center gap-2 col-md-6 mb-2">
-                      <Form.Label className="mb-0">Nombre de part *</Form.Label>
+                  <div className="piece d-flex ">
+                  <Form.Group className="col-12 col-md-6 my-2">                      
+                    <Form.Label className="mb-2">
+                    Nombre de part *
+                    </Form.Label>
                       <Form.Control
                         type="number"
                         min="0"
@@ -457,9 +461,40 @@ export default function ChangeRecipe() {
                         onChange={(e) =>
                           setRecipe({ ...recipe, piece: e.target.value })
                         }
-                        className="w-25 mx-2"
+                        className="w-50  w-md-25 mx-2"
                         required
                       />
+                    </Form.Group>
+                    <Form.Group
+                      controlId="modeCook"
+                      className="col-12 col-md-6 my-2"
+                    >
+                      <Form.Label>Mode de cuisson *</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={recipe.modeCook}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, modeCook: e.target.value })
+                        }
+                        required
+                      >
+                        <option value="">Sélectionner...</option>
+                        <option value="vapeur">Vapeur</option>
+                        <option value="airFryer">Air Fryer</option>
+                        <option value="griller">Griller</option>
+                        <option value="four">Four</option>
+                        <option value="autoCuiseur">Autocuiseur</option>
+                        <option value="déshydrater">Déshydrater</option>
+                        <option value="saute">Sauté</option>
+                        <option value="mijoter">Mijoté</option>
+                        <option value="bouillir">Bouillir</option>
+                        <option value="rotir">Rôti</option>
+                        <option value="pocher">Pocher</option>
+                        <option value="frire">Frire</option>
+                        <option value="autres">Autres...</option>
+                        <option value="aucun">Aucun...</option>
+
+                      </Form.Control>
                     </Form.Group>
                   </div>
                 </Card.Body>

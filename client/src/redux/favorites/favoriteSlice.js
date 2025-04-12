@@ -12,6 +12,8 @@ const initialState = {
     filteredResults: [],
     selectedCategories: [],
     selectedRegimes: [],
+    selectedModecook:[],
+    searchTermCountry:"",
 };
 
 const favoriteSlice = createSlice({

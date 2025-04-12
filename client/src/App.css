@@ -76,7 +76,6 @@ blockquote {
 }
 
 
-
 /*header*/
 .fixed-header {
   position: fixed;
@@ -116,4 +115,10 @@ blockquote {
   font-size: 1rem;
   color: #666;
   font-weight: bold;
+}
+
+.element-with-3d-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
 }

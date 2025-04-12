@@ -35,7 +35,7 @@ export const createRecipe = async (req, res, next) => {
   } = req.body;
 
   // Validation des champs
-  if (!name || !country || !category || !modeCook || !piece || !regime || !ingredients || !instructions || !userId) {
+  if (!name || !country || !category || !modeCook || !piece || !regime || !ingredients || !instructions ) {
     return res.status(400).json({ message: 'Tous les champs requis doivent être remplis, y compris userId.' });
   }
 
@@ -58,7 +58,7 @@ export const createRecipe = async (req, res, next) => {
   }
 
   // Validation du mode de cuisson
-  const validModeCook = ['vapeur', 'airFryer', 'griller', 'four', 'autoCuiseur', 'déshydrater', 'sauté', 'mijoter', 'bouillir', 'rôtir', 'pocher', 'frire', 'autres'];
+  const validModeCook = ['vapeur', 'airFryer', 'griller', 'four', 'autoCuiseur', 'déshydrater', 'sauté', 'mijoter', 'bouillir', 'rôtir', 'pocher', 'frire', 'autres','aucun'];
   if (!validModeCook.includes(modeCook)) {
     return res.status(400).json({
       success: false,

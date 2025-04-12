@@ -39,8 +39,10 @@ export default function AddRecipe() {
   const [recipe, setRecipe] = useState({
     name: "",
     country: "",
+    modeCook:"",
     category: "",
     regime: "",
+    piece:"",
     ingredients: [],
     instructions: [],
     comments: [],
@@ -219,32 +221,36 @@ export default function AddRecipe() {
   ///////////////////////////////////////////////////////////////////////
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("👉 Données envoyées :", recipe);
+  
+    if (
+      !recipe.name ||
+      !recipe.category ||
+      !recipe.regime ||
+      !recipe.modeCook ||
+      !recipe.country ||
+      !recipe.piece ||
+      recipe.ingredients.length === 0 ||
+      recipe.instructions.length === 0
+    ) {
+      toast.error("Tous les champs requis doivent être remplis.");
+      return;
+    }
+  
     try {
       setIsLoading(true);
-      const recipeData = { ...recipe };
-
-      // Si une image a été ajoutée, l'URL est déjà stockée dans `recipe.imageUrl`
-      const createdRecipe = await addRecipe(recipeData).unwrap(); // Utilisation de la mutation
-      console.log("Recipe Data:", createdRecipe);
-
+      const createdRecipe = await addRecipe(recipe).unwrap();
+      console.log("✅ Recette créée :", createdRecipe);
       toast.success("Recette créée avec succès !");
-
-      if (
-        createdRecipe &&
-        createdRecipe.savedRecipe &&
-        createdRecipe.savedRecipe._id
-      ) {
-        console.log("ID de la recette créée :", createdRecipe.savedRecipe._id);
-        navigate(`/displayRecipe/${createdRecipe.savedRecipe._id}`);
-      } else {
-        console.error("Recipe ID not found in the response.");
-      }
+      navigate(`/displayRecipe/${createdRecipe.savedRecipe._id}`);
     } catch (error) {
-      setError("Erreur lors de la création de la recette.");
+      console.error("❌ Erreur backend :", error);
       toast.error("Erreur lors de la création !");
+      setError("Erreur lors de la création de la recette.");
       setIsLoading(false);
     }
   };
+  
 
   return (
     <section className="bg-Recipe d-flex flex-column align-items-center p-5 ">
@@ -267,10 +273,11 @@ export default function AddRecipe() {
                       controlId="name"
                       className="col-12 col-md-6 mb-2"
                     >
-                      <Form.Label>Nom *</Form.Label>
+                      <Form.Label  className="mb-2">Nom *</Form.Label>
                       <Form.Control
                         type="text"
                         placeholder="Nom de la recette"
+                       
                         value={recipe.name}
                         onChange={(e) =>
                           setRecipe({ ...recipe, name: e.target.value })
@@ -282,10 +289,10 @@ export default function AddRecipe() {
                     {/*pays */}
                     <Form.Group
                       controlId="country"
-                      className="col-12 col-md-6 mb-2"
+                      className="col-12 col-md-6 "
                     >
                       <Form.Label>Pays *</Form.Label>
-                      <div className="d-flex flex-column flex-md-row align-items-center gap-2 col-md-12 mb-2 p-2">
+                      <div className="d-flex flex-column flex-md-row align-items-center gap-2 col-md-12 mb-2 ">
                         {" "}
                         <Form.Control
                           type="text"
@@ -302,7 +309,7 @@ export default function AddRecipe() {
                           className="input-flag "
                           required
                         />
-                        <div className=" w-100 w-md-25 d-flex justify-content-center p-2">
+                        <div className=" w-100 w-md-25 d-flex justify-content-center p-2 ">
                           {" "}
                           <CountryFlag country={recipe.country} />
                         </div>
@@ -325,7 +332,7 @@ export default function AddRecipe() {
                         }
                         required
                       >
-                        <option value="">Sélectionner une catégorie</option>
+                        <option value="">Sélectionner... </option>
                         <option value="aperitifs">Apéritifs</option>
                         <option value="entrees">Entrées</option>
                         <option value="plats">Plats</option>
@@ -349,7 +356,7 @@ export default function AddRecipe() {
                         }
                         required
                       >
-                        <option value="">Sélectionner un régime</option>
+                        <option value="">Sélectionner... </option>
                         <option value="traditionnelle">Traditionnelle</option>
                         <option value="vegetarien">Végétarien</option>
                         <option value="vegan">Végan</option>
@@ -360,8 +367,9 @@ export default function AddRecipe() {
                     </Form.Group>
                   </div>
                   {/**nombre de part */}
-                  <div className="piece d-flex align-items-center">
-                  <Form.Group className="d-flex flex-column flex-md-row align-items-center gap-2 col-md-6 mb-2">                      <Form.Label className="mb-0">
+                  <div className="piece d-flex ">
+                  <Form.Group className="col-12 col-md-6 my-2">                      
+                    <Form.Label className="mb-2">
                     Nombre de part *
                     </Form.Label>
                       <Form.Control
@@ -376,7 +384,39 @@ export default function AddRecipe() {
                         required
                       />
                     </Form.Group>
+                    <Form.Group
+                      controlId="modeCook"
+                      className="col-12 col-md-6 my-2"
+                    >
+                      <Form.Label>Mode de cuisson *</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={recipe.modeCook}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, modeCook: e.target.value })
+                        }
+                        required
+                      >
+                        <option value="">Sélectionner...</option>
+                        <option value="vapeur">Vapeur</option>
+                        <option value="airFryer">Air Fryer</option>
+                        <option value="griller">Griller</option>
+                        <option value="four">Four</option>
+                        <option value="autoCuiseur">Autocuiseur</option>
+                        <option value="déshydrater">Déshydrater</option>
+                        <option value="saute">Sauté</option>
+                        <option value="mijoter">Mijoté</option>
+                        <option value="bouillir">Bouillir</option>
+                        <option value="rotir">Rôti</option>
+                        <option value="pocher">Pocher</option>
+                        <option value="frire">Frire</option>
+                        <option value="autres">Autres...</option>
+                        <option value="aucun">Aucun...</option>
+
+                      </Form.Control>
+                    </Form.Group>
                   </div>
+                  
                 </Card.Body>
               </Card>
 

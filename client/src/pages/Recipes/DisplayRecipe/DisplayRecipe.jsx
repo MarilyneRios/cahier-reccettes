@@ -119,11 +119,8 @@ export default function DisplayRecipe() {
     );
   }
 
-  
-      console.log("Making Time:", recipe.makingTime);
-      console.log("Cooking Time:", recipe.cookingTime);
-    
-  
+  console.log("Making Time:", recipe.makingTime);
+  console.log("Cooking Time:", recipe.cookingTime);
 
   return (
     <div className="backgroundDisplayRecipe my-3">
@@ -136,14 +133,14 @@ export default function DisplayRecipe() {
           <section className="left-part custom-left-border bg-light w-100 w-md-50 m-0 p-3 rounded-top rounded-md-start">
             <div className="recipe-header mb-2 text-center">
               <h3 className="fs-3 title-border">{recipe.name}</h3>
-              <p className="fs-5 fst-italic d-flex align-items-center justify-content-center">
+              <div className="fs-5 fst-italic d-flex align-items-center justify-content-center">
                 Origine :
                 {recipe.country && (
                   <span title={recipe.country} className="ms-2">
                     <CountryFlag country={recipe.country} />
                   </span>
                 )}
-              </p>
+              </div>
             </div>
 
             <figure className="text-center">
@@ -154,50 +151,98 @@ export default function DisplayRecipe() {
                 style={{ maxHeight: "250px", objectFit: "cover" }}
               />
               <figcaption className="blockquote-image my-1">
-                 {/* Catégorie */}
-                <p>
-                  <strong>Catégorie :</strong> <cite>{recipe.category}</cite>
-                  <span className="mx-3">
-                    <strong>Régime :</strong> <cite>{recipe.regime}</cite>
-                  </span>
-                </p>
-                 {/* Préparation */}
-                <p>
-                  <strong>Préparation :</strong>{" "}
-                  <cite>{recipe.makingTime !== undefined && recipe.makingTime !== null ? `${recipe.makingTime} min` : "?"}</cite>                  <span className="mx-2"></span>
-                  <strong>Cuisson :</strong>{" "}
-                  <cite>{recipe.cookingTime !== undefined && recipe.cookingTime !== null ? `${recipe.cookingTime} min` : "?"}</cite>                </p>
+              <div className="d-flex flex-wrap">
+  {/* Catégorie */}
+  <div className="w-50 text-start">
+    <p className="mb-0">
+      <strong>Catégorie :</strong> <cite>{recipe.category}</cite>
+    </p>
+  </div>
+  {/* Régime */}
+  <div className="w-50 text-end">
+    <p className="mb-0">
+      <strong>Régime :</strong> <cite>{recipe.regime}</cite>
+    </p>
+  </div>
+</div>
+
+<div className="d-flex flex-wrap mt-2">
+  {/* Préparation */}
+  <div className="w-50 text-start">
+    <p className="mb-0">
+      <strong>Préparation :</strong>{" "}
+      <cite>
+        {recipe.makingTime !== undefined && recipe.makingTime !== null
+          ? `${recipe.makingTime} min`
+          : "?"}
+      </cite>
+    </p>
+  </div>
+  {/* Cuisson */}
+  <div className="w-50 text-end">
+    <p className="mb-0">
+      <strong>Cuisson :</strong>{" "}
+      <cite>
+        {recipe.cookingTime !== undefined && recipe.cookingTime !== null
+          ? `${recipe.cookingTime} min`
+          : "?"}
+      </cite>
+    </p>
+  </div>
+</div>
+
+<div className="d-flex flex-wrap mt-2">
+  {/* Type de cuisson */}
+  <div className="w-50 text-start">
+    <p className="mb-0">
+      <strong>Type de cuisson :</strong>{" "}
+      <cite>
+        {recipe.modeCook !== undefined && recipe.modeCook !== null
+          ? recipe.modeCook
+          : "?"}
+      </cite>
+    </p>
+  </div>
+  {/* Nombre de parts */}
+  <div className="w-50 text-end">
+    <p className="mb-0">
+      <strong>Nombre de parts :</strong>{" "}
+      <cite>
+        {recipe.piece !== undefined && recipe.piece !== null
+          ? recipe.piece
+          : "?"}
+      </cite>
+    </p>
+  </div>
+</div>
+
               </figcaption>
             </figure>
 
-             {/* auteur */}
+            {/* auteur */}
             <figcaption className="recipe-info">
               <p className="fs-5  fst-italic">
                 <strong>Auteur :</strong> {recipe.pseudo || "Anonyme"}
               </p>
-               {/* nbre de parts */}
-              <p className="fs-5 fst-italic">
-              Pour <strong> {recipe.piece || "??"} </strong>personnes  :
-              </p>
-
             </figcaption>
-             {/* ingrédients */}
+
+            {/* ingrédients */}
             <div className="recipe-ingredients listDisplay">
-                <h4 className="recipe-header title-border text-center">
-                  Ingrédients
-                </h4>
-                <ul>
-                  {recipe.ingredients?.length > 0 ? (
-                    recipe.ingredients.map(({ name, quantity, unit, _id }) => (
-                      <li key={_id}>
-                        {quantity} {unit} de {name}
-                      </li>
-                    ))
-                  ) : (
-                    <p>Aucun ingrédient disponible.</p>
-                  )}
-                </ul>
-              </div>
+              <h4 className="recipe-header title-border text-center">
+                Ingrédients
+              </h4>
+              <ul>
+                {recipe.ingredients?.length > 0 ? (
+                  recipe.ingredients.map(({ name, quantity, unit, _id }) => (
+                    <li key={_id}>
+                      {quantity} {unit} de {name}
+                    </li>
+                  ))
+                ) : (
+                  <p>Aucun ingrédient disponible.</p>
+                )}
+              </ul>
+            </div>
           </section>
 
           {/* Partie droite */}
@@ -222,8 +267,6 @@ export default function DisplayRecipe() {
                   <FaRegHeart size={30} color="black" />
                 )}{" "}
               </Button>
-
-
             </div>
 
             <div className="recipe-instructions listDisplay">

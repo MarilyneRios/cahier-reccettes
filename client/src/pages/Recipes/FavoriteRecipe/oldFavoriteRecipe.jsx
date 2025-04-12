@@ -1,46 +1,74 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
+// redux
 import { useGetAllFavoriteRecipesQuery } from "../../../redux/favorites/favoriteApiSlice";
 
 // composants
 import { Spinner, Button } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
-import FavoriteFilterComponent from "../../../components/shared/search/FavoriteFilterComponent";
+import RecipeFilters from "../../../components/shared/search/RecipeFilters";
 import SearchBarFavorite from "../../../components/shared/search/SearchBarFavorite";
 
-// icons
+//icons
 import { IoFilterSharp } from "react-icons/io5";
 
 // CSS
 import "./allFavoriteRecipe.styles.css";
 import "../../../App.css";
 
-export default function AllFavoriteRecipe() {
+export default function oldAllFavoriteRecipe() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
-  const [showFilters, setShowFilters] = useState(false);
-
+  const [showFilters, setShowFilters] = useState(false); 
+  // Récupération des favoris paginés
   const {
     data: recipesData,
-    isLoading,
-    isError,
-    error,
-    refetch,
+    isLoading: isLoadingFavorites,
+    isError: isErrorFavorites,
+    error: errorFavorites,
+    refetch: refetchFavorites,
   } = useGetAllFavoriteRecipesQuery({ pageNumber: currentPage, pageSize });
 
+  // Gestion des filtres
+  const [filters, setFilters] = useState({
+    category: "",
+    regime: "",
+    modeCook: "",
+    country: "",
+  });
+
+  // Récupération des favoris filtrés (non paginés ici)
+  const {
+    data: filteredData,
+    isLoading: isLoadingFiltered,
+    isError: isErrorFiltered,
+    error: errorFiltered,
+    refetch: refetchFiltered,
+  } = useFilterFavorisRecipesQuery(filters);
+
+  // Récupérer les résultats de la recherche
   const searchResults = useSelector((state) => state.favorite.searchResults);
   const isSearchActive = Array.isArray(searchResults) && searchResults.length > 0;
 
-  const recipes = recipesData?.recipes || [];
-  const totalPages = recipesData?.pages || 1;
-
+  // Apparission filtres
   const toggleFilters = () => {
     setShowFilters((prev) => !prev);
   };
+  // Changement de filtre
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    console.log("Filtres appliqués :", newFilters);
+  };
 
+  // Pagination
   useEffect(() => {
-    refetch();
-  }, [currentPage, refetch]);
+    console.log("🔄 useEffect déclenché - Page :", currentPage);
+    refetchFavorites();
+  }, [currentPage, refetchFavorites]);
+
+  const recipes = recipesData?.recipes || [];
+  const totalPages = recipesData?.pages || 1;
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -48,15 +76,26 @@ export default function AllFavoriteRecipe() {
     }
   };
 
-  if (isLoading) {
+  // Gestion des états de chargement/erreurs
+  if (isLoadingFavorites || isLoadingFiltered) {
     return <Spinner animation="border" role="status" />;
   }
 
-  if (isError) {
+  if (isErrorFavorites) {
     return (
       <div className="w-100 d-flex Aucune-recipe-container">
         <p className="text-danger fs-4 border border-2 rounded Aucune-recipe">
-          Erreur : {error?.data?.message || "Impossible de charger les recettes."}
+          Erreur : {errorFavorites?.data?.message || "Erreur de chargement des favoris."}
+        </p>
+      </div>
+    );
+  }
+
+  if (isErrorFiltered) {
+    return (
+      <div className="w-100 d-flex Aucune-recipe-container">
+        <p className="text-danger fs-4 border border-2 rounded Aucune-recipe">
+          Erreur : {errorFiltered?.data?.message || "Erreur de chargement des filtres."}
         </p>
       </div>
     );
@@ -64,33 +103,33 @@ export default function AllFavoriteRecipe() {
 
   return (
     <div className="d-flex flex-column align-items-center mb-5 Container-Favorite">
-      <h2 className="fst-italic text-center p-3 w-100 shadow-lg title custom-text-shadow">
+      <h2 className="fst-italic text-center p-2 w-100 shadow-lg title custom-text-shadow">
         {isSearchActive ? "Résultats de la recherche" : "Toutes vos recettes préférées"}
       </h2>
 
- {/* Barre de recherche et bouton de filtre centrés */}
- <div className="search-favorite-container d-flex justify-content-center align-items-center w-100 gap-2 mb-2 ">
-      <div className="SearchBarFavorite d-flex justify-content-center align-items-center mt-1 w-75 ">
-        <SearchBarFavorite />
-        <Button className="element-with-3d-effect  btn btn-success d-flex align-items-center mx-3" onClick={toggleFilters}>
-          <IoFilterSharp className="mx-2" />
-          {showFilters ? "Masquer les filtres" : "Filtres"}
-        </Button>
-      </div>
-      {/* Bouton pour afficher les filtres */}
-      <div className="container-filter   border border-primary">
-       
-      </div>
-    </div>
+      {/* Barre de recherche  */}
+      <div className="search-favorite-container d-flex justify-content-center align-items-center w-100">
+        <div className="SearchBarFavorite mx-2 px-1 W-100">
+          <SearchBarFavorite />
+        </div>
+        {/**Filtres */}
+        <div className="container-filter mb-3">
+      <Button className="btn btn-success d-flex align-items-center" onClick={toggleFilters}>
+        <IoFilterSharp className="mx-2" />
+        {showFilters ? "Masquer les filtres" : "Filtres"}
+      </Button>
 
-      {/* Filtres dynamiques affichés uniquement si activés */}
       {showFilters && (
-        <div className="filtersFavorite w-100 d-flex justify-content-center mb-4">
-          <FavoriteFilterComponent />
+        <div className="filtersFavorite mt-3 mx-2 px-1 w-100">
+          <RecipeFilters onFilterChange={handleFilterChange} />
         </div>
       )}
+    </div>
 
-      {/* Affichage des résultats */}
+
+      </div>
+
+      {/* Affichage des recettes */}
       {isSearchActive ? (
         <div className="container mt-4">
           {searchResults.length === 0 ? (
@@ -123,10 +162,10 @@ export default function AllFavoriteRecipe() {
             )}
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="d-flex justify-content-center align-items-center mt-4">
               <Button
-                variant=""
                 disabled={currentPage === 1}
                 className="pagination-btn fs-5"
                 onClick={() => handlePageChange(currentPage - 1)}
@@ -137,9 +176,8 @@ export default function AllFavoriteRecipe() {
                 Page {currentPage} / {totalPages}
               </span>
               <Button
-                variant=""
-                className="pagination-btn fs-5"
                 disabled={currentPage === totalPages}
+                className="pagination-btn fs-5"
                 onClick={() => handlePageChange(currentPage + 1)}
               >
                 Suivant &gt;

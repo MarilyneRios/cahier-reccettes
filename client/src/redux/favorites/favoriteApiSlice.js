@@ -37,7 +37,21 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
     }),
     providesTags: ['Favorite'],
   }),
+ 
+  //filtrer les recettes favorites
+  //exemple requete insomnia
+  //http://localhost:3000/api/favoriteRecipes/filterFavorite?category=plats&country=italie
+  filterFavorisRecipes: builder.query({
+    query: (params) => {
+      const queryString = new URLSearchParams(params).toString();
+      return {
+        url: `${FAVORITES_URL}/filterFavorite?${queryString}`,
+        method: "GET",
+      };
+    },
+    providesTags: ["Favorite"],
   }),
+}),
 });
 
 // Exporte les hooks auto-générés pour RTK Query
@@ -46,4 +60,5 @@ export const {
   useAddFavoriteRecipeMutation,
   useRemoveFavoriteRecipeMutation,
   useSearchFavoriteRecipeQuery, 
+  useFilterFavorisRecipesQuery,
 } = favoriteApiSlice;
