@@ -13,10 +13,10 @@ import CountryFlag from "../../../components/shared/flag/CountryFlag";
 
 // RTK query
 import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";
-import { 
-  useAddFavoriteRecipeMutation, 
-  useRemoveFavoriteRecipeMutation, 
-  useGetAllFavoriteRecipesQuery 
+import {
+  useAddFavoriteRecipeMutation,
+  useRemoveFavoriteRecipeMutation,
+  useGetAllFavoriteRecipesQuery
 } from "../../../redux/favorites/favoriteApiSlice";
 
 // Redux
@@ -40,13 +40,13 @@ import "../../../App.css";
 export default function DisplayRecipe() {
   const { id } = useParams(); // Récupération de l'ID depuis l'URL
 
-  // navigation avec React Router 
+  // Navigation avec React Router
   const navigate = useNavigate();
-  //distribution avec Redux
+  // Distribution avec Redux
   const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.user);
- 
+
   const [errorMessage, setErrorMessage] = useState("");
 
   // Utilisation du hook pour récupérer la recette
@@ -56,51 +56,36 @@ export default function DisplayRecipe() {
     isError,
     error,
   } = useDisplayOneRecipeQuery(id);
-  //console.log("Données complètes de la recette:", recipeData);
 
   // Vérification si les données sont présentes
   const recipe = recipeData?.recipe || null;
 
-  //mis à jour avec l'ID de l'utilisateur associé à la recette chaque fois que recipe change
+  // Mis à jour avec l'ID de l'utilisateur associé à la recette chaque fois que recipe change
   useEffect(() => {
     if (recipe?.userId) {
       dispatch(setUserId(recipe.userId));
     }
   }, [recipe, dispatch]);
 
- 
-   // Vérifier si la recette est déjà dans les favoris
-   const { data: favoriteData } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
- 
+  // Vérifier si la recette est déjà dans les favoris
+  const { data: favoriteData } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
 
   // Vérification si l'utilisateur est le créateur de la recette
   const userId = currentUser?._id || null;
   const creatorId = recipe?.userRef?._id || null;
   const isCreator = userId === creatorId;
 
-    // Vérifier si l'utilisateur est l'auteur de la recette
-    const isOwner = userId === recipe?.userRef?._id;
-
-  // console.log("ID de l'utilisateur actuel:", userId);
-  // console.log("ID du créateur de la recette (depuis l'API):", creatorId);
-  // console.log("L'utilisateur est-il le créateur ?", isCreator);
-
-
-
-  //console.log("Données complètes de  favoriteRecipes:", recipeData);
-
   // Vérifier si la recette est dans les favoris
-  const isFavorite = favoriteData?.recipes.some((fav) => fav._id === recipe._id);
+  const isFavorite = recipe && favoriteData?.recipes.some((fav) => fav._id === recipe._id);
 
-
-  
   // Mutations pour ajouter/supprimer des favoris
   const [addFavoriteRecipe] = useAddFavoriteRecipeMutation();
   const [removeFavoriteRecipe] = useRemoveFavoriteRecipeMutation();
 
   // Fonction pour gérer le clic sur le cœur (ajouter ou retirer des favoris)
   const handleToggleFavorite = async (e) => {
-    
+    e.stopPropagation(); // Empêcher la propagation du clic sur la carte
+
     try {
       // Si la recette est déjà dans les favoris, on la supprime
       if (isFavorite) {
@@ -113,7 +98,7 @@ export default function DisplayRecipe() {
     }
   };
 
-  //gestion de la navigation pour afficher la recette complete
+  // Gestion de la navigation pour afficher la recette complète
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isCreator) {
@@ -149,7 +134,6 @@ export default function DisplayRecipe() {
     );
   }
 
- 
   return (
     <div className="backgroundDisplayRecipe my-3">
       <section className="DisplayRecipe-container">
@@ -250,14 +234,14 @@ export default function DisplayRecipe() {
               </figcaption>
             </figure>
 
-            {/* auteur */}
+            {/* Auteur */}
             <figcaption className="recipe-info">
-              <p className="fs-5  fst-italic">
+              <p className="fs-5 fst-italic">
                 <strong>Auteur :</strong> {recipe.pseudo || "Anonyme"}
               </p>
             </figcaption>
 
-            {/* ingrédients */}
+            {/* Ingrédients */}
             <div className="recipe-ingredients listDisplay">
               <h4 className="recipe-header title-border text-center">
                 Ingrédients
@@ -279,29 +263,29 @@ export default function DisplayRecipe() {
           {/* Partie droite */}
           <section className="right-part custom-right-border bg-light w-100 w-md-50 m-0 p-3 rounded-bottom rounded-md-end">
             <div className="recipe-details">
-     {/* Bouton cœur : visible uniquement si l'utilisateur n'est pas l'auteur de la recette */}
-     {!isOwner && (
-        <Button
-          variant="transparent"
-          className="like-btn"
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            borderRadius: "50%",
-            padding: "5px",
-            zIndex: 1,
-          }}
-          onClick={handleToggleFavorite} // Ajouter ou retirer des favoris
-        >
-          {isFavorite ? (
-            <FaHeart size={30} color="red" /> // Cœur rouge si la recette est dans les favoris
-          ) : (
-            <FaRegHeart size={30} color="black" /> // Cœur blanc si la recette n'est pas dans les favoris
-          )}
-         </Button>
-          )}
+              {/* Bouton cœur : visible uniquement si l'utilisateur n'est pas l'auteur de la recette */}
+              {!isCreator && (
+                <Button
+                  variant="transparent"
+                  className="like-btn"
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                    borderRadius: "50%",
+                    padding: "5px",
+                    zIndex: 1,
+                  }}
+                  onClick={handleToggleFavorite} // Ajouter ou retirer des favoris
+                >
+                  {isFavorite ? (
+                    <FaHeart size={30} color="red" /> // Cœur rouge si la recette est dans les favoris
+                  ) : (
+                    <FaRegHeart size={30} color="black" /> // Cœur blanc si la recette n'est pas dans les favoris
+                  )}
+                </Button>
+              )}
             </div>
 
             <div className="recipe-instructions listDisplay">
@@ -321,7 +305,7 @@ export default function DisplayRecipe() {
               </ol>
             </div>
 
-            <div className="recipe-comments listDisplay ">
+            <div className="recipe-comments listDisplay">
               <h4 className="title-border text-center">Bienfaits</h4>
               <ol>
                 {recipe.comments?.length > 0 ? (
