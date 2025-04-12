@@ -14,10 +14,10 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
         }),
     // Ajouter une recette aux favoris
     addFavoriteRecipe: builder.mutation({
-      query: (recipeId) => ({
+      query: ({ userId, recipeId }) => ({
         url: `${FAVORITES_URL}/add`,
         method: "POST",
-        body: { recipeId },
+        body: { userId, recipeId },
       }),
       invalidatesTags: ["Favorite"],
     }),

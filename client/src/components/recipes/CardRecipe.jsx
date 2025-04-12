@@ -1,7 +1,7 @@
 import { Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 // RTK Redux
 import { 
@@ -21,7 +21,8 @@ import "./CardRecipe.css";
 ///////////////////////////////////////////////////////////////////////////
 function CardRecipe({ recipe }) {
   const { currentUser } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  
+  // navigation avec React Router 
   const navigate = useNavigate();
 
   // Récupérer l'ID de l'utilisateur courant
@@ -49,7 +50,7 @@ function CardRecipe({ recipe }) {
       if (isFavorite) {
         await removeFavoriteRecipe(recipe._id);  // Supprimer des favoris sur le backend
       } else {
-        await addFavoriteRecipe(recipe._id);  // Ajouter aux favoris sur le backend
+        await addFavoriteRecipe({ userId, recipeId: recipe._id });  // Ajouter aux favoris sur le backend
       }
     } catch (err) {
       console.error("Erreur lors de la gestion des favoris", err);

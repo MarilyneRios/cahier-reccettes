@@ -7,8 +7,6 @@ import "./ViewRecipes.css";
 export default function ViewRecipes({ currentPage }) {
   const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || []);
   console.log("Search results from Redux store:", searchResults); // Log des résultats de recherche
-
-
   
   const {
     data: recipesData,

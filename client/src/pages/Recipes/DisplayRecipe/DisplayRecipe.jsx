@@ -13,9 +13,10 @@ import CountryFlag from "../../../components/shared/flag/CountryFlag";
 
 // RTK query
 import { useDisplayOneRecipeQuery } from "../../../redux/recipes/recipesApiSlice";
-import {
-  useAddFavoriteRecipeMutation,
-  useRemoveFavoriteRecipeMutation,
+import { 
+  useAddFavoriteRecipeMutation, 
+  useRemoveFavoriteRecipeMutation, 
+  useGetAllFavoriteRecipesQuery 
 } from "../../../redux/favorites/favoriteApiSlice";
 
 // Redux
@@ -32,12 +33,20 @@ import "react-toastify/dist/ReactToastify.css";
 import "./displayRecipe.styles.css";
 import "../../../App.css";
 
+///////////////////////////////////////////////////////////////////////////
+// Composant DisplayRecipe
+///////////////////////////////////////////////////////////////////////////
+
 export default function DisplayRecipe() {
   const { id } = useParams(); // Récupération de l'ID depuis l'URL
+
+  // navigation avec React Router 
   const navigate = useNavigate();
+  //distribution avec Redux
   const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.user);
+ 
   const [errorMessage, setErrorMessage] = useState("");
 
   // Utilisation du hook pour récupérer la recette
@@ -48,38 +57,59 @@ export default function DisplayRecipe() {
     error,
   } = useDisplayOneRecipeQuery(id);
   //console.log("Données complètes de la recette:", recipeData);
+
   // Vérification si les données sont présentes
   const recipe = recipeData?.recipe || null;
 
+  //mis à jour avec l'ID de l'utilisateur associé à la recette chaque fois que recipe change
   useEffect(() => {
     if (recipe?.userId) {
       dispatch(setUserId(recipe.userId));
     }
   }, [recipe, dispatch]);
 
+ 
+   // Vérifier si la recette est déjà dans les favoris
+   const { data: favoriteData } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
+ 
+
   // Vérification si l'utilisateur est le créateur de la recette
   const userId = currentUser?._id || null;
   const creatorId = recipe?.userRef?._id || null;
   const isCreator = userId === creatorId;
 
-  console.log("ID de l'utilisateur actuel:", userId);
-  console.log("ID du créateur de la recette (depuis l'API):", creatorId);
-  console.log("L'utilisateur est-il le créateur ?", isCreator);
+    // Vérifier si l'utilisateur est l'auteur de la recette
+    const isOwner = userId === recipe?.userRef?._id;
 
-  // gestion des likes
-  const favoriteState = useSelector(
-    (state) => state.favorite || { favorites: [] }
-  );
-  const favoriteRecipes = favoriteState.favorites;
+  // console.log("ID de l'utilisateur actuel:", userId);
+  // console.log("ID du créateur de la recette (depuis l'API):", creatorId);
+  // console.log("L'utilisateur est-il le créateur ?", isCreator);
+
+
 
   //console.log("Données complètes de  favoriteRecipes:", recipeData);
 
-  const isFavorite = favoriteRecipes.includes(id);
-  const handleLike = () => {
-    if (isFavorite) {
-      dispatch(removeFavorite(id));
-    } else {
-      dispatch(addFavorite(id));
+  // Vérifier si la recette est dans les favoris
+  const isFavorite = favoriteData?.recipes.some((fav) => fav._id === recipe._id);
+
+
+  
+  // Mutations pour ajouter/supprimer des favoris
+  const [addFavoriteRecipe] = useAddFavoriteRecipeMutation();
+  const [removeFavoriteRecipe] = useRemoveFavoriteRecipeMutation();
+
+  // Fonction pour gérer le clic sur le cœur (ajouter ou retirer des favoris)
+  const handleToggleFavorite = async (e) => {
+    
+    try {
+      // Si la recette est déjà dans les favoris, on la supprime
+      if (isFavorite) {
+        await removeFavoriteRecipe(recipe._id);  // Supprimer des favoris sur le backend
+      } else {
+        await addFavoriteRecipe({ userId, recipeId: recipe._id });  // Ajouter aux favoris sur le backend
+      }
+    } catch (err) {
+      console.error("Erreur lors de la gestion des favoris", err);
     }
   };
 
@@ -119,9 +149,7 @@ export default function DisplayRecipe() {
     );
   }
 
-  console.log("Making Time:", recipe.makingTime);
-  console.log("Cooking Time:", recipe.cookingTime);
-
+ 
   return (
     <div className="backgroundDisplayRecipe my-3">
       <section className="DisplayRecipe-container">
@@ -151,71 +179,74 @@ export default function DisplayRecipe() {
                 style={{ maxHeight: "250px", objectFit: "cover" }}
               />
               <figcaption className="blockquote-image my-1">
-              <div className="d-flex flex-wrap">
-  {/* Catégorie */}
-  <div className="w-50 text-start">
-    <p className="mb-0">
-      <strong>Catégorie :</strong> <cite>{recipe.category}</cite>
-    </p>
-  </div>
-  {/* Régime */}
-  <div className="w-50 text-end">
-    <p className="mb-0">
-      <strong>Régime :</strong> <cite>{recipe.regime}</cite>
-    </p>
-  </div>
-</div>
+                <div className="d-flex flex-wrap">
+                  {/* Catégorie */}
+                  <div className="w-50 text-start">
+                    <p className="mb-0">
+                      <strong>Catégorie :</strong>{" "}
+                      <cite>{recipe.category}</cite>
+                    </p>
+                  </div>
+                  {/* Régime */}
+                  <div className="w-50 text-end">
+                    <p className="mb-0">
+                      <strong>Régime :</strong> <cite>{recipe.regime}</cite>
+                    </p>
+                  </div>
+                </div>
 
-<div className="d-flex flex-wrap mt-2">
-  {/* Préparation */}
-  <div className="w-50 text-start">
-    <p className="mb-0">
-      <strong>Préparation :</strong>{" "}
-      <cite>
-        {recipe.makingTime !== undefined && recipe.makingTime !== null
-          ? `${recipe.makingTime} min`
-          : "?"}
-      </cite>
-    </p>
-  </div>
-  {/* Cuisson */}
-  <div className="w-50 text-end">
-    <p className="mb-0">
-      <strong>Cuisson :</strong>{" "}
-      <cite>
-        {recipe.cookingTime !== undefined && recipe.cookingTime !== null
-          ? `${recipe.cookingTime} min`
-          : "?"}
-      </cite>
-    </p>
-  </div>
-</div>
+                <div className="d-flex flex-wrap mt-2">
+                  {/* Préparation */}
+                  <div className="w-50 text-start">
+                    <p className="mb-0">
+                      <strong>Préparation :</strong>{" "}
+                      <cite>
+                        {recipe.makingTime !== undefined &&
+                        recipe.makingTime !== null
+                          ? `${recipe.makingTime} min`
+                          : "?"}
+                      </cite>
+                    </p>
+                  </div>
+                  {/* Cuisson */}
+                  <div className="w-50 text-end">
+                    <p className="mb-0">
+                      <strong>Cuisson :</strong>{" "}
+                      <cite>
+                        {recipe.cookingTime !== undefined &&
+                        recipe.cookingTime !== null
+                          ? `${recipe.cookingTime} min`
+                          : "?"}
+                      </cite>
+                    </p>
+                  </div>
+                </div>
 
-<div className="d-flex flex-wrap mt-2">
-  {/* Type de cuisson */}
-  <div className="w-50 text-start">
-    <p className="mb-0">
-      <strong>Type de cuisson :</strong>{" "}
-      <cite>
-        {recipe.modeCook !== undefined && recipe.modeCook !== null
-          ? recipe.modeCook
-          : "?"}
-      </cite>
-    </p>
-  </div>
-  {/* Nombre de parts */}
-  <div className="w-50 text-end">
-    <p className="mb-0">
-      <strong>Nombre de parts :</strong>{" "}
-      <cite>
-        {recipe.piece !== undefined && recipe.piece !== null
-          ? recipe.piece
-          : "?"}
-      </cite>
-    </p>
-  </div>
-</div>
-
+                <div className="d-flex flex-wrap mt-2">
+                  {/* Type de cuisson */}
+                  <div className="w-50 text-start">
+                    <p className="mb-0">
+                      <strong>Type de cuisson :</strong>{" "}
+                      <cite>
+                        {recipe.modeCook !== undefined &&
+                        recipe.modeCook !== null
+                          ? recipe.modeCook
+                          : "?"}
+                      </cite>
+                    </p>
+                  </div>
+                  {/* Nombre de parts */}
+                  <div className="w-50 text-end">
+                    <p className="mb-0">
+                      <strong>Nombre de parts :</strong>{" "}
+                      <cite>
+                        {recipe.piece !== undefined && recipe.piece !== null
+                          ? recipe.piece
+                          : "?"}
+                      </cite>
+                    </p>
+                  </div>
+                </div>
               </figcaption>
             </figure>
 
@@ -248,25 +279,29 @@ export default function DisplayRecipe() {
           {/* Partie droite */}
           <section className="right-part custom-right-border bg-light w-100 w-md-50 m-0 p-3 rounded-bottom rounded-md-end">
             <div className="recipe-details">
-              <Button
-                variant="transparent"
-                className="like-btn"
-                style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.5)",
-                  borderRadius: "50%",
-                  padding: "5px",
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                }}
-                onClick={handleLike}
-              >
-                {isFavorite ? (
-                  <FaHeart size={30} color="red" />
-                ) : (
-                  <FaRegHeart size={30} color="black" />
-                )}{" "}
-              </Button>
+     {/* Bouton cœur : visible uniquement si l'utilisateur n'est pas l'auteur de la recette */}
+     {!isOwner && (
+        <Button
+          variant="transparent"
+          className="like-btn"
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            borderRadius: "50%",
+            padding: "5px",
+            zIndex: 1,
+          }}
+          onClick={handleToggleFavorite} // Ajouter ou retirer des favoris
+        >
+          {isFavorite ? (
+            <FaHeart size={30} color="red" /> // Cœur rouge si la recette est dans les favoris
+          ) : (
+            <FaRegHeart size={30} color="black" /> // Cœur blanc si la recette n'est pas dans les favoris
+          )}
+         </Button>
+          )}
             </div>
 
             <div className="recipe-instructions listDisplay">
