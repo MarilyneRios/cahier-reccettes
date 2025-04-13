@@ -28,7 +28,7 @@ router.delete('/:id', verifyToken, removeFavoriteRecipe);// DELETE: http://local
 // Search
 ///////////////////////////////////////////////////////////////////////////
 
-router.get('/search/:query',verifyToken, searchFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/search/salade
+router.get('/search',verifyToken, searchFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/search/salade
 
 
 ///////////////////////////////////////////////////////////////////////////

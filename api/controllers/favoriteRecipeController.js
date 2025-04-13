@@ -4,6 +4,30 @@ import mongoose from 'mongoose';
 import User from "../models/userModel.js";
 import Recipe from "../models/recipeModel.js";
 
+//logique error
+import { errorHandler } from "../utils/error.js";
+
+// Fonction utilitaire pour récupérer toutes les recettes favorites d'un utilisateur
+const getUserFavoriteRecipes = async (userId) => {
+  console.log(`Récupération des recettes favorites pour l'utilisateur ${userId}...`);
+
+  const user = await User.findById(userId).populate({
+    path: 'savedRecipe',
+    select: 'name country category regime makingTime cookingTime modeCook imageUrl',
+    populate: { path: 'userRef', select: 'username profilePicture' },
+  });
+
+  if (!user) {
+    console.log("Utilisateur non trouvé");
+    throw errorHandler(404, "Utilisateur non trouvé");
+  }
+
+  const userRecipes = await Recipe.find({ userRef: userId }).populate("userRef", "username profilePicture");
+
+  console.log(`Recettes favorites récupérées : ${user.savedRecipe.length}, Recettes créées par l'utilisateur : ${userRecipes.length}`);
+
+  return user.savedRecipe.concat(userRecipes);
+};
 
 // @desc    Add one recipe to favorites
 // @route   POST /api/recipes/addFavoriteRecipes
@@ -105,47 +129,31 @@ export const removeFavoriteRecipe = async (req, res, next) => {
   }
 };
 
-
 // @desc    Display recipes of favorite recipes by user and recipes userId === userRef avec pagination
 // @route   GET /api/recipes/AllFavoriteRecipes/
 // @access  Private (token)
 export const getAllFavoriteRecipes = async (req, res, next) => {
   try {
-    // 0. Nombre d'éléments par page
     const pageSize = 6;
     const page = Number(req.query.pageNumber) || 1;
-    
-    // 1. Récupérer le user et populate ses savedRecipe
-    const user = await User.findById(req.user.id).populate({
-      path: 'savedRecipe',
-      select: 'name country category regime makingTime cookingTime imageUrl',
-      populate: { path: 'userRef', select: 'username profilePicture' }, 
-    });
-    
-    if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-    console.log('Utilisateur et recettes sauvegardées : ', user); 
-    
-    // 2. Récupérer les recettes où userId === userRef
-    const userRecipes = await Recipe.find({ userRef: req.user.id })
-  .populate("userRef", "username profilePicture");
-    
-    // 3. Vérifier si le user a des savedRecipes et userRef (s'il a créé des recettes)
-    const favoriteRecipes = user.savedRecipe.concat(userRecipes);
-    
+
+    console.log(`Pagination: page ${page}, pageSize ${pageSize}`);
+
+    // 1. Récupérer les recettes favorites de l'utilisateur
+    const favoriteRecipes = await getUserFavoriteRecipes(req.user.id);
+
     if (favoriteRecipes.length === 0) {
       return res.status(200).json({ message: "Aucune recette favorite trouvée" });
     }
-    
-    // 4. Appliquer la pagination sur toutes les recettes
+
+    console.log(`Nombre total de recettes favorites : ${favoriteRecipes.length}`);
+
+    // 2. Appliquer la pagination sur toutes les recettes
     const startIndex = (page - 1) * pageSize;
     const paginatedRecipes = favoriteRecipes.slice(startIndex, startIndex + pageSize);
-    
-    // 5. Compter le nombre total de recettes favorites
+
     const totalRecipes = favoriteRecipes.length;
-    
-    // 6. Retourner les recettes paginées avec les informations de pagination
+
     res.status(200).json({
       recipes: paginatedRecipes,
       page,
@@ -153,84 +161,76 @@ export const getAllFavoriteRecipes = async (req, res, next) => {
       totalRecipes,
     });
   } catch (error) {
-    // 7. Message d'erreur en cas d'échec
     console.error(error);
     res.status(500).json({ message: "Erreur serveur, veuillez réessayer plus tard" });
   }
 };
 
-
-///////////////////////////////////////////////////////////////////////////
-// Search et filtrer
-///////////////////////////////////////////////////////////////////////////
-
 // @desc    Search recipes & display one recipe on homeScreen
-// @route   GET /api/favoriteRecipes/search/query
-// @access   Private (token)
+// @route   GET /api/favoriteRecipes/search
+// @access  Private (token)
 export const searchFavoriteRecipe = async (req, res, next) => {
   try {
-    // 1. Récupération du terme de recherche dans les paramètres
-    const searchTerm = req.params.query;
-    console.log('searchTerm is', searchTerm);
+    const query = req.query.query || ''; // Récupère la query (vide par défaut)
 
-    // 2. Si aucun terme de recherche n'est fourni
-    if (!searchTerm) {
-      return res.status(400).json({
-        success: false,
-        message: "Le paramètre 'query' est requis.",
-        statusCode: 400,
-      });
+    if (!query) {
+      return next(errorHandler(400, "Une recherche query est requise!"));
     }
 
-    // 3. Recherche insensible à la casse
-    const searchRegex = new RegExp(searchTerm, "i");
+    console.log(`Recherche de recettes avec le terme : ${query}`);
 
-    // 4. Récupérer tous les utilisateurs avec leurs recettes favorites peuplées
-    const usersWithFavorites = await User.find()
-    .populate({
-      path: 'savedRecipe',
-      populate: { path: 'userRef', select: 'username' },
+    // Récupérer les recettes favorites de l'utilisateur
+    const favoriteRecipes = await getUserFavoriteRecipes(req.user.id);
+
+    // Filtrer les recettes favorites en fonction du query sur plusieurs critères
+    const filteredRecipes = favoriteRecipes.filter((recipe) => {
+      // Recherche par nom de recette
+      const nameMatch = recipe.name.toLowerCase().includes(query.toLowerCase());
+
+      // Recherche par pseudo de l'utilisateur (nom d'utilisateur)
+      const usernameMatch = recipe.userRef?.username.toLowerCase().includes(query.toLowerCase());
+
+      // Recherche par ingrédients (vérifier si le champ existe et est un tableau)
+      const ingredientsMatch = recipe.ingredients && Array.isArray(recipe.ingredients)
+        ? recipe.ingredients.some(ingredient =>
+            ingredient.name.toLowerCase().includes(query.toLowerCase())
+          )
+        : false; // Si ingredients n'existe pas ou n'est pas un tableau, on passe à false
+
+      // Recherche par pays
+      const countryMatch = recipe.country?.toLowerCase().includes(query.toLowerCase());
+
+      // Recherche par mode de cuisson
+      const modeCookMatch = recipe.modeCook?.toLowerCase().includes(query.toLowerCase());
+
+      // Recherche par régime
+      const regimeMatch = recipe.regime?.toLowerCase().includes(query.toLowerCase());
+
+      // Recherche par catégorie
+      const categoryMatch = recipe.category?.toLowerCase().includes(query.toLowerCase());
+
+      // Retourner true si l'un des critères correspond
+      return nameMatch || usernameMatch || ingredientsMatch || countryMatch || modeCookMatch || regimeMatch || categoryMatch;
     });
 
+    console.log(`Recettes filtrées : ${filteredRecipes.length}`);
 
-    // 5. Rassembler toutes les recettes favorites dans un seul tableau
-    let matchingRecipes = [];
-    for (const user of usersWithFavorites) {
-      const filtered = user.savedRecipe.filter((recipe) => {
-        return (
-          searchRegex.test(recipe.name) ||
-          searchRegex.test(recipe.country) ||
-          searchRegex.test(recipe.category) ||
-          searchRegex.test(recipe.regime) ||
-          searchRegex.test(recipe.modeCook) ||
-          searchRegex.test(recipe.pseudo) || // 👈 Ajoute ceci
-          recipe.ingredients?.some((ing) => searchRegex.test(ing.name)) ||
-          searchRegex.test(recipe.userRef?.username || '')
-        );
-      });
-      
-      matchingRecipes.push(...filtered);
+    if (filteredRecipes.length === 0) {
+      return res.status(404).json({ message: "Aucune recette trouvée" });
     }
 
-    // 6. Si aucune recette n'est trouvée
+    // Retourner les recettes filtrées
+    res.status(200).json(filteredRecipes);
 
-    if (matchingRecipes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Aucune recette favorite trouvée pour le terme recherché.',
-        statusCode: 404,
-      });
-    }
-
-    // 7. Retourner les recettes trouvées
-    res.status(200).json({
-      success: true,
-      recipes: matchingRecipes,
-    });
   } catch (error) {
-    next(error);
+    console.error("Erreur lors de la recherche de recettes favorites :", error);
+    next(errorHandler(500, "Erreur serveur, veuillez réessayer plus tard"));
   }
 };
+
+
+
+
 
 // @desc    Filter favorite recipes by multiple criteria and display them on the home screen
 // @route   GET /api/favoriteRecipes/filterFavorite?category=desserts&country=France
