@@ -31,12 +31,13 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
     }),
       // Rechercher une recette favorite
       searchFavoriteRecipe: builder.query({
-    query: (query) => ({
-      url: `${FAVORITES_URL}/search/${query}`,
-      method: 'GET',
-    }),
-    providesTags: ['Favorite'],
-  }),
+        query: (query) => ({
+          url: `${FAVORITES_URL}/search?query=${encodeURIComponent(query)}`,
+          method: 'GET',
+        }),
+        providesTags: ['Favorite'],
+      }),
+      
  
   //filtrer les recettes favorites
   //exemple requete insomnia

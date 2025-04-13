@@ -33,16 +33,18 @@ const handleSubmit = async (e) => {
   if (searchTerm) {
     console.log("Search term for favorite submitted:", searchTerm); 
     const results = await refetch();
-    console.log("Search results for favorite:", results);
-    if (results.data?.recipes) {
-      console.log("Dispatching search results for favorite:", results.data);
-      // Passez directement le tableau
-      dispatch(setFavoriteSearchResults(results.data.recipes));
     
+    console.log("Search results for favorite:", results);
+    console.log(`Nombre de recettes trouvées : ${results.data?.length}`);
+
+    if (results.data && results.data.length > 0) {
+      console.log("Dispatching search results for favorite:", results.data);
+      dispatch(setFavoriteSearchResults(results.data));
       navigate("/allFavoriteRecipe");
-    }else {
+    } else {
       console.log("No data received from search query.");
     }
+    
   }
 };
 
