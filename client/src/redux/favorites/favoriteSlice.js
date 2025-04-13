@@ -8,12 +8,12 @@ const initialState = {
   //searchBar
   searchResults: [],
   searchTerm: "",
-    // filter
-    filteredResults: [],
-    selectedCategories: [],
-    selectedRegimes: [],
-    selectedModecook:[],
-    searchTermCountry:"",
+  // filter
+  filteredResults: [],
+  selectedCategories: [],
+  selectedRegimes: [],
+  selectedModecook: [],
+  searchTermCountry: "",
 };
 
 const favoriteSlice = createSlice({
@@ -51,9 +51,23 @@ const favoriteSlice = createSlice({
     setSelectedRegimes: (state, action) => {
       state.selectedRegimes = action.payload;
     },
+    setSelectedModecook: (state, action) => {
+      state.selectedModecook = action.payload;
+    },
+    setSearchTermCountry: (state, action) => {
+      state.searchTermCountry = action.payload;
+    },
     setFilteredResults: (state, action) => {
       state.filteredResults = action.payload;
     },
+    resetFilters: (state) => {
+      state.selectedCategories = [];
+      state.selectedRegimes = [];
+      state.selectedModecook = [];
+      state.searchTermCountry = "";
+
+    }
+    
   },
 });
 
@@ -65,6 +79,12 @@ export const {
   setLoading,
   setError,
   setFavoriteSearchResults,
+  setSelectedCategories,
+  setSelectedRegimes,
+  setSelectedModecook,
+  setSearchTermCountry,
+  setFilteredResults,
+  resetFilters,
 } = favoriteSlice.actions;
 
 export default favoriteSlice.reducer;

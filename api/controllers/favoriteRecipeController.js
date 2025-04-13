@@ -262,10 +262,7 @@ export const filtreFavoriteRecipe = async (req, res, next) => {
 
     console.log(`Recettes filtrées : ${filteredRecipes.length}`);
 
-    // Vérifier si aucune recette n'a été trouvée
-    if (filteredRecipes.length === 0) {
-      return res.status(404).json({ message: "Aucune recette trouvée pour les critères spécifiés." });
-    }
+   
 
     // Retourner les recettes filtrées
     res.status(200).json(filteredRecipes);

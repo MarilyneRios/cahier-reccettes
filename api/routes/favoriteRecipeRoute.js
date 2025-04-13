@@ -35,7 +35,7 @@ router.get('/search',verifyToken, searchFavoriteRecipe); // GET http://localhost
 //filtrer
 ///////////////////////////////////////////////////////////////////////////
 
-router.get('/filterFavorite',verifyToken,  filtreFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filterFavorite?country=France&category=Desserts
+router.get('/filterFavorite',verifyToken,  filtreFavoriteRecipe); // GET http://localhost:3000/api/favoriteRecipes/filterFavorite?regime=traditionnelle
 
 
 export default router;

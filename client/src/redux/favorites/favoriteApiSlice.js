@@ -41,17 +41,24 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
  
   //filtrer les recettes favorites
   //exemple requete insomnia
-  //http://localhost:3000/api/favoriteRecipes/filterFavorite?category=plats&country=espagne
+  // ex : http://localhost:3000/api/favoriteRecipes/filterFavorite?regime=traditionnelle&conutry=france
+  //  ou http://localhost:3000/api/favoriteRecipes/filterFavorite?regime=traditionnelle...
   filterFavorisRecipes: builder.query({
     query: (params = {}) => {
+      // Si des paramètres sont passés, on crée la query string
       const queryString = new URLSearchParams(params).toString();
+      
+      // Assure-toi que la query string est bien formée
+      console.log(`URL Request: ${FAVORITES_URL}/filterFavorite?${queryString}`);
+      
       return {
         url: `${FAVORITES_URL}/filterFavorite?${queryString}`,
         method: "GET",
       };
     },
+    // L'utilisation de "providesTags" permet de fournir des tags pour la gestion du cache
     providesTags: ["Favorite"],
-  }),  
+  }),
 
 }),
 });
