@@ -65,7 +65,6 @@ const favoriteSlice = createSlice({
       state.selectedRegimes = [];
       state.selectedModecook = [];
       state.searchTermCountry = "";
-
     }
     
   },

@@ -2,11 +2,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+//Importation react-bootstrap
+import { Button } from "react-bootstrap";
+
 // Importation des modules nécessaires depuis React-bootstrap
 import { Accordion } from "react-bootstrap";
 
 // Importation des icônes nécessaires depuis react-icons
 import { MdFilterList } from "react-icons/md";
+
+// notification
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Importation des requêtes RTK
 import { useDispatch } from "react-redux";
@@ -21,42 +28,72 @@ const categoryMapping = {
   Desserts: "desserts",
   Boissons: "boissons",
   Salades: "salades",
-  Toutes: ""
+  Toutes: "",
 };
 
 const regimeMapping = {
   Traditionnelle: "traditionnelle",
   Végétarien: "vegetarien",
-  végétalien: "vegan",
+  Végétalien: "vegan",
   "Sans gluten": "sans-gluten",
   "Sans lactose": "sans-lactose",
   Autres: "autres",
-  Toutes: ""
+  Toutes: "",
 };
 
+const modeCookMapping = {
+  Vapeur: "vapeur",
+  AirFryer: "airFryer",
+  Griller: "griller",
+  Four: "four",
+  "Auto-cuisseur": "autoCuiseur",
+  Déshydrater: "deshydrater",
+  Sauté: "saute",
+  Mijoter: "mijoter",
+  Bouillir: "bouillir",
+  Rôtir: "rotir",
+  Pocher: "pocher",
+  Frire: "frire",
+  Autres: "autres",
+};
 
 // Mapping pour API (sans accents)
 const apiCategoryMapping = { ...categoryMapping };
 const apiRegimeMapping = { ...regimeMapping };
+const apiModeCookMapping = { ...modeCookMapping };
 
 const FilterComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedRegime, setSelectedRegime] = useState(null);
+  const [selectedModeCook, setSelectedModeCook] = useState(null);
+  const [searchTermCountry, setSearchTermCountry] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Construction dynamique du searchTerm
   const searchTerm = [
     selectedCategory ? apiCategoryMapping[selectedCategory] : "",
-    selectedRegime ? apiRegimeMapping[selectedRegime] : ""
-  ].filter(Boolean).join(" ");
+    selectedRegime ? apiRegimeMapping[selectedRegime] : "",
+    selectedModeCook ? apiModeCookMapping[selectedModeCook] : "",
+    searchTermCountry ? searchTermCountry.trim() : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  const { data: searchResults, error, refetch, isFetching } = useSearchRecipesQuery(
+  // RTK Query : fetch en fonction du searchTerm
+  const {
+    data: searchResults,
+    error,
+    refetch,
+    isFetching,
+  } = useSearchRecipesQuery(
     searchTerm ? encodeURIComponent(searchTerm) : undefined,
     { skip: !searchTerm }
   );
 
+  // Gestion des résultats et navigation
   useEffect(() => {
-    console.log("Search results:", searchResults);
     if (searchResults) {
       dispatch(setSearchResults(searchResults));
       navigate("/");
@@ -71,31 +108,52 @@ const FilterComponent = () => {
     }
   }, [searchResults, searchTerm, dispatch, navigate]);
 
-  // 2.3 Détecter l'Effacement de la Barre de Recherche
+  // Reset des résultats si le searchTerm est vidé
   useEffect(() => {
     if (searchTerm === "") {
       dispatch(setSearchResults([]));
     }
   }, [searchTerm, dispatch]);
 
+  // Gestion des clics sur les filtres
   const handleCategoryClick = (category) => {
     const newCategory = selectedCategory === category ? null : category;
     setSelectedCategory(newCategory);
-    if (searchTerm && !isFetching) {
-      refetch().catch((error) => console.error("Error fetching search results:", error));
-    }
   };
 
   const handleRegimeClick = (regime) => {
     const newRegime = selectedRegime === regime ? null : regime;
     setSelectedRegime(newRegime);
-    if (searchTerm && !isFetching) {
-      refetch().catch((error) => console.error("Error fetching search results:", error));
-    }
   };
+
+  const handleModeCookClick = (modeCook) => {
+    const newModeCook = selectedModeCook === modeCook ? null : modeCook;
+    setSelectedModeCook(newModeCook);
+  };
+
+  // Refetch dès qu'un filtre ou le champ pays change
+  useEffect(() => {
+    if (searchTerm && !isFetching) {
+      refetch().catch((error) =>
+        console.error("Error fetching search results:", error)
+      );
+    }
+  }, [selectedCategory, selectedRegime, selectedModeCook, searchTermCountry]);
 
   const categories = Object.keys(categoryMapping);
   const regimes = Object.keys(regimeMapping);
+  const modeCooks = Object.keys(modeCookMapping);
+
+    // Bouton reset
+    const handleResetFilters = () => {
+      setSelectedCategory("");
+      setSelectedRegime("");
+      setSelectedModecook("");
+      setSearchTermCountry("");
+      dispatch(resetFilters());
+      dispatch(setFavoriteSearchResults([]));
+    };
+    
 
   return (
     <form className="d-flex flex-column justify-content-center">
@@ -108,15 +166,22 @@ const FilterComponent = () => {
           {categories.map((category) => (
             <Accordion.Body
               key={category}
-              className={`accordionBody ${selectedCategory === category ? "bg-success text-white" : ""}`}
+              className={`accordionBody ${
+                selectedCategory === category ? "bg-success text-white" : ""
+              }`}
               onClick={() => handleCategoryClick(category)}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </Accordion.Body>
           ))}
-          {searchTerm && selectedCategory && ((Array.isArray(searchResults) && searchResults.length === 0) || error) && (
-            <div className="text-center text-danger">Aucune recette dans cette catégorie</div>
-          )}
+          {searchTerm &&
+            selectedCategory &&
+            ((Array.isArray(searchResults) && searchResults.length === 0) ||
+              error) && (
+              <div className="text-center text-danger">
+                Aucune recette dans cette catégorie
+              </div>
+            )}
         </Accordion.Item>
 
         <Accordion.Item eventKey="1">
@@ -127,17 +192,75 @@ const FilterComponent = () => {
           {regimes.map((regime) => (
             <Accordion.Body
               key={regime}
-              className={`accordionBody ${selectedRegime === regime ? "bg-success text-white" : ""}`}
+              className={`accordionBody ${
+                selectedRegime === regime ? "bg-success text-white" : ""
+              }`}
               onClick={() => handleRegimeClick(regime)}
             >
               {regime.charAt(0).toUpperCase() + regime.slice(1)}
             </Accordion.Body>
           ))}
-          {searchTerm && selectedRegime && ((Array.isArray(searchResults) && searchResults.length === 0) || error) && (
-            <div className="text-center text-danger">Aucune recette dans ce régime</div>
-          )}
+          {searchTerm &&
+            selectedRegime &&
+            ((Array.isArray(searchResults) && searchResults.length === 0) ||
+              error) && (
+              <div className="text-center text-danger">
+                Aucune recette dans ce régime
+              </div>
+            )}
+        </Accordion.Item>
+
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>
+            <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
+            Par cuisson :
+          </Accordion.Header>
+          {modeCooks.map((modeCook) => (
+            <Accordion.Body
+              key={modeCook}
+              className={`accordionBody ${
+                selectedModeCook === modeCook ? "bg-success text-white" : ""
+              }`}
+              onClick={() => handleModeCookClick(modeCook)}
+            >
+              {modeCook.charAt(0).toUpperCase() + modeCook.slice(1)}
+            </Accordion.Body>
+          ))}
+          {searchTerm &&
+            selectedModeCook &&
+            ((Array.isArray(searchResults) && searchResults.length === 0) ||
+              error) && (
+              <div className="text-center text-danger">
+                Aucune recette dans ce mode de cuisson
+              </div>
+            )}
         </Accordion.Item>
       </Accordion>
+
+      {/* Input pour rechercher par pays */}
+      <div className="mt-3 d-flex ">
+        <label className=" mt-2 mx-2">Par pays :</label>
+        <input
+          type="text"
+          className="form-control  w-50"
+          placeholder="Entrez un pays"
+          value={searchTermCountry}
+          onChange={(e) => setSearchTermCountry(e.target.value)}
+        />
+      </div>
+    
+      {/* Séparateur */}
+      <hr className="" />
+      
+        {/* Bouton reset */}
+           <Button
+              className="btn btn-danger my-2 input-filter-Favorite mx-5"
+              onClick={handleResetFilters}
+            >
+              Réinitialiser
+            </Button>
+   
+
     </form>
   );
 };

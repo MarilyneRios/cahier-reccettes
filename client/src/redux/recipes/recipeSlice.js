@@ -53,7 +53,7 @@ const recipeSlice = createSlice({
       state.searchResults = action.payload;
     },
     setSearchTerm: (state, action) => {
-       state.searchTerm = action.payload;
+      state.searchTerm = action.payload;
     },
     setSelectedCategories: (state, action) => {
       state.selectedCategories = action.payload;
@@ -61,9 +61,21 @@ const recipeSlice = createSlice({
     setSelectedRegimes: (state, action) => {
       state.selectedRegimes = action.payload;
     },
+    setSelectedModecook: (state, action) => {
+      state.selectedModecook = action.payload;
+    },
+    setSearchTermCountry: (state, action) => {
+      state.searchTermCountry = action.payload;
+    },
     setFilteredResults: (state, action) => {
       // Ajouté pour gérer les résultats filtrés
       state.filteredResults = action.payload;
+    },
+    resetFilters: (state) => {
+      state.selectedCategories = [];
+      state.selectedRegimes = [];
+      state.selectedModecook = [];
+      state.searchTermCountry = "";
     },
   },
 });
@@ -77,7 +89,10 @@ export const {
   setSearchTerm,
   setSelectedRegimes,
   setSelectedCategories,
+  setSelectedModecook,
+  setSearchTermCountry,
   setFilteredResults,
+  resetFilters,
 } = recipeSlice.actions;
 
 export default recipeSlice.reducer;
