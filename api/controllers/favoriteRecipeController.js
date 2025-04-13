@@ -228,70 +228,51 @@ export const searchFavoriteRecipe = async (req, res, next) => {
   }
 };
 
-
-
-
-
 // @desc    Filter favorite recipes by multiple criteria and display them on the home screen
-// @route   GET /api/favoriteRecipes/filterFavorite?category=desserts&country=France
+// @route   GET /api/favoriteRecipes/filterFavorite?country=France&category=Desserts&regime=Vegan&modeCook=Four
 // @access  Private (requires authentication token)
 export const filtreFavoriteRecipe = async (req, res, next) => {
   try {
-    // 1. Recuperer query parameters 
-    const { name, country, category, regime, ingredient, pseudo, modeCook } = req.query;
-    console.log(name, country, category, regime, ingredient, pseudo, modeCook);
+    // Récupérer les critères de filtrage depuis les query parameters
+    const { country, category, regime, modeCook } = req.query;
+    console.log(`Filtres reçus :`, { country, category, regime, modeCook });
 
-    // 2. Definir une function insensible à la case (regex)
-    const regexFilter = (value) => new RegExp(value, 'i');
+    // Récupérer les recettes favorites de l'utilisateur
+    const favoriteRecipes = await getUserFavoriteRecipes(req.user.id);
 
-    // 3. Initialiser l'objet filter 
-    let usersQuery = {};
-    if (pseudo) {
-      // Ajouter un regex filter pour le username 
-      usersQuery.username = { $regex: regexFilter(pseudo) };
-    }
+    // Filtrer les recettes favorites en fonction des critères
+    const filteredRecipes = favoriteRecipes.filter((recipe) => {
+      // Vérifie si les critères sont définis et applique les filtres
 
-    // 4. trouver users qui match avec le pseudo pseudo et populate les saved recipes
-    const users = await User.find(usersQuery).populate({
-      path: 'savedRecipe',
-      populate: { path: 'userRef', select: 'username' },
+      // Filtre par pays
+      const countryMatch = country ? recipe.country?.toLowerCase().includes(country.toLowerCase()) : true;
+
+      // Filtre par catégorie
+      const categoryMatch = category ? recipe.category?.toLowerCase().includes(category.toLowerCase()) : true;
+
+      // Filtre par régime
+      const regimeMatch = regime ? recipe.regime?.toLowerCase().includes(regime.toLowerCase()) : true;
+
+      // Filtre par mode de cuisson
+      const modeCookMatch = modeCook ? recipe.modeCook?.toLowerCase().includes(modeCook.toLowerCase()) : true;
+
+      // Retourne la recette si elle correspond à l'un des critères définis
+      return countryMatch && categoryMatch && regimeMatch && modeCookMatch;
     });
 
-    // 5. Initialiser un tableau pour les recettes favoris qui match avec les critères
-    let matchingRecipes = [];
+    console.log(`Recettes filtrées : ${filteredRecipes.length}`);
 
-    // 6. Iteratuion sur chaque each user's saved recipes et appliquer les filtres
-    for (const user of users) {
-      const filtered = user.savedRecipe.filter((recipe) => {
-        return (
-          (!name || regexFilter(name).test(recipe.name)) &&
-          (!country || regexFilter(country).test(recipe.country)) &&
-          (!category || regexFilter(category).test(recipe.category)) &&
-          (!regime || regexFilter(regime).test(recipe.regime)) &&
-          (!modeCook || regexFilter(modeCook).test(recipe.modeCook)) &&
-          (!ingredient || recipe.ingredients?.some((ing) => regexFilter(ingredient).test(ing.name)))
-        );
-      });
-      // 7. Ajouter les recettes filtrés  dans le tableau matchingRecipes
-      matchingRecipes.push(...filtered);
+    // Vérifier si aucune recette n'a été trouvée
+    if (filteredRecipes.length === 0) {
+      return res.status(404).json({ message: "Aucune recette trouvée pour les critères spécifiés." });
     }
 
-    // 8. Verifie si aucune recette match avec les criteres
-    if (matchingRecipes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'No favorite recipes found for the provided criteria.',
-        statusCode: 404,
-      });
-    }
+    // Retourner les recettes filtrées
+    res.status(200).json(filteredRecipes);
 
-    // 9. Retour/envoie 
-    res.status(200).json({
-      success: true,
-      recipes: matchingRecipes,
-    });
   } catch (error) {
-    next(error);
+    console.error("Erreur lors de la recherche de recettes favorites :", error);
+    next(errorHandler(500, "Erreur serveur, veuillez réessayer plus tard"));
   }
 };
 

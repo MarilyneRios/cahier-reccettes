@@ -41,9 +41,9 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
  
   //filtrer les recettes favorites
   //exemple requete insomnia
-  //http://localhost:3000/api/favoriteRecipes/filterFavorite?category=plats&country=italie
+  //http://localhost:3000/api/favoriteRecipes/filterFavorite?category=plats&country=espagne
   filterFavorisRecipes: builder.query({
-    query: (params) => {
+    query: (params = {}) => {
       const queryString = new URLSearchParams(params).toString();
       return {
         url: `${FAVORITES_URL}/filterFavorite?${queryString}`,
@@ -51,7 +51,8 @@ export const favoriteApiSlice = apiSlice.injectEndpoints({
       };
     },
     providesTags: ["Favorite"],
-  }),
+  }),  
+
 }),
 });
 
@@ -62,4 +63,5 @@ export const {
   useRemoveFavoriteRecipeMutation,
   useSearchFavoriteRecipeQuery, 
   useFilterFavorisRecipesQuery,
+  useLazyFilterFavorisRecipesQuery,
 } = favoriteApiSlice;
