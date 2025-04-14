@@ -72,15 +72,23 @@ export default function AllFavoriteRecipe() {
  <div className="search-favorite-container d-flex justify-content-center align-items-center w-100 gap-2 mb-2 ">
       <div className="SearchBarFavorite d-flex justify-content-center align-items-center mt-1 w-75 ">
         <SearchBarFavorite />
-        <Button className="element-with-3d-effect  btn btn-success d-flex align-items-center mx-3" onClick={toggleFilters}>
-          <IoFilterSharp className="mx-2" />
-          {showFilters ? "Masquer les filtres" : "Filtres"}
-        </Button>
+          {/* Bouton pour afficher les filtres */}
+          <Button className="element-with-3d-effect btn btn-success d-flex align-items-center mx-3" onClick={toggleFilters}>
+  <IoFilterSharp className="mx-2" />
+  {showFilters ? (
+    <>
+      Masquer <span className="d-none d-sm-inline">les filtres</span>
+    </>
+  ) : (
+    <>
+      <span className="d-none d-sm-inline">Filtres</span>
+    </>
+  )}
+</Button>
+
       </div>
-      {/* Bouton pour afficher les filtres */}
-      <div className="container-filter   border border-primary">
-       
-      </div>
+    
+
     </div>
 
       {/* Filtres dynamiques affichés uniquement si activés */}

@@ -63,7 +63,7 @@ const handleSubmit = async (e) => {
       <input
         className="form-control text-white rounded-pill border-0 bg-transparent flex-grow-1 search-input"
         type="search"
-        placeholder="Dans mon cahier "
+        placeholder="Mon cahier "
         aria-label="Search"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
