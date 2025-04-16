@@ -37,6 +37,6 @@ router.get('/search/:query', searchRecipe); // GET http://localhost:3000/api/rec
 ///////////////////////////////////////////////////////////////////////////
 // filtrer
 ///////////////////////////////////////////////////////////////////////////
-router.get('/filter', filtreRecipe); // GET http://localhost:3000/api/recipes/filter?category=desserts&country=France ok
+router.get('/filter', filtreRecipe); // GET http://localhost:3000/api/recipes/filter?category=desserts&modeCook=aucun ok
 
 export default router;

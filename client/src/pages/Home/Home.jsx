@@ -11,11 +11,21 @@ import "./Home.css";
 export default function Home() {
   const { currentUser, loading } = useSelector((state) => state.user);
 
-  // Gestion de la pagination
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+  
+      // Scroll vers la section ViewRecipesHome
+      const targetSection = document.getElementById("ViewRecipesHome");
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
+  
 
   if (loading) {
     return <Loader />;
@@ -35,25 +45,33 @@ export default function Home() {
       >
         <div className="HeaderPlace"></div>
         <h2 className="fst-italic text-center mt-3 shadow-lg title custom-text-shadow">Toutes nos recettes</h2>
-        <ViewRecipes currentPage={currentPage} />
+        
+        <ViewRecipes currentPage={currentPage} onTotalPagesChange={setTotalPages} />
 
         {/* Pagination */}
-        <div className="d-flex justify-content-center align-items-center mt-3">
-          <Button
-            variant="outline-success"
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            &lt; Précédent
-          </Button>
-          <span className="mx-3 fs-5">Page {currentPage}</span>
-          <Button
-            variant="outline-success"
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Suivant &gt;
-          </Button>
-        </div>
+        {totalPages > 1 && (
+          <div className="d-flex justify-content-center align-items-center mt-4">
+            <Button
+              variant=""
+              disabled={currentPage === 1}
+              className="pagination-btn fs-5"
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              &lt; Précédent
+            </Button>
+            <span className="mx-3 fs-4">
+              Page {currentPage} / {totalPages}
+            </span>
+            <Button
+              variant=""
+              className="pagination-btn fs-5"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Suivant &gt;
+            </Button>
+          </div>
+        )}
       </section>
     </div>
   );

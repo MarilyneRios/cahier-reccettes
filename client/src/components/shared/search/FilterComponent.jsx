@@ -1,33 +1,21 @@
-// Importation des modules nécessaires depuis React
+// React, Router et State
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-//Importation react-bootstrap
-import { Button } from "react-bootstrap";
-
-// Importation des modules nécessaires depuis React-bootstrap
-import { Accordion } from "react-bootstrap";
-
-// Importation des icônes nécessaires depuis react-icons
+import { Button, Accordion } from "react-bootstrap";
 import { MdFilterList } from "react-icons/md";
-
-// notification
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Importation des requêtes RTK
 import { useDispatch } from "react-redux";
-import { useSearchRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
-import { setSearchResults } from "../../../redux/recipes/recipeSlice";
+import { useLazyFilterRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
+import { setFilteredResults, resetFilters } from "../../../redux/recipes/recipeSlice";
 
-// Mapping pour UX (avec accents)
+// Mapping des valeurs affichées (UX) vers les valeurs attendues par l’API (backend)
 const categoryMapping = {
   Apéritifs: "aperitifs",
   Entrées: "entrees",
   Plats: "plats",
   Desserts: "desserts",
   Boissons: "boissons",
-  Salades: "salades",
   Toutes: "",
 };
 
@@ -57,12 +45,12 @@ const modeCookMapping = {
   Autres: "autres",
 };
 
-// Mapping pour API (sans accents)
-const apiCategoryMapping = { ...categoryMapping };
-const apiRegimeMapping = { ...regimeMapping };
-const apiModeCookMapping = { ...modeCookMapping };
+////////////////////////////////////////////////////////////
+// Composant FilterComponent
+////////////////////////////////////////////////////////////
 
 const FilterComponent = () => {
+  // States pour gérer la sélection des filtres
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedRegime, setSelectedRegime] = useState(null);
   const [selectedModeCook, setSelectedModeCook] = useState(null);
@@ -71,93 +59,97 @@ const FilterComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Construction dynamique du searchTerm
-  const searchTerm = [
-    selectedCategory ? apiCategoryMapping[selectedCategory] : "",
-    selectedRegime ? apiRegimeMapping[selectedRegime] : "",
-    selectedModeCook ? apiModeCookMapping[selectedModeCook] : "",
-    searchTermCountry ? searchTermCountry.trim() : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
 
-  // RTK Query : fetch en fonction du searchTerm
-  const {
-    data: searchResults,
-    error,
-    refetch,
-    isFetching,
-  } = useSearchRecipesQuery(
-    searchTerm ? encodeURIComponent(searchTerm) : undefined,
-    { skip: !searchTerm }
-  );
+  // Hook RTK Query pour déclencher la recherche quand on veut
+  const [triggerFilter, { data, error }] = useLazyFilterRecipesQuery();
 
-  // Gestion des résultats et navigation
-  useEffect(() => {
-    if (searchResults) {
-      dispatch(setSearchResults(searchResults));
-      navigate("/");
-      setTimeout(() => {
-        const section = document.getElementById("ViewRecipesHome");
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    } else if (searchTerm) {
-      dispatch(setSearchResults([]));
-    }
-  }, [searchResults, searchTerm, dispatch, navigate]);
-
-  // Reset des résultats si le searchTerm est vidé
-  useEffect(() => {
-    if (searchTerm === "") {
-      dispatch(setSearchResults([]));
-    }
-  }, [searchTerm, dispatch]);
-
-  // Gestion des clics sur les filtres
-  const handleCategoryClick = (category) => {
-    const newCategory = selectedCategory === category ? null : category;
-    setSelectedCategory(newCategory);
-  };
-
-  const handleRegimeClick = (regime) => {
-    const newRegime = selectedRegime === regime ? null : regime;
-    setSelectedRegime(newRegime);
-  };
-
-  const handleModeCookClick = (modeCook) => {
-    const newModeCook = selectedModeCook === modeCook ? null : modeCook;
-    setSelectedModeCook(newModeCook);
-  };
-
-  // Refetch dès qu'un filtre ou le champ pays change
-  useEffect(() => {
-    if (searchTerm && !isFetching) {
-      refetch().catch((error) =>
-        console.error("Error fetching search results:", error)
-      );
-    }
-  }, [selectedCategory, selectedRegime, selectedModeCook, searchTermCountry]);
-
+  // Listes des options affichées
   const categories = Object.keys(categoryMapping);
   const regimes = Object.keys(regimeMapping);
   const modeCooks = Object.keys(modeCookMapping);
 
-    // Bouton reset
-    const handleResetFilters = () => {
-      setSelectedCategory("");
-      setSelectedRegime("");
-      setSelectedModecook("");
-      setSearchTermCountry("");
-      dispatch(resetFilters());
-      dispatch(setFavoriteSearchResults([]));
+  // 🟢 Effet : dès qu'un des filtres change, on construit un objet de filtres
+  // et on déclenche une recherche via triggerFilter (API call)
+  useEffect(() => {
+    // Création de l'objet de filtres à envoyer
+    const filters = {
+      category: categoryMapping[selectedCategory],
+      regime: regimeMapping[selectedRegime],
+      modeCook: modeCookMapping[selectedModeCook],
+      country: searchTermCountry.trim() !== "" ? searchTermCountry.toLowerCase() : "",
     };
-    
 
+    // On enlève les filtres vides ou null
+    Object.keys(filters).forEach((key) => {
+      if (!filters[key]) {
+        delete filters[key];
+      }
+    });
+
+    console.log("Filtres avant envoi :", filters);
+
+    // Si au moins un filtre est actif, on lance la requête
+    if (Object.keys(filters).length > 0) {
+      console.log("Recherche avec filtres :", filters);
+      triggerFilter(filters);
+    } else {
+      // Sinon, on vide les résultats
+      console.log("Aucun filtre appliqué.");
+      dispatch(setFilteredResults([]));
+    }
+  }, [selectedCategory, selectedRegime, selectedModeCook, searchTermCountry, dispatch, triggerFilter]);
+  // 🟢 Effet : quand des données arrivent de l'API
+  useEffect(() => {
+    if (data) {
+      console.log("Données reçues :", data);
+      if (data.recipes && data.recipes.length > 0) {
+        // Si on a des recettes, on les enregistre dans le state Redux
+        dispatch(setFilteredResults(data.recipes));
+        // et on redirige vers la page des recettes favorites filtrées
+        navigate("/allFavoriteRecipe");
+      } else {
+        // Sinon on notifie l'utilisateur qu'il n'y a rien trouvé
+        dispatch(setFilteredResults([]));
+        toast.success("Aucune recette trouvée pour ces critères !");
+      }
+    }
+  }, [data, dispatch, navigate]);
+
+  // 🟠 Effet : si une erreur survient lors de la requête API
+  useEffect(() => {
+    if (error) {
+      console.error("Erreur lors de la recherche :", error);
+    }
+  }, [error]);
+
+  // 🎛 Gestion des clics sur les filtres
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(selectedCategory === category ? null : category);
+  };
+
+  const handleRegimeClick = (regime) => {
+    setSelectedRegime(selectedRegime === regime ? null : regime);
+  };
+
+  const handleModeCookClick = (modeCook) => {
+    setSelectedModeCook(selectedModeCook === modeCook ? null : modeCook);
+  };
+
+  // 🔄 Réinitialisation des filtres
+  const handleResetFilters = () => {
+    setSelectedCategory(null);
+    setSelectedRegime(null);
+    setSelectedModeCook(null);
+    setSearchTermCountry("");
+    dispatch(resetFilters());
+    dispatch(setFilteredResults([]));
+  };
+
+  // 📋 Rendu du formulaire de filtres
   return (
     <form className="d-flex flex-column justify-content-center">
       <Accordion>
+        {/* Catégories */}
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
@@ -166,24 +158,15 @@ const FilterComponent = () => {
           {categories.map((category) => (
             <Accordion.Body
               key={category}
-              className={`accordionBody ${
-                selectedCategory === category ? "bg-success text-white" : ""
-              }`}
+              className={`accordionBody ${selectedCategory === category ? "bg-success text-white" : ""}`}
               onClick={() => handleCategoryClick(category)}
             >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {category}
             </Accordion.Body>
           ))}
-          {searchTerm &&
-            selectedCategory &&
-            ((Array.isArray(searchResults) && searchResults.length === 0) ||
-              error) && (
-              <div className="text-center text-danger">
-                Aucune recette dans cette catégorie
-              </div>
-            )}
         </Accordion.Item>
 
+        {/* Régimes */}
         <Accordion.Item eventKey="1">
           <Accordion.Header>
             <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
@@ -192,24 +175,15 @@ const FilterComponent = () => {
           {regimes.map((regime) => (
             <Accordion.Body
               key={regime}
-              className={`accordionBody ${
-                selectedRegime === regime ? "bg-success text-white" : ""
-              }`}
+              className={`accordionBody ${selectedRegime === regime ? "bg-success text-white" : ""}`}
               onClick={() => handleRegimeClick(regime)}
             >
-              {regime.charAt(0).toUpperCase() + regime.slice(1)}
+              {regime}
             </Accordion.Body>
           ))}
-          {searchTerm &&
-            selectedRegime &&
-            ((Array.isArray(searchResults) && searchResults.length === 0) ||
-              error) && (
-              <div className="text-center text-danger">
-                Aucune recette dans ce régime
-              </div>
-            )}
         </Accordion.Item>
 
+        {/* Modes de cuisson */}
         <Accordion.Item eventKey="2">
           <Accordion.Header>
             <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
@@ -218,49 +192,33 @@ const FilterComponent = () => {
           {modeCooks.map((modeCook) => (
             <Accordion.Body
               key={modeCook}
-              className={`accordionBody ${
-                selectedModeCook === modeCook ? "bg-success text-white" : ""
-              }`}
+              className={`accordionBody ${selectedModeCook === modeCook ? "bg-success text-white" : ""}`}
               onClick={() => handleModeCookClick(modeCook)}
             >
-              {modeCook.charAt(0).toUpperCase() + modeCook.slice(1)}
+              {modeCook}
             </Accordion.Body>
           ))}
-          {searchTerm &&
-            selectedModeCook &&
-            ((Array.isArray(searchResults) && searchResults.length === 0) ||
-              error) && (
-              <div className="text-center text-danger">
-                Aucune recette dans ce mode de cuisson
-              </div>
-            )}
         </Accordion.Item>
       </Accordion>
 
-      {/* Input pour rechercher par pays */}
-      <div className="mt-3 d-flex ">
-        <label className=" mt-2 mx-2">Par pays :</label>
+      {/* Recherche par pays */}
+      <div className="mt-3 d-flex">
+        <label className="mt-2 mx-2">Par pays :</label>
         <input
           type="text"
-          className="form-control  w-50"
+          className="form-control w-50"
           placeholder="Entrez un pays"
           value={searchTermCountry}
           onChange={(e) => setSearchTermCountry(e.target.value)}
         />
       </div>
-    
-      {/* Séparateur */}
-      <hr className="" />
-      
-        {/* Bouton reset */}
-           <Button
-              className="btn btn-danger my-2 input-filter-Favorite mx-5"
-              onClick={handleResetFilters}
-            >
-              Réinitialiser
-            </Button>
-   
 
+      <hr className="" />
+
+      {/* Bouton de réinitialisation */}
+      <Button className="btn btn-danger my-2 input-filter-Favorite mx-5" onClick={handleResetFilters}>
+        Réinitialiser
+      </Button>
     </form>
   );
 };

@@ -432,53 +432,83 @@ export const searchRecipe = async (req, res, next) => {
 };
 
 
-
-
 // @desc    Filter recipes by many critères & diplay one recipe on homeScreen
 // @route   GET /api/recipes/filter?category=desserts&country=France
 // @access  Public
+// Fonction: filtrer les recettes via des paramètres dans l'URL et retourner les recettes correspondantes sous forme de tableau d'objets
 export const filtreRecipe = async (req, res, next) => {
   try {
-    // Récupérer les paramètres de requête
-    const { name, country, category, regime, ingredient, pseudo, modeCook } = req.query;
-    console.log(name, country, category, regime, ingredient, pseudo, modeCook);
+    // 1️⃣ Récupérer les paramètres de la query string (dans l'URL)
+    const { country, category, regime, pseudo, modeCook } = req.query;
 
-    // Initialisation de l'objet filter
+    console.log(country, category, regime, pseudo, modeCook);
+    console.log("Filtres reçus côté backend : ", req.query);
+
+    // 2️⃣ Créer un objet vide qui contiendra dynamiquement les critères de filtre pour MongoDB
     let filter = {};
 
-    // Ajouter des conditions au filtre si les critères sont fournis
-    if (name) filter.name = { $regex: new RegExp(name, "i") };
-    if (country) filter.country = { $regex: new RegExp(country, "i") };
+    // 3️⃣ Ajouter les filtres un par un s'ils sont fournis dans la query string
+    // Utilisation de RegExp pour permettre des recherches insensibles à la casse et partielles (par exemple : commence par)
+    if (country) filter.country = { $regex: new RegExp("^" + country, "i") };
     if (category) filter.category = { $regex: new RegExp(category, "i") };
     if (regime) filter.regime = { $regex: new RegExp(regime, "i") };
-    if (ingredient) filter["ingredients.name"] = { $regex: new RegExp(ingredient, "i") };
-    if (modeCook) filter.modeCook = { $regex: new RegExp(modeCook, "i") }; // Ajout du filtre pour modeCook
+    if (modeCook) filter.modeCook = { $regex: new RegExp(modeCook, "i") };
 
-    // Recherche de l'utilisateur si le pseudo est spécifié
-    if (pseudo) {
-      const user = await User.findOne({ username: { $regex: new RegExp(pseudo, "i") } });
-      if (user) {
-        filter.userRef = user._id;
-      }
+    // 4️⃣ Vérifications de validité pour certains champs avant de lancer la recherche
+
+    // Catégories valides
+    const validCategories = ["aperitifs", "entrees", "plats", "desserts", "boissons", "salades", "autres"];
+    if (category && !validCategories.includes(category)) {
+      return res.status(400).json({
+        success: false,
+        message: `Catégorie invalide. Les catégories valides sont : ${validCategories.join(", ")}`,
+      });
     }
 
-    // Recherche des recettes avec les filtres dynamiques
-    const recipes = await Recipe.find(filter).populate("userRef", "username");
+    // Régimes valides
+    const validRegimes = ["traditionnelle", "vegetarien", "vegan", "sans-gluten", "sans-lactose", "autres"];
+    if (regime && !validRegimes.includes(regime)) {
+      return res.status(400).json({
+        success: false,
+        message: `Catégorie invalide. Les catégories valides sont : ${validRegimes.join(", ")}`,
+      });
+    }
 
+    // Modes de cuisson valides
+    const validModeCook = [
+      "vapeur", "airFryer", "griller", "four", "autoCuiseur", "déshydrater", "saute",
+      "mijoter", "bouillir", "rotir", "pocher", "frire", "autres", "aucun",
+    ];
+    if (modeCook && !validModeCook.includes(modeCook)) {
+      return res.status(400).json({
+        success: false,
+        message: `Catégorie invalide. Les catégories valides sont : ${validModeCook.join(", ")}`,
+      });
+    }
+
+    // 5️⃣ Recherche dans la base Recipe selon les filtres construits
+    console.log("Filtres avant recherche dans la base de données : ", filter);
+    const recipes = await Recipe.find(filter).populate("userRef", "username"); // populate pour inclure le username du user lié à chaque recette
+
+    // 6️⃣ Si aucune recette trouvée : renvoyer un message d'erreur 404
     if (recipes.length === 0) {
       return res.status(404).json({
         success: false,
         message: "Aucune recette trouvée pour les critères fournis.",
+        filtersUsed: filter, // optionnel : pour débogage côté client
         statusCode: 404,
       });
     }
 
-    // Retourner les recettes filtrées
+    // 7️⃣ Sinon : renvoyer les recettes trouvées
     res.status(200).json({
       success: true,
-      recipes,
+      total: recipes.length, // nombre total de recettes trouvées
+      recipes, // tableau d'objets recette avec les champs selon ton modèle mongoose
     });
+
   } catch (error) {
+    // Gestion des erreurs serveur
     next(error);
   }
 };

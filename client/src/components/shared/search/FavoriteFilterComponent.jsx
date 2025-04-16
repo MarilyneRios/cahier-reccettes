@@ -13,8 +13,6 @@ import {
   setFavoriteSearchResults,
   setSelectedCategories,
   setSelectedRegimes,
-  setSelectedModecook,
-  setSearchTermCountry,
   resetFilters,
 } from "../../../redux/favorites/favoriteSlice";
 
@@ -27,7 +25,6 @@ const categoryMapping = {
   Plats: "plats",
   Desserts: "desserts",
   Boissons: "boissons",
-  Salades: "salades",
   Toutes: "",
 };
 
@@ -56,6 +53,10 @@ const modeCookMapping = {
   Frire: "frire",
   Autres: "autres",
 };
+
+////////////////////////////////////////////////////////////
+//FavoriteFilterComponent
+////////////////////////////////////////////////////////////
 
 export default function FavoriteFilterComponent() {
   const [selectedCategory, setSelectedCategory] = useState("");

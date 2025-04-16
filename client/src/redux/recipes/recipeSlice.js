@@ -21,12 +21,16 @@ const initialState = {
   loading: false,
   error: false,
   // searchBar
-  searchResults: [],
+  searchResults:  [] , //
   searchTerm: "",
   // filter
-  filteredResults: [],
+  filteredResults:  {
+    recipes: [],
+  }, //[]
   selectedCategories: [],
   selectedRegimes: [],
+  selectedModecook: [],
+  searchTermCountry: "",
 };
 
 const recipeSlice = createSlice({
@@ -49,8 +53,8 @@ const recipeSlice = createSlice({
       state.currentRecipe = action.payload;
     },
     setSearchResults: (state, action) => {
-      //pour transmettre les recherches au back
-      state.searchResults = action.payload;
+     state.searchResults = action.payload;
+     //state.searchResults.recipes = action.payload;
     },
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
@@ -68,14 +72,15 @@ const recipeSlice = createSlice({
       state.searchTermCountry = action.payload;
     },
     setFilteredResults: (state, action) => {
-      // Ajouté pour gérer les résultats filtrés
       state.filteredResults = action.payload;
+      //state.filteredResults.recipes = action.payload;
     },
     resetFilters: (state) => {
-      state.selectedCategories = [];
-      state.selectedRegimes = [];
-      state.selectedModecook = [];
-      state.searchTermCountry = "";
+      //state.selectedCategories = [];
+      //state.selectedRegimes = [];
+      //state.selectedModecook = [];
+      //state.searchTermCountry = "";
+      state.filteredResults.recipes = [];
     },
   },
 });

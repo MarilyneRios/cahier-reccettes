@@ -15,6 +15,10 @@ import { IoFilterSharp } from "react-icons/io5";
 import "./allFavoriteRecipe.styles.css";
 import "../../../App.css";
 
+/////////////////////////////////////////////////////////
+// AllFavoriteRecipe
+/////////////////////////////////////////////////////////
+
 export default function AllFavoriteRecipe() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;

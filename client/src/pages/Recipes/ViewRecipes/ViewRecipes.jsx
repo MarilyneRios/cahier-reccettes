@@ -1,27 +1,59 @@
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useDisplayAllRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
 import { Spinner } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
 import "./ViewRecipes.css";
 
-export default function ViewRecipes({ currentPage }) {
-  const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || []);
+/////////////////////////////////////////////////////////
+// ViewRecipes
+/////////////////////////////////////////////////////////
+
+
+export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {} }) {
+  // Résultats de la barre de recherche
+  const searchResults = useSelector(
+    (state) => state.recipe.searchResults?.recipes || []
+  );
   console.log("Search results from Redux store:", searchResults); // Log des résultats de recherche
-  
+
+  // Résultats des filtres
+  const filteredResults = useSelector(
+    (state) => state.recipe.filteredResults || []
+  );  
+  console.log("Filter results from Redux store:", filteredResults);
+
   const {
     data: recipesData,
     isLoading,
     isError,
     error,
+    refetch,
   } = useDisplayAllRecipesQuery({
     pageNumber: currentPage,
     pageSize: 6,
-    skip: searchResults.length > 0,
   });
 
   console.log("Recipes Data ViewRecipe:", recipesData); // Log des données de recettes
 
-  const displayedRecipes = searchResults.length > 0 ? searchResults : recipesData?.recipes || [];
+  useEffect(() => {
+    refetch();
+  }, [currentPage, refetch]);
+
+    // Mise à jour du total de pages dans le parent
+    useEffect(() => {
+      if (recipesData?.pages) {
+        onTotalPagesChange(recipesData.pages);
+      }
+    }, [recipesData, onTotalPagesChange]);
+
+  // Déterminer les recettes à afficher
+  const displayedRecipes = filteredResults.length > 0
+    ? filteredResults
+    : searchResults.length > 0
+    ? searchResults
+    : recipesData?.recipes || [];
+
   console.log("Displayed Recipes ViewRecipe:", displayedRecipes); // Log des recettes affichées
 
   if (displayedRecipes.length === 0) {
@@ -48,7 +80,10 @@ export default function ViewRecipes({ currentPage }) {
 
   return (
     <div className="d-flex flex-wrap justify-content-center">
-      <div className="row row-cols-1 row-cols-md-3 g-4 my-3" style={{ width: "80%" }}>
+      <div
+        className="row row-cols-1 row-cols-md-3 g-4 my-3"
+        style={{ width: "80%" }}
+      >
         {displayedRecipes.slice(0, 6).map((recipe) => (
           <div className="col d-flex justify-content-center" key={recipe._id}>
             <CardRecipe recipe={recipe} />

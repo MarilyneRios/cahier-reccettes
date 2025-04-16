@@ -1,21 +1,20 @@
-// recipesApiSlice.js
 import { apiSlice } from "../apiSlice";
 
 const RECIPES_URL = "/api/recipes";
 
 export const recipesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Nouvel endpoint pour le CRUD
+    // Ajouter une recette
     addRecipe: builder.mutation({
-      query: (Recipe) => ({
+      query: (recipe) => ({
         url: `${RECIPES_URL}/`,
         method: "POST",
-        body: Recipe,
+        body: recipe,
       }),
       invalidatesTags: ["Recipe"],
     }),
 
-    // Afficher toutes les recettes avec la pagination
+    // Afficher toutes les recettes avec pagination
     displayAllRecipes: builder.query({
       query: ({ pageNumber = 1, pageSize = 6 }) => ({
         url: `${RECIPES_URL}/?pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -23,6 +22,8 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Recipe"],
     }),
+
+    // Afficher une recette
     displayOneRecipe: builder.query({
       query: (id) => ({
         url: `${RECIPES_URL}/displayOneRecipe/${id}`,
@@ -31,15 +32,17 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Recipe"],
     }),
 
+    // Modifier une recette
     updateRecipe: builder.mutation({
-      query: ({ id, ...Recipes }) => ({
+      query: ({ id, ...recipe }) => ({
         url: `${RECIPES_URL}/updateRecipe/${id}`,
         method: "PATCH",
-        body: Recipes,
+        body: recipe,
       }),
       invalidatesTags: ["Recipe"],
     }),
 
+    // Supprimer une recette
     deleteRecipe: builder.mutation({
       query: (id) => ({
         url: `${RECIPES_URL}/deleteRecipe/${id}`,
@@ -48,7 +51,7 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Recipe"],
     }),
 
-    // Nouveau endpoint pour la recherche
+    // Rechercher une recette par terme
     searchRecipes: builder.query({
       query: (query) => ({
         url: `${RECIPES_URL}/search/${query}`,
@@ -57,12 +60,14 @@ export const recipesApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Recipe"],
     }),
 
+    // Filtrer les recettes selon critères
+   // ex de requete : get: http://localhost:3000/api/recipes/filter?regime=traditionnelle&modeCook=aucun
     filterRecipes: builder.query({
-      query: (params) => {
-        
+      query: (params = {}) => {
         const queryString = new URLSearchParams(params).toString();
+        console.log(`URL Request: ${RECIPES_URL}/filter?${queryString}`);
         return {
-          url: `${RECIPES_URL}/search?${queryString}`,
+          url: `${RECIPES_URL}/filter?${queryString}`,
           method: "GET",
         };
       },
@@ -78,5 +83,6 @@ export const {
   useUpdateRecipeMutation,
   useDeleteRecipeMutation,
   useSearchRecipesQuery,
-  usefilterRecipesQuery,
+  useFilterRecipesQuery,
+  useLazyFilterRecipesQuery,
 } = recipesApiSlice;
