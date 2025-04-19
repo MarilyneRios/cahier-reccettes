@@ -12,15 +12,11 @@ import "./ViewRecipes.css";
 
 export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {} }) {
   // Résultats de la barre de recherche
-  const searchResults = useSelector(
-    (state) => state.recipe.searchResults?.recipes || []
-  );
+  const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || [] );
   console.log("Search results from Redux store:", searchResults); // Log des résultats de recherche
 
   // Résultats des filtres
-  const filteredResults = useSelector(
-    (state) => state.recipe.filteredResults || []
-  );  
+  const filteredResults = useSelector((state) => state.recipe.filteredResults || []);  
   console.log("Filter results from Redux store:", filteredResults);
 
   const {
@@ -33,8 +29,7 @@ export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {}
     pageNumber: currentPage,
     pageSize: 6,
   });
-
-  console.log("Recipes Data ViewRecipe:", recipesData); // Log des données de recettes
+  console.log("Recipes Data ViewRecipe:", recipesData); 
 
   useEffect(() => {
     refetch();
@@ -53,8 +48,7 @@ export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {}
     : searchResults.length > 0
     ? searchResults
     : recipesData?.recipes || [];
-
-  console.log("Displayed Recipes ViewRecipe:", displayedRecipes); // Log des recettes affichées
+  console.log("Displayed Recipes ViewRecipe:", displayedRecipes); 
 
   if (displayedRecipes.length === 0) {
     return (

@@ -10,6 +10,7 @@ import favoriteReducer from "./favorites/favoriteSlice.js";
 import { apiSlice } from './apiSlice.js';
 import {recipesApiSlice} from './recipes/recipesApiSlice.js';
 import { favoriteApiSlice } from './favorites/favoriteApiSlice.js';
+import globalReducer from './globalSlice'
 //import {usersApiSlice} from './users/usersApiSlice.js';
 
 
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   recipe: recipeReducer,
   favorite: favoriteReducer,
+  global: globalReducer,
 
   [apiSlice.reducerPath]: apiSlice.reducer,
   [recipesApiSlice.reducerPath]: recipesApiSlice.reducer,

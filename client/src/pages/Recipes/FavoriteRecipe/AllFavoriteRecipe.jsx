@@ -20,20 +20,20 @@ import "../../../App.css";
 /////////////////////////////////////////////////////////
 
 export default function AllFavoriteRecipe() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentFavoritePage, setCurrentFavoritePage] = useState(1);
   const pageSize = 6;
   const [showFilters, setShowFilters] = useState(false);
 
   const {
     data: recipesData,
-    isLoading,
-    isError,
+    isFavoriteLoading,
+    isFavoriteError,
     error,
     refetch,
-  } = useGetAllFavoriteRecipesQuery({ pageNumber: currentPage, pageSize });
+  } = useGetAllFavoriteRecipesQuery({ pageNumber: currentFavoritePage, pageSize });
 
-  const searchResults = useSelector((state) => state.favorite.searchResults);
-  const isSearchActive = Array.isArray(searchResults) && searchResults.length > 0;
+  const searchFavoriteResults = useSelector((state) => state.favorite.searchFavoriteResults);
+  const isSearchActive = Array.isArray(searchFavoriteResults) && searchFavoriteResults.length > 0;
 
   const recipes = recipesData?.recipes || [];
   const totalPages = recipesData?.pages || 1;
@@ -44,19 +44,19 @@ export default function AllFavoriteRecipe() {
 
   useEffect(() => {
     refetch();
-  }, [currentPage, refetch]);
+  }, [currentFavoritePage, refetch]);
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
-      setCurrentPage(newPage);
+      setCurrentFavoritePage(newPage);
     }
   };
 
-  if (isLoading) {
+  if (isFavoriteLoading) {
     return <Spinner animation="border" role="status" />;
   }
 
-  if (isError) {
+  if (isFavoriteError) {
     return (
       <div className="w-100 d-flex Aucune-recipe-container">
         <p className="text-danger fs-4 border border-2 rounded Aucune-recipe">
@@ -105,11 +105,11 @@ export default function AllFavoriteRecipe() {
       {/* Affichage des résultats */}
       {isSearchActive ? (
         <div className="container mt-4">
-          {searchResults.length === 0 ? (
+          {searchFavoriteResults.length === 0 ? (
             <p>Aucune recette trouvée.</p>
           ) : (
             <div className="row row-cols-1 row-cols-md-3 g-4 my-3" style={{ width: "80%" }}>
-              {searchResults.map((recipe) => (
+              {searchFavoriteResults.map((recipe) => (
                 <div className="col d-flex justify-content-center" key={recipe._id}>
                   <CardRecipe recipe={recipe} />
                 </div>
@@ -139,20 +139,20 @@ export default function AllFavoriteRecipe() {
             <div className="d-flex justify-content-center align-items-center mt-4">
               <Button
                 variant=""
-                disabled={currentPage === 1}
+                disabled={currentFavoritePage === 1}
                 className="pagination-btn fs-5"
-                onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => handlePageChange(currentFavoritePage - 1)}
               >
                 &lt; Précédent
               </Button>
               <span className="mx-3 fs-4">
-                Page {currentPage} / {totalPages}
+                Page {currentFavoritePage} / {totalPages}
               </span>
               <Button
                 variant=""
                 className="pagination-btn fs-5"
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentFavoritePage === totalPages}
+                onClick={() => handlePageChange(currentFavoritePage + 1)}
               >
                 Suivant &gt;
               </Button>

@@ -6,14 +6,14 @@ const initialState = {
   loading: false,
   error: false,
   //searchBar
-  searchResults: [],
-  searchTerm: "",
+  searchFavoriteResults: [],
+  searchFavoriteTerm: "",
   // filter
-  filteredResults: [],
-  selectedCategories: [],
-  selectedRegimes: [],
-  selectedModecook: [],
-  searchTermCountry: "",
+  filteredFavoriteResults: [],
+  selectedFavoriteCategory: [],
+  selectedFavoriteRegime: [],
+  selectedFavoriteModecook: [],
+  searchFavoriteTermCountry: "",
 };
 
 const favoriteSlice = createSlice({
@@ -36,35 +36,35 @@ const favoriteSlice = createSlice({
     setFavoriteRecipe: (state, action) => {
       state.currentFavorite = action.payload;
     },
-    setLoading: (state, action) => {
+    setFavoriteLoading: (state, action) => {
       state.loading = action.payload;
     },
-    setError: (state, action) => {
+    setFavoriteError: (state, action) => {
       state.error = action.payload;
     },
     setFavoriteSearchResults: (state, action) => {
-      state.searchResults = action.payload;
+      state.searchFavoriteResults = action.payload;
     },
-    setSelectedCategories: (state, action) => {
-      state.selectedCategories = action.payload;
+    setSelectedFavoriteCategory: (state, action) => {
+      state.selectedFavoriteCategory = action.payload;
     },
-    setSelectedRegimes: (state, action) => {
-      state.selectedRegimes = action.payload;
+    setSelectedFavoriteRegime: (state, action) => {
+      state.selectedFavoriteRegime = action.payload;
     },
-    setSelectedModecook: (state, action) => {
-      state.selectedModecook = action.payload;
+    setSelectedFavoriteModecook: (state, action) => {
+      state.selectedFavoriteModecook = action.payload;
     },
-    setSearchTermCountry: (state, action) => {
-      state.searchTermCountry = action.payload;
+    setSearchFavoriteTermCountry: (state, action) => {
+      state.searchFavoriteTermCountry = action.payload;
     },
-    setFilteredResults: (state, action) => {
-      state.filteredResults = action.payload;
-    },
-    resetFilters: (state) => {
-      state.selectedCategories = [];
-      state.selectedRegimes = [];
-      state.selectedModecook = [];
-      state.searchTermCountry = "";
+   // setFilteredFavoriteResults: (state, action) => {
+   //   state.filteredFavoriteResults = action.payload;
+   // },
+    resetFavoriteFilters: (state) => {
+      state.selectedFavoriteCategory = [];
+      state.selectedFavoriteRegime = [];
+      state.selectedFavoriteModecook = [];
+      state.searchFavoriteTermCountry = "";
     }
     
   },
@@ -75,15 +75,16 @@ export const {
   removeFavoriteLocal,
   setFavorites,
   setFavoriteRecipe,
-  setLoading,
-  setError,
+  setFavoriteLoading,
+  setFavoriteError,
   setFavoriteSearchResults,
-  setSelectedCategories,
-  setSelectedRegimes,
-  setSelectedModecook,
-  setSearchTermCountry,
-  setFilteredResults,
-  resetFilters,
+  setSelectedFavoriteCategory,
+  setSelectedFavoriteRegime,
+  setSelectedFavoriteModecook,
+  setSearchFavoriteTermCountry,
+  setFilteredFavoriteResults,
+  resetFavoriteFilters,
 } = favoriteSlice.actions;
+
 
 export default favoriteSlice.reducer;

@@ -1,4 +1,3 @@
-// React, Router et State
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Accordion } from "react-bootstrap";
@@ -7,7 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { useLazyFilterRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
-import { setFilteredResults, resetFilters } from "../../../redux/recipes/recipeSlice";
+import { setFilteredResults, resetFilters, setSearchResults } from "../../../redux/recipes/recipeSlice";
 
 // Mapping des valeurs affichées (UX) vers les valeurs attendues par l’API (backend)
 const categoryMapping = {
@@ -51,14 +50,13 @@ const modeCookMapping = {
 
 const FilterComponent = () => {
   // States pour gérer la sélection des filtres
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedRegime, setSelectedRegime] = useState(null);
-  const [selectedModeCook, setSelectedModeCook] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedRegime, setSelectedRegime] = useState("");
+  const [selectedModeCook, setSelectedModeCook] = useState("");
   const [searchTermCountry, setSearchTermCountry] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   // Hook RTK Query pour déclencher la recherche quand on veut
   const [triggerFilter, { data, error }] = useLazyFilterRecipesQuery();
@@ -71,7 +69,6 @@ const FilterComponent = () => {
   // 🟢 Effet : dès qu'un des filtres change, on construit un objet de filtres
   // et on déclenche une recherche via triggerFilter (API call)
   useEffect(() => {
-    // Création de l'objet de filtres à envoyer
     const filters = {
       category: categoryMapping[selectedCategory],
       regime: regimeMapping[selectedRegime],
@@ -79,7 +76,7 @@ const FilterComponent = () => {
       country: searchTermCountry.trim() !== "" ? searchTermCountry.toLowerCase() : "",
     };
 
-    // On enlève les filtres vides ou null
+    // Supprimer les filtres vides de l'objet
     Object.keys(filters).forEach((key) => {
       if (!filters[key]) {
         delete filters[key];
@@ -88,64 +85,48 @@ const FilterComponent = () => {
 
     console.log("Filtres avant envoi :", filters);
 
-    // Si au moins un filtre est actif, on lance la requête
     if (Object.keys(filters).length > 0) {
       console.log("Recherche avec filtres :", filters);
       triggerFilter(filters);
     } else {
-      // Sinon, on vide les résultats
       console.log("Aucun filtre appliqué.");
-      dispatch(setFilteredResults([]));
+      dispatch(setFilteredResults([])); // Réinitialiser les résultats de la recherche
     }
   }, [selectedCategory, selectedRegime, selectedModeCook, searchTermCountry, dispatch, triggerFilter]);
-  // 🟢 Effet : quand des données arrivent de l'API
+
+  // Quand les données arrivent
   useEffect(() => {
     if (data) {
       console.log("Données reçues :", data);
       if (data.recipes && data.recipes.length > 0) {
-        // Si on a des recettes, on les enregistre dans le state Redux
+        console.log(`Nombre de recettes trouvées : ${data.recipes.length}`);
+        console.log("Dispatching setFilteredResults with:", data.recipes);
         dispatch(setFilteredResults(data.recipes));
-        // et on redirige vers la page des recettes favorites filtrées
-        navigate("/allFavoriteRecipe");
+        navigate("/viewRecipes"); 
       } else {
-        // Sinon on notifie l'utilisateur qu'il n'y a rien trouvé
+        console.log("Aucune recette trouvée.");
         dispatch(setFilteredResults([]));
         toast.success("Aucune recette trouvée pour ces critères !");
       }
     }
   }, [data, dispatch, navigate]);
 
-  // 🟠 Effet : si une erreur survient lors de la requête API
+  // 🔄 Réinitialisation des filtres
+  const handleResetFilters = () => {
+    setSelectedCategory("");
+    setSelectedRegime("");
+    setSelectedModeCook("");
+    setSearchTermCountry("");
+    dispatch(resetFilters());
+    dispatch(setSearchResults([]));
+  };
+
   useEffect(() => {
     if (error) {
       console.error("Erreur lors de la recherche :", error);
     }
   }, [error]);
 
-  // 🎛 Gestion des clics sur les filtres
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(selectedCategory === category ? null : category);
-  };
-
-  const handleRegimeClick = (regime) => {
-    setSelectedRegime(selectedRegime === regime ? null : regime);
-  };
-
-  const handleModeCookClick = (modeCook) => {
-    setSelectedModeCook(selectedModeCook === modeCook ? null : modeCook);
-  };
-
-  // 🔄 Réinitialisation des filtres
-  const handleResetFilters = () => {
-    setSelectedCategory(null);
-    setSelectedRegime(null);
-    setSelectedModeCook(null);
-    setSearchTermCountry("");
-    dispatch(resetFilters());
-    dispatch(setFilteredResults([]));
-  };
-
-  // 📋 Rendu du formulaire de filtres
   return (
     <form className="d-flex flex-column justify-content-center">
       <Accordion>
@@ -159,7 +140,11 @@ const FilterComponent = () => {
             <Accordion.Body
               key={category}
               className={`accordionBody ${selectedCategory === category ? "bg-success text-white" : ""}`}
-              onClick={() => handleCategoryClick(category)}
+              onClick={() => {
+                setSelectedCategory(category);
+                console.log("Action setSelectedCategory :", setSelectedCategory);
+                console.log("Selected category :", category);
+              }}
             >
               {category}
             </Accordion.Body>
@@ -176,7 +161,12 @@ const FilterComponent = () => {
             <Accordion.Body
               key={regime}
               className={`accordionBody ${selectedRegime === regime ? "bg-success text-white" : ""}`}
-              onClick={() => handleRegimeClick(regime)}
+              onClick={() => {
+                setSelectedRegime(regime);
+                console.log("Action setSelectedRegime :", setSelectedRegime);
+                console.log("Selected Regime :", regime);
+              }}
+              
             >
               {regime}
             </Accordion.Body>
@@ -193,7 +183,11 @@ const FilterComponent = () => {
             <Accordion.Body
               key={modeCook}
               className={`accordionBody ${selectedModeCook === modeCook ? "bg-success text-white" : ""}`}
-              onClick={() => handleModeCookClick(modeCook)}
+              onClick={() => {
+                setSelectedModeCook(modeCook);
+                console.log("Action setSelectedModeCook :", setSelectedModeCook);
+                console.log("Selected ModeCook :", modeCook);
+              }}
             >
               {modeCook}
             </Accordion.Body>

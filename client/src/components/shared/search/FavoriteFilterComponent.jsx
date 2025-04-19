@@ -11,15 +11,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLazyFilterFavorisRecipesQuery } from "../../../redux/favorites/favoriteApiSlice";
 import {
   setFavoriteSearchResults,
-  setSelectedCategories,
-  setSelectedRegimes,
-  resetFilters,
+  resetFavoriteFilters,
 } from "../../../redux/favorites/favoriteSlice";
 
 // styles
 import "./filter.styles.css";
 
-const categoryMapping = {
+const categoryFavoriteMapping = {
   Apéritifs: "aperitifs",
   Entrées: "entrees",
   Plats: "plats",
@@ -28,7 +26,7 @@ const categoryMapping = {
   Toutes: "",
 };
 
-const regimeMapping = {
+const regimeFavoriteMapping = {
   Traditionnelle: "traditionnelle",
   Végétarien: "vegetarien",
   Végétalien: "vegan",
@@ -38,7 +36,7 @@ const regimeMapping = {
   Toutes: "",
 };
 
-const modeCookMapping = {
+const modeCookFavoriteMapping = {
   Vapeur: "vapeur",
   AirFryer: "airFryer",
   Griller: "griller",
@@ -59,26 +57,25 @@ const modeCookMapping = {
 ////////////////////////////////////////////////////////////
 
 export default function FavoriteFilterComponent() {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedRegime, setSelectedRegime] = useState("");
-  const [selectedModecook, setSelectedModecook] = useState("");
-  const [searchTermCountry, setSearchTermCountry] = useState("");
+  const [selectedFavoriteCategory, setSelectedFavoriteCategory] = useState("");
+  const [selectedFavoriteRegime, setSelectedFavoriteRegime] = useState("");
+  const [selectedFavoriteModecook, setSelectedFavoriteModecook] = useState("");
+  const [searchFavoriteTermCountry, setSearchFavoriteTermCountry] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Lazy query
-  const [triggerFilter, { data, isLoading, error }] =
-    useLazyFilterFavorisRecipesQuery();
+  const [triggerFilter, { data,  error }] = useLazyFilterFavorisRecipesQuery();
 
   // Déclencher la recherche à chaque changement
   useEffect(() => {
     const filters = {
-      category: categoryMapping[selectedCategory],
-      regime: regimeMapping[selectedRegime],
-      modeCook: modeCookMapping[selectedModecook],
+      category: categoryFavoriteMapping[selectedFavoriteCategory],
+      regime: regimeFavoriteMapping[selectedFavoriteRegime],
+      modeCook: modeCookFavoriteMapping[selectedFavoriteModecook],
       country:
-        searchTermCountry.trim() !== "" ? searchTermCountry.toLowerCase() : "",
+        searchFavoriteTermCountry.trim() !== "" ? searchFavoriteTermCountry.toLowerCase() : "",
     };
 
     // Supprimer les filtres vides de l'objet
@@ -89,17 +86,17 @@ export default function FavoriteFilterComponent() {
     });
 
     if (Object.keys(filters).length > 0) {
-      console.log("Recherche avec filtres :", filters);
+      console.log("Recherche avec filtres favorite :", filters);
       triggerFilter(filters);
     } else {
-      console.log("Aucun filtre n'a été appliqué.");
+      console.log("Aucun filtre favorite n'a été appliqué.");
       dispatch(setFavoriteSearchResults([])); // Réinitialiser les résultats de la recherche
     }
   }, [
-    selectedCategory,
-    selectedRegime,
-    selectedModecook,
-    searchTermCountry,
+    selectedFavoriteCategory,
+    selectedFavoriteRegime,
+    selectedFavoriteModecook,
+    searchFavoriteTermCountry,
     triggerFilter,
     dispatch,
   ]);
@@ -115,21 +112,18 @@ export default function FavoriteFilterComponent() {
       } else {
         console.log("Aucune recette trouvée.");
         dispatch(setFavoriteSearchResults([]));
-
-        toast.success(
-          "Aucune recette trouvée pour tous ces critères spécifiés !"
-        );
+        toast.success("Aucune recette trouvée pour tous ces critères spécifiés !");
       }
     }
   }, [data, dispatch, navigate]);
 
   // Bouton reset
   const handleResetFilters = () => {
-    setSelectedCategory("");
-    setSelectedRegime("");
-    setSelectedModecook("");
-    setSearchTermCountry("");
-    dispatch(resetFilters());
+    setSelectedFavoriteCategory("");
+    setSelectedFavoriteRegime("");
+    setSelectedFavoriteModecook("");
+    setSearchFavoriteTermCountry("");
+    dispatch(resetFavoriteFilters());
     dispatch(setFavoriteSearchResults([]));
   };
   
@@ -150,16 +144,16 @@ export default function FavoriteFilterComponent() {
       {/* Catégorie */}
       <Form.Group controlId="category">
         <Form.Select
-          value={selectedCategory}
+          value={selectedFavoriteCategory}
           onChange={(e) => {
-            setSelectedCategory(e.target.value);
-            console.log("Action setSelectedCategory :", setSelectedCategory);
-            dispatch(setSelectedCategories([e.target.value]));
+            setSelectedFavoriteCategory(e.target.value);
+            console.log("Action setSelectedCategory :", setSelectedFavoriteCategory);
+            console.log("Selected category :", e.target.value);
           }}
           className="border border-3 border-success px-2 input-filter-Favorite"
         >
           <option value="">Catégorie</option>
-          {Object.keys(categoryMapping).map((key) => (
+          {Object.keys(categoryFavoriteMapping).map((key) => (
             <option key={key} value={key}>
               {key}
             </option>
@@ -169,37 +163,38 @@ export default function FavoriteFilterComponent() {
 
       {/* Régime */}
       <Form.Group controlId="regime">
-        <Form.Select
-          value={selectedRegime}
-          onChange={(e) => {
-            setSelectedRegime(e.target.value);
-            console.log("Action setSelectedRegime :", setSelectedRegime);
-            dispatch(setSelectedRegimes([e.target.value]));
-          }}
-          className="border border-3 border-success px-2 input-filter-Favorite"
-        >
-          <option value="">Régime</option>
-          {Object.keys(regimeMapping).map((key) => (
-            <option key={key} value={key}>
-              {key}
-            </option>
-          ))}
-        </Form.Select>
-      </Form.Group>
+  <Form.Select
+    value={selectedFavoriteRegime}
+    onChange={(e) => {
+      setSelectedFavoriteRegime(e.target.value);
+      console.log("Action setSelectedFavoriteRegime :", setSelectedFavoriteRegime);
+      console.log("Selected regime :", e.target.value);
+    }}
+    className="border border-3 border-success px-2 input-filter-Favorite"
+  >
+    <option value="">Régime</option>
+    {Object.keys(regimeFavoriteMapping).map((key) => (
+      <option key={key} value={key}>
+        {key}
+      </option>
+    ))}
+  </Form.Select>
+</Form.Group>
+
 
       {/* Mode de cuisson */}
       <Form.Group controlId="modecook">
         <Form.Select
-          value={selectedModecook}
+          value={selectedFavoriteModecook}
           onChange={(e) => {
-            setSelectedModecook(e.target.value);
-            console.log("Action setSelectedModecook :", setSelectedModecook);
-            dispatch(setSelectedModecook([e.target.value]));
+            setSelectedFavoriteModecook(e.target.value);
+            console.log("Action setSelectedModecook :", setSelectedFavoriteModecook);
+            console.log("Selected ModeCook :", e.target.value);
           }}
           className="border border-3 border-success px-2 input-filter-Favorite"
         >
           <option value="">Cuisson</option>
-          {Object.keys(modeCookMapping).map((key) => (
+          {Object.keys(modeCookFavoriteMapping).map((key) => (
             <option key={key} value={key}>
               {key}
             </option>
@@ -212,11 +207,11 @@ export default function FavoriteFilterComponent() {
         <Form.Control
           type="text"
           placeholder="Pays"
-          value={searchTermCountry}
+          value={searchFavoriteTermCountry}
           onChange={(e) => {
-            setSearchTermCountry(e.target.value);
-            console.log("Action setSearchTermCountry :", setSearchTermCountry);
-            dispatch(setSearchTermCountry(e.target.value));
+            setSearchFavoriteTermCountry(e.target.value);
+            console.log("Action setSearchTermCountry :", setSearchFavoriteTermCountry);
+            console.log("Selected SearchTermCountry :", e.target.value);
           }}
           className="border border-3 border-success px-2 input-filter-Favorite"
         />

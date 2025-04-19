@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Initialisation de l'état initial pour le slice Redux
 const initialState = {
   recipeInfo: {
     _id: "",
@@ -10,25 +9,23 @@ const initialState = {
     regime: "",
     ingredients: [],
     instructions: [],
-    makingTime: 0, // Initialisé à 0 plutôt que "" pour éviter des erreurs de type
-    cookingTime: 0, // Initialisé à 0 plutôt que "" pour éviter des erreurs de type
+    makingTime: 0,
+    cookingTime: 0,
     comments: [],
     pseudo: "",
     imageUrl: "",
-    userId: null, // Pas de récupération depuis localStorage
+    userId: null,
   },
   currentRecipe: null,
   loading: false,
   error: false,
   // searchBar
-  searchResults:  [] , //
+  searchResults: [],
   searchTerm: "",
   // filter
-  filteredResults:  {
-    recipes: [],
-  }, //[]
-  selectedCategories: [],
-  selectedRegimes: [],
+  filteredResults: [],
+  selectedCategory: [],
+  selectedRegime: [],
   selectedModecook: [],
   searchTermCountry: "",
 };
@@ -53,17 +50,17 @@ const recipeSlice = createSlice({
       state.currentRecipe = action.payload;
     },
     setSearchResults: (state, action) => {
-     state.searchResults = action.payload;
-     //state.searchResults.recipes = action.payload;
+      console.log("Setting search results:", action.payload); 
+      state.searchResults = action.payload;
     },
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
     },
-    setSelectedCategories: (state, action) => {
-      state.selectedCategories = action.payload;
+    setSelectedCategory: (state, action) => {
+      state.selectedCategory = action.payload;
     },
-    setSelectedRegimes: (state, action) => {
-      state.selectedRegimes = action.payload;
+    setSelectedRegime: (state, action) => {
+      state.selectedRegime = action.payload;
     },
     setSelectedModecook: (state, action) => {
       state.selectedModecook = action.payload;
@@ -72,16 +69,17 @@ const recipeSlice = createSlice({
       state.searchTermCountry = action.payload;
     },
     setFilteredResults: (state, action) => {
+      console.log("Action setFilteredResults received with payload:", action.payload);
       state.filteredResults = action.payload;
-      //state.filteredResults.recipes = action.payload;
     },
     resetFilters: (state) => {
-      //state.selectedCategories = [];
-      //state.selectedRegimes = [];
-      //state.selectedModecook = [];
-      //state.searchTermCountry = "";
-      state.filteredResults.recipes = [];
+      console.log("Action resetFilters received");
+      state.selectedCategory = [];
+      state.selectedRegime = [];
+      state.selectedModecook = [];
+      state.searchTermCountry = "";
     },
+    
   },
 });
 
@@ -92,8 +90,8 @@ export const {
   setCurrentRecipe,
   setSearchResults,
   setSearchTerm,
-  setSelectedRegimes,
-  setSelectedCategories,
+  setSelectedRegime,
+  setSelectedCategory,
   setSelectedModecook,
   setSearchTermCountry,
   setFilteredResults,
