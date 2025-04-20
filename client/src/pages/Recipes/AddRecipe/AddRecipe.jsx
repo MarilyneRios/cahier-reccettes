@@ -367,7 +367,7 @@ export default function AddRecipe() {
                     </Form.Group>
                   </div>
                   {/**nombre de part */}
-                  <div className="piece d-flex ">
+                  <div className="row">
                   <Form.Group className="col-12 col-md-6 my-2">                      
                     <Form.Label className="mb-2">
                     Nombre de part *
@@ -398,18 +398,14 @@ export default function AddRecipe() {
                         required
                       >
                         <option value="">Sélectionner...</option>
-                        <option value="vapeur">Vapeur</option>
-                        <option value="airFryer">Air Fryer</option>
+                        <option value="airFryer">AirFryer</option>
+                        <option value="autoCuiseur">Auto-cuisseur</option>
                         <option value="griller">Griller</option>
                         <option value="four">Four</option>
-                        <option value="autoCuiseur">Autocuiseur</option>
-                        <option value="déshydrater">Déshydrater</option>
-                        <option value="saute">Sauté</option>
-                        <option value="mijoter">Mijoté</option>
-                        <option value="bouillir">Bouillir</option>
-                        <option value="rotir">Rôti</option>
-                        <option value="pocher">Pocher</option>
-                        <option value="frire">Frire</option>
+                        <option value="robot-de-cuisine">Robot-de-cuisine</option>
+                        <option value="plaque-de-cuisson">Plaque-de-cuisson</option>
+                        <option value="micro-ondes">Micro-ondes</option>
+                        <option value="vapeur">Vapeur</option>
                         <option value="autres">Autres...</option>
                         <option value="aucun">Aucun...</option>
 
