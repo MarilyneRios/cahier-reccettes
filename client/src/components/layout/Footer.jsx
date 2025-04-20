@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 // icons
-import { FaUserCircle, FaHome, FaInfoCircle } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { FaCirclePlus, FaBookOpenReader } from "react-icons/fa6";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { PiBooksDuotone } from "react-icons/pi";
 
 function Footer() {
@@ -13,8 +12,8 @@ function Footer() {
           <h5 className="fw-bold border-bottom pb-2">À propos</h5>
           <p>Bienvenue sur notre application de partage de recettes !</p>
           <p>
-            Découvrez, partagez et savourez des recettes délicieuses avec vos
-            amis.
+            Découvrez, partagez et savourez des recettes délicieuses 
+            <br></br>avec votre famille et vos amis.
           </p>
         </div>
         <div className="col-md-4 mb-4">
@@ -86,44 +85,22 @@ function Footer() {
       <hr />
       <div className="row text-center">
         <div className="col-12">
-          <p className="fst-italic mb-3">
+          <p className="fst-italic mb-3 text-center">
             Copyright © 2025 by Marilyne Rios. Tous droits réservés.
           </p>
           <div className="d-flex justify-content-center row text-center mt-3">
             <div className="col-12">
-              <p className="">
-                Nous utilisons des cookies pour améliorer votre expérience. En
-                continuant, vous acceptez notre{" "}
+              <p className="text-center">
+                Ce site utilise uniquement des cookies techniques nécessaires à
+                la navigation et au bon fonctionnement de l&apos;application. <br></br>Aucun
+                cookie publicitaire ou de suivi n&apos;est utilisé., vous acceptez
+                notre{" "}
                 <Link to="/privacy-policy" className="text-success">
                   Politique de Confidentialité
                 </Link>
                 .
               </p>
             </div>
-          </div>
-          <div className="d-flex ">
-            <p>
-              Cette application a été créée avec <strong>Vite</strong>,{" "}
-              <strong>Bootstrap</strong>, <strong>Express.js</strong>,{" "}
-              <strong>Node.js</strong> et <strong>MongoDB</strong>.
-            </p>
-
-            <a
-              href="https://github.com/MarilyneRios"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-decoration-none text-success fw-bold mx-3"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/marilyne-rios-59a13015b"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-decoration-none text-success fw-bold"
-            >
-              LinkedIn
-            </a>
           </div>
         </div>
       </div>

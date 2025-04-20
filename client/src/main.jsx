@@ -21,6 +21,7 @@ import AddRecipe from './pages/Recipes/AddRecipe/AddRecipe';
 import DisplayRecipe from './pages/Recipes/DisplayRecipe/DisplayRecipe';
 import ChangeRecipe from './pages/Recipes/ChangeRecipe/ChangeRecipe'
 import AllFavoriteRecipe from './pages/Recipes/FavoriteRecipe/AllFavoriteRecipe';
+import PolitiqueCookies from './pages/PolitiqueCookies/PolitiqueCookies';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path='/sign-in' element={<SignIn />} />
       <Route path='/about' element={<About />} />
       <Route path='/sign-up' element={<SignUp />} />
+      <Route path='/privacy-policy' element={<PolitiqueCookies />} />
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
         <Route path='/viewRecipes' element={<ViewRecipes />} />
