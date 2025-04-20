@@ -74,7 +74,7 @@ function Header() {
     >
       <Container
         fluid
-        className="d-flex justify-content-between align-items-center font-weight-light  bg-overlay w-100 p-0 m-0"
+        className="d-flex justify-content-between align-items-center font-weight-light  bg-overlay  p-0 m-0"
       >
         {/* Toggle button and dropdown on the left */}
         <div className="d-flex align-items-center me-3 ">

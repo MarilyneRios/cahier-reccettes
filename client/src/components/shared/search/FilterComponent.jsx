@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { useLazyFilterRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
 import { setFilteredResults, resetFilters, setSearchResults } from "../../../redux/recipes/recipeSlice";
+//css style
+import "../../layout/Header.css";
 
 // Mapping des valeurs affichées (UX) vers les valeurs attendues par l’API (backend)
 const categoryMapping = {
@@ -15,7 +17,7 @@ const categoryMapping = {
   Plats: "plats",
   Desserts: "desserts",
   Boissons: "boissons",
-  Toutes: "",
+ // Toutes: "",
 };
 
 const regimeMapping = {
@@ -25,23 +27,20 @@ const regimeMapping = {
   "Sans gluten": "sans-gluten",
   "Sans lactose": "sans-lactose",
   Autres: "autres",
-  Toutes: "",
+ // Toutes: "",
 };
 
 const modeCookMapping = {
-  Vapeur: "vapeur",
   AirFryer: "airFryer",
+  "Auto-cuisseur": "autoCuiseur",
   Griller: "griller",
   Four: "four",
-  "Auto-cuisseur": "autoCuiseur",
-  Déshydrater: "deshydrater",
-  Sauté: "saute",
-  Mijoter: "mijoter",
-  Bouillir: "bouillir",
-  Rôtir: "rotir",
-  Pocher: "pocher",
-  Frire: "frire",
+  "Robot-de-cuisine": "Robot de cuisine",
+  "Plaque-de-cuisson": "Plaque de cuisson",
+  "Micro-ondes": "Micro-ondes",
+  Vapeur: "vapeur",
   Autres: "autres",
+  //Toutes: "",
 };
 
 ////////////////////////////////////////////////////////////
@@ -102,7 +101,7 @@ const FilterComponent = () => {
         console.log(`Nombre de recettes trouvées : ${data.recipes.length}`);
         console.log("Dispatching setFilteredResults with:", data.recipes);
         dispatch(setFilteredResults(data.recipes));
-        navigate("/viewRecipes"); 
+        navigate("/"); //viewRecipes
       } else {
         console.log("Aucune recette trouvée.");
         dispatch(setFilteredResults([]));
@@ -131,18 +130,19 @@ const FilterComponent = () => {
     <form className="d-flex flex-column justify-content-center">
       <Accordion>
         {/* Catégories */}
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>
+        <Accordion.Item eventKey="0" className="">
+          <Accordion.Header className="custom-accordion-header">
             <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
             Par catégorie :
           </Accordion.Header>
           {categories.map((category) => (
             <Accordion.Body
               key={category}
-              className={`accordionBody ${selectedCategory === category ? "bg-success text-white" : ""}`}
+              role="button"
+              tabIndex={0}
+              className={`accordionBody ${selectedCategory === category ? "bg-success text-white" : ""} custom-accordion-body `}
               onClick={() => {
                 setSelectedCategory(category);
-                console.log("Action setSelectedCategory :", setSelectedCategory);
                 console.log("Selected category :", category);
               }}
             >
@@ -153,17 +153,18 @@ const FilterComponent = () => {
 
         {/* Régimes */}
         <Accordion.Item eventKey="1">
-          <Accordion.Header>
+          <Accordion.Header className="custom-accordion-header">
             <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
             Par régime :
           </Accordion.Header>
           {regimes.map((regime) => (
             <Accordion.Body
               key={regime}
-              className={`accordionBody ${selectedRegime === regime ? "bg-success text-white" : ""}`}
+              role="button"
+              tabIndex={1}
+              className={`accordionBody ${selectedRegime === regime ? "bg-success text-white" : ""}  custom-accordion-body`}
               onClick={() => {
                 setSelectedRegime(regime);
-                console.log("Action setSelectedRegime :", setSelectedRegime);
                 console.log("Selected Regime :", regime);
               }}
               
@@ -175,17 +176,18 @@ const FilterComponent = () => {
 
         {/* Modes de cuisson */}
         <Accordion.Item eventKey="2">
-          <Accordion.Header>
+          <Accordion.Header className="custom-accordion-header">
             <MdFilterList size={32} className="mx-0 image3D rounded-pill p-2" />
             Par cuisson :
           </Accordion.Header>
           {modeCooks.map((modeCook) => (
             <Accordion.Body
               key={modeCook}
-              className={`accordionBody ${selectedModeCook === modeCook ? "bg-success text-white" : ""}`}
+              role="button"
+              tabIndex={2}
+              className={`accordion-body-scroll accordionBody ${selectedModeCook === modeCook ? "bg-success text-white" : ""}  custom-accordion-body`}
               onClick={() => {
                 setSelectedModeCook(modeCook);
-                console.log("Action setSelectedModeCook :", setSelectedModeCook);
                 console.log("Selected ModeCook :", modeCook);
               }}
             >
@@ -205,6 +207,7 @@ const FilterComponent = () => {
           value={searchTermCountry}
           onChange={(e) => setSearchTermCountry(e.target.value)}
         />
+        
       </div>
 
       <hr className="" />

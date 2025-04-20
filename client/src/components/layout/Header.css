@@ -23,20 +23,31 @@
 .custom-dropdown-menu {
   min-width: 200px;
   min-height: 90vh;
+  overflow-y: auto;
 }
+
+/*
+.custom-accordion-header {
+  height: 50px; 
+  display: flex;
+  align-items: center;
+  padding: 0 ; 
+}*/
+ .custom-accordion-body{
+  height: 40px; 
+  align-items: center;
+ }
 
 /* Couleur des liens pdt survol */
 .custom-dropdown-menu .dropdown-item:hover {
   background-color: #d4edda;
   color: #155724;
-
 }
 
 /*Ajout de transition pour les liens*/
 .custom-dropdown-menu .dropdown-item {
   transition: all 0.3s ease-in-out;
 }
-
 
 /* Couleur des liens actif */
 .custom-dropdown-menu .dropdown-item.active {
@@ -45,7 +56,6 @@
 }
 .active-header {
     background-color: #28a745;
-   
 }
 
 /* Accordéon */
