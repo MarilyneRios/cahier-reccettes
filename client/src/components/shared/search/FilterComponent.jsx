@@ -35,12 +35,12 @@ const modeCookMapping = {
   "Auto-cuisseur": "autoCuiseur",
   Griller: "griller",
   Four: "four",
-  "Robot-de-cuisine": "Robot de cuisine",
-  "Plaque-de-cuisson": "Plaque de cuisson",
+  "Robot-de-cuisine": "Robot-de-cuisine",
+  "Plaque-de-cuisson": "Plaque-de-cuisson",
   "Micro-ondes": "Micro-ondes",
   Vapeur: "vapeur",
   Autres: "autres",
-  //Toutes: "",
+  Aucun: "aucun",
 };
 
 ////////////////////////////////////////////////////////////

@@ -37,19 +37,16 @@ const regimeFavoriteMapping = {
 };
 
 const modeCookFavoriteMapping = {
-  Vapeur: "vapeur",
   AirFryer: "airFryer",
+  "Auto-cuisseur": "autoCuiseur",
   Griller: "griller",
   Four: "four",
-  "Auto-cuisseur": "autoCuiseur",
-  Déshydrater: "deshydrater",
-  Sauté: "saute",
-  Mijoter: "mijoter",
-  Bouillir: "bouillir",
-  Rôtir: "rotir",
-  Pocher: "pocher",
-  Frire: "frire",
+  "Robot-de-cuisine": "Robot de cuisine",
+  "Plaque-de-cuisson": "Plaque de cuisson",
+  "Micro-ondes": "Micro-ondes",
+  Vapeur: "vapeur",
   Autres: "autres",
+  Aucun: "aucun",
 };
 
 ////////////////////////////////////////////////////////////
