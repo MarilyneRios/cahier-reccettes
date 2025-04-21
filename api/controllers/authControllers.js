@@ -15,7 +15,7 @@ export const display = (req, res) => {
 // @route   POST /api/auth/signup
 // @access  Public
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password,password2,questionSecret } = req.body;
 
   // Vérifier la présence du mot de passe dans la requête
   if (!password) {
@@ -23,7 +23,7 @@ export const signup = async (req, res, next) => {
   }
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
+  const newUser = new User({ username, email, password: hashedPassword, password2: hashedPassword, questionSecret: hashedPassword });
 
   try {
     await newUser.save();
@@ -63,6 +63,34 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    deuxième mot de passe afin de sécuriser la connexion sur une nouvelle page 
+// @route   POST /api/auth/signin2
+// @access  Private
+export const signin2 = async (req, res, next) => {
+  const {  password2 } = req.body;
+  try {
+    //vérif si email est correct
+    const validUser = await User.findOne({ password2 });
+    if (!validUser) return next(errorHandler(404, "User not found"));
+    //vérif le psw  avec compareSync
+    const validPassword2 = bcryptjs.compareSync(password2, validUser.password2);
+    if (!validPassword2) return next(errorHandler(401, "wrong credentials"));
+    
+
+    // Supprimer le mot de passe des données retournées
+    const { password: hashedPassword, ...userData  } = validUser._doc;
+
+    res
+      .status(200)
+      .json({ ...userData } );  
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 
 // @desc    Connexion d'un utilisateur via Google (avec création de compte si nécessaire)
 // @route   POST /api/auth/google
@@ -133,3 +161,9 @@ export const signout = (req, res) => {
     res.status(500).json('Logout failed');
   }
 }
+
+// @desc    Question secrète afin de réinitialiser le mot de passe
+// @route   GET /api/auth/resetPassword
+// @access  Public
+
+export const resetPassword = async (req, res, next) => {}

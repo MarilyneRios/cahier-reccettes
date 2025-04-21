@@ -1,0 +1,39 @@
+/* SignIn sépration btns*/
+.separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espace entre les lignes et le texte */
+  }
+  
+  .separator-line {
+    flex: 1;
+    border: 0;
+    height: 2px;
+    background-color: #000;
+  }
+  
+  .separator-text {
+    font-size: 1rem;
+    color: #666;
+    font-weight: bold;
+  }
+
+  /* personnaliser les consignes password */
+  .passwordHelpBlock.muted {
+    color: red;
+    font-style: italic;
+  }
+  
+  .passwordHelpBlock span {
+    display: block;
+    margin-top: 0.2rem; 
+  }
+  
+  /* imput password */
+  
+  .password-input {
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  

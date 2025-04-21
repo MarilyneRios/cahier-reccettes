@@ -96,29 +96,10 @@ blockquote {
   min-height: 75vh;
 }
 
-/* SignIn sépration btns*/
-.separator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* Espace entre les lignes et le texte */
-}
-
-.separator-line {
-  flex: 1;
-  border: 0;
-  height: 2px;
-  background-color: #000;
-}
-
-.separator-text {
-  font-size: 1rem;
-  color: #666;
-  font-weight: bold;
-}
 
 .element-with-3d-effect {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   transform-style: preserve-3d;
   box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
 }
+

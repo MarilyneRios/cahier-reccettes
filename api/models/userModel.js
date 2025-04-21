@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    password2: {
+      type: String,
+      required: true,
+    },
+    questionSecret: {
+      type: String,
+      required: true,
+    },
     savedRecipe: [{
       type: mongoose.Schema.Types.ObjectId, // Un tableau d'ObjectId pour sauvegarder plusieurs recettes
       ref: 'Recipe', 

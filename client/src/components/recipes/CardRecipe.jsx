@@ -31,8 +31,10 @@ function CardRecipe({ recipe }) {
   // Vérifier si la recette est déjà dans les favoris
   const { data: favoriteData } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
 
-  // Vérifier si la recette est dans les favoris
-  const isFavorite = favoriteData?.recipes.some((fav) => fav._id === recipe._id);
+  // Vérifier si la recette est dans les favoris 
+  // Pour éviter bug à l'ajout de new user : Plutôt que de ne rien renvoyer ou null
+  // ?. sans déclencher une erreur si l'objet est null ou undefined
+  const isFavorite = favoriteData?.recipes?.some((fav) => fav._id === recipe._id) || false;
 
   // Vérifier si l'utilisateur est l'auteur de la recette
   const isOwner = userId === recipe?.userRef?._id;
