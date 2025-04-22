@@ -6,7 +6,7 @@ import {
     removeFavoriteRecipe, 
     searchFavoriteRecipe, 
     filtreFavoriteRecipe
-  } from '../controllers/favoriteRecipeController.js';
+} from '../controllers/favoriteRecipeController.js';
 
 import { verifyToken } from '../utils/verifyUser.js';
 

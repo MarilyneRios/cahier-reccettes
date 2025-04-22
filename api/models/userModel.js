@@ -20,11 +20,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    password2: {
+    questionSecret: {
       type: String,
+      enum:[
+        "Quel est le prénom de votre premier animal ?",
+        "Quelle est votre ville de naissance ?",
+        "Quel est le nom de votre plat préféré ?",
+        "Quelle est votre couleur préférée ?",
+        "Quel est le deuxième prénom de votre mère ?"
+      ],
       required: true,
     },
-    questionSecret: {
+    reponseSecret:{
       type: String,
       required: true,
     },
