@@ -101,7 +101,13 @@ const FilterComponent = () => {
         console.log(`Nombre de recettes trouvées : ${data.recipes.length}`);
         console.log("Dispatching setFilteredResults with:", data.recipes);
         dispatch(setFilteredResults(data.recipes));
-        navigate("/"); //viewRecipes
+        navigate("/"); //viewRecipes partie
+        setTimeout(() => {
+          const section = document.getElementById("ViewRecipesHome");
+          if (section) {
+            section.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
       } else {
         console.log("Aucune recette trouvée.");
         dispatch(setFilteredResults([]));
