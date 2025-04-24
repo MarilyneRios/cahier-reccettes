@@ -47,7 +47,6 @@ export const updateUser = async (req, res, next) => {
       { new: true }
     );
 
-    
     // Excluez le mot de passe du document mis à jour
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
@@ -71,3 +70,39 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 }  
+
+// @desc    réinitialiser un mot de passe
+// @route   PUT /api/users/resetPassword/:id
+// @access  Privé (token)
+
+export const resetPasswordUser = async (req, res, next) => {
+
+    // Sécurité : vérification user
+    if (req.user.id !== req.params.id) {
+      return next(errorHandler(401, 'You can update only your account!'));
+    }
+
+    try {
+      // créer un objet updatedFields pour stocker les champs mis à jour
+      const updatedFields = {};
+      // Vérifiez si le champ 'password' est présent dans la requête
+      if (req.body.password) {
+      // Si oui, ajoutez la valeur du champ 'password' à updatedFields
+
+        updatedFields.password = bcryptjs.hashSync(req.body.password, 10);
+      }
+          // met à jour updatedUser
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      // Utilisez $set pour mettre à jour les champs spécifiés
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    // Excluez le mot de passe du document mis à jour
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+}
