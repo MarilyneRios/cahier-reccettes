@@ -57,17 +57,27 @@ export const userApiSlice = apiSlice.injectEndpoints({
       })
     }),
     //Vérification email et envoi questionSecret
-    // Get : localhost:3000/api/auth/getUserByEmail?email=test3@gmail.com
+    // Get : localhost:3000/api/auth/getUserByEmail?email=c@gmail.com
     getUserByEmail: builder.query({
-      query: (email) => ({
+      query: ({email}) => ({
         url: `${AUTH_URL}/getUserByEmail`,
         method: 'GET',
         params: { email },
       }),
     }),
     
+    // Vérifie la réponse secrète à une question
+    // POST /api/auth/verifyReponseSecret
+    //JSON {"email": "c@gmail.com", "reponseSecret": "c@gmail.com"}
+    verifyReponseSecret: builder.mutation({
+      query: ({ email, reponseSecret }) => ({
+        url: `${AUTH_URL}/verifyReponseSecret`, 
+        method: 'POST',
+        body: { email, reponseSecret },
+      }),
+    }),
     
-    
+
   }),
 });
 
@@ -80,5 +90,7 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useGetUserByIdQuery, 
-  useGetUserByEmailQuery 
+  useGetUserByEmailQuery,
+  useLazyGetUserByEmailQuery,
+  useVerifyReponseSecretMutation,  
 } = userApiSlice;

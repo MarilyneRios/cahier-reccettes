@@ -215,26 +215,27 @@ export const getUserByEmail = async (req, res) => {
 export const verifyReponseSecret = async (req, res) => {
   console.log("📦 Corps reçu :", req.body);
 
-  const { email, reponseSecret } = req.body;
+  //récupèr email et reponseSecret du body
+  const { email,  reponseSecret } = req.body;
   console.log("👉 Requête reçue pour vérifier la réponse secrète à une question.");
   console.log("📧 Email + réponse fournie :", email, reponseSecret);
 
   try {
-    const user = await User.findOne({ email });
-
+    //récupère email et reponseSecret de bdd
+    const user = await User.findOne({ email }).select("email reponseSecret"); 
+    // vérification user existe
     if (!user) {
       console.warn("❌ Utilisateur non trouvé pour email:", email);
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
 
-    console.log("🔍 User object:", user); // Log the entire user object
-    console.log("🔐 user.reponseSecret =", user.reponseSecret);
-
+    // vérification reponseSecret existe
     if (!user.reponseSecret) {
       console.warn("❌ La réponse secrète n'est pas définie pour l'utilisateur:", email);
       return res.status(400).json({ message: "La réponse secrète n'est pas définie pour cet utilisateur" });
     }
 
+    // décrypter user.reponseSecret afin depouvoir comparer avec reponseSecret du body
     const isMatch = await bcryptjs.compare(reponseSecret, user.reponseSecret);
 
     if (isMatch) {

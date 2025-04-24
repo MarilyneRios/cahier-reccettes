@@ -2,7 +2,10 @@ import { useState } from "react";
 import FormContainer from "../../components/shared/FormContainer";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useLazyGetUserByEmailQuery } from "../../redux/users/usersApiSlice";
+import {
+  useLazyGetUserByEmailQuery,
+  useVerifyReponseSecretMutation,
+} from "../../redux/users/usersApiSlice";
 
 //////////////////////////////////////////////////////////////////
 // ForgotPassword Component
@@ -13,25 +16,24 @@ export default function ForgotPassword() {
   const [reponseSecret, setReponseSecret] = useState("");
   const [showSecret, setShowSecret] = useState(false);
   const [error, setError] = useState(null);
+  const [isError, setIsError] = useState(null);
 
   // Navigation
   const navigate = useNavigate();
 
   // Query RTK
-  const [
-    triggerGetUserByEmail,
-    { data: userFound, isLoading, isFetching, isError },
-  ] = useLazyGetUserByEmailQuery();
+  const [triggerGetUserByEmail, { data: userFound, isLoading, isFetching }] =
+    useLazyGetUserByEmailQuery();
 
-  console.log("👤 Résultat de useGetUserByEmailQuery:", {
+  /* console.log("👤 Résultat de useGetUserByEmailQuery:", {
     email,
     userFound,
     isLoading,
     isFetching,
-    isError,
-  });
+  
+  });*/
 
-  // email submission
+  // email  vérification
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
     console.log("📤 Formulaire email soumis avec:", email);
@@ -39,33 +41,53 @@ export default function ForgotPassword() {
     setShowSecret(false);
 
     try {
-      const data = await triggerGetUserByEmail(email).unwrap();
-      console.log("✅ Utilisateur trouvé:", data);
+      const data = await triggerGetUserByEmail({ email }).unwrap();
+
+      //console.log("✅ Utilisateur trouvé:", data);
 
       if (data?.questionSecret) {
         setShowSecret(true);
       } else {
-        console.warn("❌ Aucun utilisateur trouvé avec cet email.");
+        // console.warn("❌ Aucun utilisateur trouvé avec cet email.");
         setError("Aucun utilisateur trouvé avec cet email.");
       }
     } catch (err) {
-      console.error("❌ Erreur dans handleSubmitEmail:", err);
+      //console.error("❌ Erreur dans handleSubmitEmail:", err);
       setError("Une erreur est survenue. Veuillez réessayer.");
     }
   };
   // handleSubmitEmail ok
 
-  // secret response submission
-  const handleSubmitReponse = (e) => {
+
+  // Query RTK
+  const [verifyReponseSecret, { verifyReponseSecretData, isSuccess }] =
+    useVerifyReponseSecretMutation();
+  console.log("👤 Résultat de verifyReponseSecret:", {
+    verifyReponseSecretData,
+    isSuccess,
+  });
+
+  // ReponseSecret vérification
+  const handleSubmitReponse = async (e) => {
     e.preventDefault();
     setError(null);
 
-    if (reponseSecret === userFound?.reponseSecret) {
-      navigate("/resetPassword");
-    } else {
-      setError("La réponse secrète est incorrecte.");
+    try {
+      const res = await verifyReponseSecret({ email, reponseSecret }).unwrap();
+      console.log("✅ Résultat complet de verifyReponseSecret:", res);
+    
+      if (res.success) {
+        alert("Réponse correcte !");
+        navigate("/");
+      } else {
+        setError("La réponse secrète est incorrecte.");
+      }
+    } catch (err) {
+      console.error("❌ Erreur lors de la vérification de la réponse secrète :", err);
+      setError("Une erreur est survenue. Veuillez réessayer.");
     }
-  };
+  }
+
 
   return (
     <FormContainer>
