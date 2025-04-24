@@ -238,7 +238,7 @@ export default function SignUp() {
         <Row className="py-3">
           <Col className="text-center">
             Déjà inscrit ?{" "}
-            <Link to="/sign-in" className="text-success">Se connecter</Link>
+            <Link to="/sign-in" className="text-success text-decoration-none">Se connecter</Link>
             {/* Affichage des erreurs */}
             {error && <p className="text-danger mt-5">{error}</p>}
           </Col>

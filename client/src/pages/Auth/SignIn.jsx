@@ -3,15 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../../components/shared/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { signInStart, signInSuccess, signInFailure } from "../../redux/users/userSlice";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../../redux/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../../components/authentificate/OAuth";
 // Importation de useSignInMutation:
-import { useSignInMutation} from "../../redux/users/usersApiSlice";
+import { useSignInMutation } from "../../redux/users/usersApiSlice";
 //style css
-import './sign.styles.css'
-
-
+import "./sign.styles.css";
 
 ///////////////////////////////////////////////////////////////////
 // SignIn
@@ -30,7 +32,7 @@ export default function SignIn() {
 
   // Déclaration RTK Query du hook useSignInMutation pour sign-in
   const [signIn] = useSignInMutation();
-  
+
   // Gérer les modifications d'entrée et mettre à jour l'état des données du formulaire
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -48,7 +50,7 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
       // Vérifie si signIn est une fonction avant de l'appeler
-      if (typeof signIn === 'function') {
+      if (typeof signIn === "function") {
         // Effectue la mutation de connexion à l'aide de la requête RTK
         console.log("Envoi des données de connexion:", formData);
         const res = await signIn(formData).unwrap();
@@ -73,101 +75,110 @@ export default function SignIn() {
       }
     } catch (error) {
       console.log("Erreur lors de la connexion:", error);
-      dispatch(signInFailure("Le mot de passe ou l'email est incorrect, veuillez réessayer.")); // Message générique
+      dispatch(
+        signInFailure(
+          "Le mot de passe ou l'email est incorrect, veuillez réessayer."
+        )
+      ); // Message générique
     }
   };
-  
+
   // Fonction pour traduire les messages d'erreur
   const translateErrorMessage = (message) => {
     const errorTranslations = {
       "Invalid email or password": "Email ou mot de passe invalide",
       "User not found": "Utilisateur non trouvé",
-      "wrong credentials":"Le mot de passe ou l'email est incorrect",
+      "wrong credentials": "Le mot de passe ou l'email est incorrect",
     };
-    return errorTranslations[message] || "Une erreur est survenue, veuillez réessayer.";
+    return (
+      errorTranslations[message] ||
+      "Une erreur est survenue, veuillez réessayer."
+    );
   };
-  
 
   return (
     <div className="SignInAndUpForm">
-    <FormContainer >
-      <h1 className="d-flex justify-content-center text-dark">Connexion</h1>
+      <FormContainer>
+        <h1 className="d-flex justify-content-center text-dark">Connexion</h1>
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="my-2 ">
-          <Form.Control
-            type="email"
-            id="email"
-            placeholder="Email"
-            value={formData.email || ""}
-            onChange={handleChange}
-            autoComplete="email"
-          />
-        </Form.Group>
-
-        <Form.Group className="my-2">
-          <div className="d-flex">
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="my-2 ">
+            {/**Email */}
+            <Form.Label htmlFor="email">Email</Form.Label>
             <Form.Control
-              type={visiblePassword ? "text" : "password"}
-              id="password"
-              placeholder="Mot de passe"
-              value={formData.password || ""}
+              type="email"
+              id="email"
+              placeholder="Email"
+              value={formData.email || ""}
               onChange={handleChange}
-              autoComplete="current-password"
-              className="me-2"
+              autoComplete="email"
             />
-            {visiblePassword ? (
-              <FaEyeSlash
-                onClick={() => setVisiblePassword(false)}
-                className="m-3"
-                size={20}
+          </Form.Group>
+          {/**Mot de passe */}
+          <Form.Group className="my-2">
+            <Form.Label htmlFor="password">Mot de passe</Form.Label>
+            <div className="d-flex">
+              <Form.Control
+                type={visiblePassword ? "text" : "password"}
+                id="password"
+                placeholder="Mot de passe"
+                value={formData.password || ""}
+                onChange={handleChange}
+                autoComplete="current-password"
+                className="me-2"
               />
-            ) : (
-              <FaEye
-                onClick={() => setVisiblePassword(true)}
-                size={20}
-                className="m-3"
-              />
-            )}
+              {visiblePassword ? (
+                <FaEyeSlash
+                  onClick={() => setVisiblePassword(false)}
+                  className="m-3"
+                  size={20}
+                />
+              ) : (
+                <FaEye
+                  onClick={() => setVisiblePassword(true)}
+                  size={20}
+                  className="m-3"
+                />
+              )}
+            </div>
+          </Form.Group>
+
+          <Button
+            type="submit"
+            variant="outline-success"
+            className="my-3 w-100"
+            disabled={loading}
+          >
+            {loading ? "Chargement..." : "Se connecter"}
+          </Button>
+
+          <div className="separator my-4">
+            <hr className="separator-line" />
+            <span className="separator-text">ou</span>
+            <hr className="separator-line" />
           </div>
-        </Form.Group>
 
-        <Button
-          type="submit"
-          variant="outline-success"
-          className="my-3 w-100"
-          disabled={loading}
-        >
-          {loading ? "Chargement..." : "Se connecter"}
-        </Button>
-
-      
-        <div className="separator my-4">
-           <hr className="separator-line" />
-           <span className="separator-text">ou</span>
-           <hr className="separator-line" />
-        </div>
- 
-        <OAuth disabled={loading} label={"Continue avec Google"}/>
-      </Form>
-
-      <Row className="py-3">
-        <Col>
-          Avez-vous un compte ?{" "}
-          <Link to="/sign-up" className="text-success">
-            Inscription
-          </Link>
-          {error && (
-            <p className="text-danger mt-5">
-              {typeof error === "string"
-                ? error
-                : "Une erreur est survenue, veuillez réessayer."}
-            </p>
-          )}
-        </Col>
-      </Row>
-    </FormContainer>
+          <OAuth disabled={loading} label={"Continue avec Google"} />
+        </Form>
+        {/**Si pbm */}
+        <Row className="py-3">
+          <Col xs={12} md={6} className="mb-2">
+            Avez-vous un compte ?{" "}
+            <Link to="/sign-up" className="text-success text-decoration-none">
+              Inscription
+            </Link>
+          </Col>
+          <Col xs={12} md={6}>
+            <Link
+              to="/forgotPassword"
+              className="text-danger text-decoration-none"
+              title="Réinitialisez votre mot de passe"
+            >
+              Mot de passe oublié ?
+            </Link>
+          </Col>
+        </Row>
+      </FormContainer>
     </div>
-
   );
 }

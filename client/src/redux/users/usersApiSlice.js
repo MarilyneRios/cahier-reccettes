@@ -35,6 +35,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    //profilpage et forgotPassword
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
         url: `${USERS_URL}/update/${id}`,
@@ -54,7 +55,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/${userId}`,
         method: 'GET',
       })
-    })
+    }),
+    //Vérification email et envoi questionSecret
+    // Get : localhost:3000/api/auth/getUserByEmail?email=test3@gmail.com
+    getUserByEmail: builder.query({
+      query: (email) => ({
+        url: `${AUTH_URL}/getUserByEmail`,
+        method: 'GET',
+        params: { email },
+      }),
+    }),
+    
+    
     
   }),
 });
@@ -68,4 +80,5 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useGetUserByIdQuery, 
+  useGetUserByEmailQuery 
 } = userApiSlice;

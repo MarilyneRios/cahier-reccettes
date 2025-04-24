@@ -400,3 +400,9 @@ import CountryFlag from "../../../components/shared/CountryFlag";
 //....
 {recipe.country && <CountryFlag country={recipe.country} />}
 ````
+
+## Node.js Send an Email
+
+Afin d'améliorer le système de vérification d'email pour forgotPassworrd
+
+https://www.w3schools.com/nodejs/nodejs_email.asp

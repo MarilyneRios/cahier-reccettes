@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Image } from "react-bootstrap";
 import FormContainer from "../../components/shared/FormContainer";
-// composant réutilisable
-import BackButton from "../../components/shared/BackButton";
+
 // icones
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaUnlock } from "react-icons/fa";

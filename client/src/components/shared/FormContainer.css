@@ -2,3 +2,7 @@
     background: rgba(255, 255, 255, 0.70); 
     border-radius: 10px; 
   }
+
+.opacity-sign {
+  opacity: 0.95;
+}  

@@ -9,7 +9,7 @@ const FormContainer = ({ children, size = 6, className = "" }) => {
       {/** Pour petits écrans (md) => 6 colonnes  */}
         <Col xs={12} 
           md={size} 
-           className='card px-5 py-3 border border-dark bg-white opacity-75 ${className} '>
+           className='card px-5 py-3 border border-dark bg-white opacity-sign ${className} '>
               {children}
         </Col>
       </Row>

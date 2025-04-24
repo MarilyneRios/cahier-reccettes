@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true, // Supprimer automatiquement les espaces en début et en fin de chaîne
+      trim: true, 
       lowercase: true, 
     },
     password: {

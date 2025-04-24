@@ -184,8 +184,68 @@ export const signout = (req, res) => {
   }
 };
 
-// @desc    Question secrète afin de réinitialiser le mot de passe
+// @desc    Récupère la question secrète d'un utilisateur à partir de son email
 // @route   GET /api/auth/resetPassword
 // @access  Public
+export const getUserByEmail = async (req, res) => {
+  const { email } = req.query;
+  console.log("👉 Requête reçue pour la récupération de la question secrète.");
+  console.log("📧 Email fourni :", email);
+  try {
+    const user = await User.findOne({ email }).select("email questionSecret"); 
+   
+    if (!user) {
+      console.warn("⚠️ Aucun utilisateur trouvé avec cet email :", email);
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
 
-export const resetPassword = async (req, res, next) => {};
+    res.status(200).json({ questionSecret: user.questionSecret });
+
+  } catch (error) {
+    console.error("❌ Erreur lors de la récupération de l'utilisateur :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+
+
+// @desc    Vérifie la réponse secrète à une question
+// @route   POST /api/auth/verifyReponseSecret
+// @access  Public
+export const verifyReponseSecret = async (req, res) => {
+  console.log("📦 Corps reçu :", req.body);
+
+  const { email, reponseSecret } = req.body;
+  console.log("👉 Requête reçue pour vérifier la réponse secrète à une question.");
+  console.log("📧 Email + réponse fournie :", email, reponseSecret);
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      console.warn("❌ Utilisateur non trouvé pour email:", email);
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    console.log("🔍 User object:", user); // Log the entire user object
+    console.log("🔐 user.reponseSecret =", user.reponseSecret);
+
+    if (!user.reponseSecret) {
+      console.warn("❌ La réponse secrète n'est pas définie pour l'utilisateur:", email);
+      return res.status(400).json({ message: "La réponse secrète n'est pas définie pour cet utilisateur" });
+    }
+
+    const isMatch = await bcryptjs.compare(reponseSecret, user.reponseSecret);
+
+    if (isMatch) {
+      console.log("✅ Réponse secrète correcte pour", email);
+      return res.status(200).json({ success: true });
+    } else {
+      console.warn("❌ Réponse secrète incorrecte pour", email);
+      return res.status(401).json({ message: "Réponse secrète incorrecte" });
+    }
+  } catch (error) {
+    console.error("❌ Stack :", error.stack);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};

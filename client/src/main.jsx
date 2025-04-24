@@ -22,17 +22,21 @@ import DisplayRecipe from './pages/Recipes/DisplayRecipe/DisplayRecipe';
 import ChangeRecipe from './pages/Recipes/ChangeRecipe/ChangeRecipe'
 import AllFavoriteRecipe from './pages/Recipes/FavoriteRecipe/AllFavoriteRecipe';
 import PolitiqueCookies from './pages/PolitiqueCookies/PolitiqueCookies';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<Home />} />
       <Route path='/sign-in' element={<SignIn />} />     
+      <Route path='/forgotPassword' element={<ForgotPassword />} />     
       <Route path='/about' element={<About />} />
       <Route path='/sign-up' element={<SignUp />} />
       <Route path='/privacy-policy' element={<PolitiqueCookies />} />
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
+        <Route path='/resetPassword' element={<ResetPassword />} /> 
         <Route path='/viewRecipes' element={<ViewRecipes />} />
         <Route path='/addRecipe' element={<AddRecipe />} />
         <Route path='/displayRecipe/:id' element={<DisplayRecipe/>} />
