@@ -15,8 +15,8 @@ export const sendResetEmail = async (userEmail, userId) => {
     tls: {
       rejectUnauthorized: false, // Accepte les certificats auto-signés si nécessaire
     },
-    logger: true, 
-    debug: true,
+    //logger: true, 
+    //debug: true,
   });
 
   try {

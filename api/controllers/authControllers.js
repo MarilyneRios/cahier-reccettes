@@ -1,4 +1,4 @@
-//mùodels
+//models
 import User from "../models/userModel.js";
 //utils
 import { sendResetEmail } from "../utils/emailService.js";
@@ -258,8 +258,7 @@ export const verifyReponseSecret = async (req, res) => {
 
 //@desc envoie le mail avec lien pour resetPassword
 // @route   POST /api/auth/sendResetEmail
-// @access  Private
-
+// @access  Public
 
 export const resetPasswordRequest = async (req, res) => {
   const { email } = req.body;

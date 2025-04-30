@@ -1,78 +1,77 @@
-import { apiSlice } from '../apiSlice';
+import { apiSlice } from "../apiSlice";
 
 // l’URL de base pour les appels d’API liés à l'authentification
-const AUTH_URL = '/api/auth';
+const AUTH_URL = "/api/auth";
 // l’URL de base pour les appels d’API liés aux utilisateurs
-const USERS_URL = '/api/user';
+const USERS_URL = "/api/user";
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signIn: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/signin`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
     signUp: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/signup`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
     signOut: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/signout`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
     googleSignIn: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/google`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
-    //profilpage 
+    //profilpage
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
         url: `${USERS_URL}/update/${id}`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
     deleteUser: builder.mutation({
-      query: ({ id}) => ({
+      query: ({ id }) => ({
         url: `${USERS_URL}/delete/${id}`,
-        method: 'DELETE',
-       
+        method: "DELETE",
       }),
     }),
     getUserById: builder.query({
       query: (userId) => ({
         url: `${USERS_URL}/${userId}`,
-        method: 'GET',
-      })
+        method: "GET",
+      }),
     }),
     //Vérification email et envoi questionSecret
     // Get : localhost:3000/api/auth/getUserByEmail?email=c@gmail.com
     getUserByEmail: builder.query({
-      query: ({email}) => ({
+      query: ({ email }) => ({
         url: `${AUTH_URL}/getUserByEmail`,
-        method: 'GET',
+        method: "GET",
         params: { email },
       }),
     }),
-    
+
     // Vérifie la réponse secrète à une question
     // POST /api/auth/verifyReponseSecret
     //JSON {"email": "c@gmail.com", "reponseSecret": "c@gmail.com"}
     verifyReponseSecret: builder.mutation({
       query: ({ email, reponseSecret }) => ({
-        url: `${AUTH_URL}/verifyReponseSecret`, 
-        method: 'POST',
+        url: `${AUTH_URL}/verifyReponseSecret`,
+        method: "POST",
         body: { email, reponseSecret },
       }),
     }),
@@ -83,10 +82,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
     resetPassword: builder.mutation({
       query: ({ id, data }) => ({
         url: `${USERS_URL}/resetPassword/${id}`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
+
+    // envoie le mail avec lien pour resetPassword
+    //  POST /api/auth/sendResetEmail
+    //  Public
+    resetPasswordRequest: builder.mutation({
+      query: ({email}) => ({
+        url: `${AUTH_URL}/sendResetEmail`,
+        method: "POST",
+        body: {email}, // { email: "adbcd@email.com" }
+      }),
+    })
   }),
 });
 
@@ -98,9 +108,10 @@ export const {
   useGoogleSignInMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-  useGetUserByIdQuery, 
+  useGetUserByIdQuery,
   useGetUserByEmailQuery,
   useLazyGetUserByEmailQuery,
-  useVerifyReponseSecretMutation,  
-  useresetPasswordUserMutation,
+  useVerifyReponseSecretMutation,
+  useResetPasswordRequestMutation,
+
 } = userApiSlice;

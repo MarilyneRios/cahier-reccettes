@@ -1,11 +1,19 @@
 import { useState } from "react";
-import FormContainer from "../../components/shared/FormContainer";
+
 import { Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+//Composant réutilisable
+import FormContainer from "../../components/shared/FormContainer";
+//Redux RTK
 import {
   useLazyGetUserByEmailQuery,
   useVerifyReponseSecretMutation,
+  useResetPasswordRequestMutation,
 } from "../../redux/users/usersApiSlice";
+
+//notification
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //////////////////////////////////////////////////////////////////
 // ForgotPassword Component
@@ -16,13 +24,18 @@ export default function ForgotPassword() {
   const [reponseSecret, setReponseSecret] = useState("");
   const [showSecret, setShowSecret] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+  const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(null);
 
   // Navigation
   const navigate = useNavigate();
 
+  //////////////////////////////////////////////////////////////
+  //vérification email
+  //////////////////////////////////////////////////////////////
   // Query RTK
-  const [triggerGetUserByEmail, { data: userFound, isLoading, isFetching }] =
+  const [triggerGetUserByEmail, { data: userFound, isFetching }] =
     useLazyGetUserByEmailQuery();
 
   /* console.log("👤 Résultat de useGetUserByEmailQuery:", {
@@ -59,6 +72,10 @@ export default function ForgotPassword() {
   // handleSubmitEmail ok
 
 
+
+  //////////////////////////////////////////////////////////////
+  //vérification question et réponse secrète
+  //////////////////////////////////////////////////////////////
   // Query RTK
   const [verifyReponseSecret, { verifyReponseSecretData, isSuccess }] =
     useVerifyReponseSecretMutation();
@@ -77,20 +94,41 @@ export default function ForgotPassword() {
       console.log("✅ Résultat complet de verifyReponseSecret:", res);
     
       if (res.success) {
-        alert("Réponse correcte !");
+        toast.success("Un email vous a été envoyé !");
+        await handleSubmitSendResetEmail(); 
         navigate("/");
       } else {
         setError("La réponse secrète est incorrecte.");
-      }
+        }
     } catch (err) {
       console.error("❌ Erreur lors de la vérification de la réponse secrète :", err);
       setError("Une erreur est survenue. Veuillez réessayer.");
     }
   }
 
-  // Envoyer un mail avec un lien pour ensuite se diriger vers RestPassword avec auth
+  //////////////////////////////////////////////////////////////
+  //envoyer le mail avec un lien pour resetPassword
+  //////////////////////////////////////////////////////////////
+  const [sendResetEmail, {dataSendResetEmail} ] = useResetPasswordRequestMutation();
+  console.log("👤 Résultat de sendResetEmail:", {
+    dataSendResetEmail,
+    isSuccess,
+  });
 
+  const handleSubmitSendResetEmail = async () => {
+    try {
+      const res = await sendResetEmail({ email }).unwrap();
+      console.log("✅ Résultat complet de handleSubmitSendResetEmail:", res);
+      setMessage(res.message); // "Email envoyé avec succès"
+      return true;
+    } catch (err) {
+      setMessage(err?.data?.message || 'Erreur lors de l\'envoi de l\'email');
+      console.error("❌ Erreur lors de handleSubmitSendResetEmail :", err);
+      return false;
+    }
+  };
 
+  
 
   return (
     <FormContainer>

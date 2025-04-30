@@ -25,7 +25,7 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/google', google);
 
-//déconnoxion
+//déconnexion
 router.post('/signout', signout);
 
 //Vérification d'email
