@@ -72,7 +72,7 @@ export const deleteUser = async (req, res, next) => {
 }  
 
 // @desc    réinitialiser un mot de passe
-// @route   PUT /api/users/resetPassword/:id
+// @route   POST /api/users/resetPassword/:id
 // @access  Privé (token)
 
 export const resetPasswordUser = async (req, res, next) => {

@@ -88,6 +88,9 @@ export default function ForgotPassword() {
     }
   }
 
+  // Envoyer un mail avec un lien pour ensuite se diriger vers RestPassword avec auth
+
+
 
   return (
     <FormContainer>

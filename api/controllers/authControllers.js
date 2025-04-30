@@ -1,7 +1,11 @@
+//mùodels
 import User from "../models/userModel.js";
-import bcryptjs from "bcryptjs";
+//utils
+import { sendResetEmail } from "../utils/emailService.js";
 import { errorHandler } from "../utils/error.js";
+//crypt
 import jwt from "jsonwebtoken";
+import bcryptjs from "bcryptjs";
 
 // test
 export const display = (req, res) => {
@@ -249,4 +253,33 @@ export const verifyReponseSecret = async (req, res) => {
     console.error("❌ Stack :", error.stack);
     res.status(500).json({ message: "Erreur serveur" });
   }
+};
+
+
+//@desc envoie le mail avec lien pour resetPassword
+// @route   POST /api/auth/sendResetEmail
+// @access  Private
+
+
+export const resetPasswordRequest = async (req, res) => {
+  const { email } = req.body;
+  console.log("email de resetPasswordRequest " , email)
+
+  // Logique pour récupérer l'utilisateur et envoyer l'email
+  const user = await User.findOne({ email });
+  console.log("user de resetPasswordRequest", user)
+
+
+  if (!user) {
+    return res.status(404).json({ message: 'Utilisateur non trouvé' });
+  }
+
+  try {
+    await sendResetEmail(user.email, user._id);
+    return res.status(200).json({ message: 'Email envoyé avec succès' });
+  } catch (err) {
+    console.error("Erreur captée dans resetPasswordRequest :", err);
+    return res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email' });
+  }
+  
 };

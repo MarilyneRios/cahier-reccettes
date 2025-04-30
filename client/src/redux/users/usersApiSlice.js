@@ -35,7 +35,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    //profilpage et forgotPassword
+    //profilpage 
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
         url: `${USERS_URL}/update/${id}`,
@@ -76,8 +76,17 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: { email, reponseSecret },
       }),
     }),
-    
 
+    // réinitialiser un mot de passe
+    // POST /api/users/resetPassword/:id
+    //Privé (token)
+    resetPassword: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `${USERS_URL}/resetPassword/${id}`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -93,4 +102,5 @@ export const {
   useGetUserByEmailQuery,
   useLazyGetUserByEmailQuery,
   useVerifyReponseSecretMutation,  
+  useresetPasswordUserMutation,
 } = userApiSlice;

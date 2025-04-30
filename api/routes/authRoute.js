@@ -1,8 +1,17 @@
 
 import express from 'express';
 import { verifyToken } from '../utils/verifyUser.js';
+import { sendResetEmail } from "../utils/emailService.js";
 
-import { display, signin, signup,google, signout, getUserByEmail, verifyReponseSecret } from '../controllers/authControllers.js';
+import { display, 
+    signin, 
+    signup,
+    google, 
+    signout, 
+    getUserByEmail, 
+    verifyReponseSecret,
+    resetPasswordRequest,
+} from '../controllers/authControllers.js';
 
 const router = express.Router();
 
@@ -24,5 +33,10 @@ router.get("/getUserByEmail", getUserByEmail);
 
 //Comaprer les reponseSecrete
 router.post("/verifyReponseSecret", verifyReponseSecret);
+
+//pour envoyer le mail avec un lien pour resetPassword
+router.post('/sendResetEmail', resetPasswordRequest); 
+
+
 
 export default router;

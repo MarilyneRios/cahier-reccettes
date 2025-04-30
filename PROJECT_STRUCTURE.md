@@ -19,6 +19,8 @@ CAHIER-RECETTE/
 │   ├── utils/
 │   │   ├── error.js
 │   │   └── verifyUser.js
+│   │   └── emailService.js
+│   │   └── tokenService.js
 │   └── index.js
 │
 ├── client/
