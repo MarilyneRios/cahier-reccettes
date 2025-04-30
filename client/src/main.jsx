@@ -30,13 +30,13 @@ const router = createBrowserRouter(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<Home />} />
       <Route path='/sign-in' element={<SignIn />} />     
-      <Route path='/forgotPassword' element={<ForgotPassword />} />     
+      <Route path='/forgotPassword' element={<ForgotPassword />} />   
+      <Route path='/resetPassword' element={<ResetPassword />} />   
       <Route path='/about' element={<About />} />
       <Route path='/sign-up' element={<SignUp />} />
       <Route path='/privacy-policy' element={<PolitiqueCookies />} />
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
-        <Route path='/resetPassword' element={<ResetPassword />} /> 
         <Route path='/viewRecipes' element={<ViewRecipes />} />
         <Route path='/addRecipe' element={<AddRecipe />} />
         <Route path='/displayRecipe/:id' element={<DisplayRecipe/>} />

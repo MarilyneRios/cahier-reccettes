@@ -27,7 +27,7 @@ export const sendResetEmail = async (userEmail, userId) => {
       text: `Vous avez demandé à réinitialiser votre mot de passe.`,
       html: `
         <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
-        <p>Voici le lien pour réinitialiser : <a href="https://tonsite.com/reset-password/${userId}">Réinitialiser</a></p>
+        <p>Voici le lien pour réinitialiser : <a href="https://mon-cahier-de-reccettes.onrender.com/reset-password/${userId}">Réinitialiser</a></p>
       `,
     });
 
