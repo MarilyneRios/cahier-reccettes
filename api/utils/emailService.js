@@ -12,11 +12,11 @@ export const sendResetEmail = async (userEmail, userId) => {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
-   // tls: {
-   //  rejectUnauthorized: false, // Accepte les certificats auto-signés si nécessaire
-   // },
-    //logger: true, 
-    //debug: true,
+    tls: {
+     rejectUnauthorized: false, // Accepte les certificats auto-signés si nécessaire
+    },
+    logger: true, 
+    debug: true,
   });
 
   try {

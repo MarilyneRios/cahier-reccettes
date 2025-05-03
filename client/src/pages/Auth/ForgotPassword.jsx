@@ -94,6 +94,8 @@ export default function ForgotPassword() {
     
       if (res.success) {
         toast.success("Un email vous a été envoyé !");
+        toast.success("⚠️ L'email peut apparaître dans vos spam ! ⚠️");
+
         await handleSubmitSendResetEmail(); 
         navigate("/");
       } else {
