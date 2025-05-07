@@ -2,6 +2,7 @@
 import User from "../models/userModel.js";
 //utils
 import { sendResetEmail } from "../utils/emailService.js";
+import {sendLoginNotificationEmail } from "../utils/emailConnexion.js";
 import { errorHandler } from "../utils/error.js";
 //crypt
 import jwt from "jsonwebtoken";
@@ -100,6 +101,15 @@ export const signin = async (req, res, next) => {
 
     // Définir une expiration pour le cookie
     const expiryDate = new Date(Date.now() + 4 * 60 * 60 * 1000); // 4h en ms
+
+    //envoyer un mail pour signifier qu'il y a eu une connexion
+    
+    try {
+      await sendLoginNotificationEmail(validUser.email, validUser._id);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'email :", error);
+      // Ne bloque pas la connexion si l'email échoue
+    }
 
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })

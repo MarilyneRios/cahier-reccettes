@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 //Composant réutilisable
 import FormContainer from "../../components/shared/FormContainer";
 
@@ -79,7 +80,7 @@ export default function ResetPassword() {
 
       // La mutation pour updateUser via RTK Query et ".unwrap();"
       const res = await updateUser({
-        id: userId._id,
+        id: userId,
         // Mettre à jour les données à mettre à jour
         data: updatedData,
       }).unwrap();
