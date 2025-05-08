@@ -11,6 +11,7 @@ import { display,
     getUserByEmail, 
     verifyReponseSecret,
     resetPasswordRequest,
+    resetPassword,
 } from '../controllers/authControllers.js';
 
 const router = express.Router();
@@ -31,11 +32,15 @@ router.post('/signout', signout);
 //Vérification d'email
 router.get("/getUserByEmail", getUserByEmail);
 
-//Comaprer les reponseSecrete
+//Comparer les reponseSecrete
 router.post("/verifyReponseSecret", verifyReponseSecret);
 
 //pour envoyer le mail avec un lien pour resetPassword
 router.post('/sendResetEmail', resetPasswordRequest); 
+
+// Route pour réinitialiser le mot de passe via un lien avec ID (et token si utilisé)
+router.post("/resetPassword/:id", resetPassword);
+
 
 
 

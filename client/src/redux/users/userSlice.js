@@ -24,12 +24,14 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    
     //signout
     signOutSuccess: (state) => {
       state.currentUser = null;
       state.loading = false;
       state.error = false;
     },
+
     //update
     updateUserStart: (state) => {
       state.loading = true;
@@ -43,6 +45,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
     //delete
     deleteUserStart: (state) => {
       state.loading = true;
@@ -56,6 +59,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
     //forgotPassword
     forgotPasswordStart: (state) => {
       state.loading = true;
@@ -69,7 +73,20 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    //envoie le mail avec lien pour resetPassword
+
+    //resetPassword
+    resetUserStart: (state) => {
+      state.loading = true;
+    },
+    resetUserSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = false;
+    },
+    resetUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -87,6 +104,9 @@ export const {
   forgotPasswordStart,
   forgotPasswordSuccess,
   forgotPasswordFailure,
+  resetUserStart,
+  resetUserSuccess,
+  resetUserFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

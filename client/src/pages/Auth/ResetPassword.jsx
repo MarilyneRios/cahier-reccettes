@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from 'react-router-dom';
 import { Form, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 //Composant réutilisable
@@ -11,12 +12,12 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 //redux userSlice
 import {
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
+  resetUserStart,
+  resetUserSuccess,
+  resetUserFailure,
 } from "../../redux/users/userSlice";
 // Importation de useSignInMutation:
-import { useUpdateUserMutation } from "../../redux/users/usersApiSlice";
+//import { useUpdateUserMutation } from "../../redux/users/usersApiSlice";
 import "../Profile/Profile.css";
 
 ///////////////////////////////////////////////////////////////////
@@ -24,9 +25,10 @@ import "../Profile/Profile.css";
 //////////////////////////////////////////////////////////////////
 
 export default function ResetPassword() {
-  const { userId } = useParams();
-  const { loading } = useSelector((state) => state.user);
-  console.log("userId", userId)
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const token = queryParams.get('token');
 
   const [formData, setFormData] = useState({
     password: "",
@@ -36,14 +38,16 @@ export default function ResetPassword() {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
   const [localError, setLocalError] = useState("");
-  const [updateSuccess, setUpdateSuccess] = useState(false);
+ 
 
   // hook de navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
+  console.log("user info", loading);
 
   // Déclaration RTK Query du hook useUpdateUserMutation pour updateUser
-  const [updateUser] = useUpdateUserMutation();
+  //const [updateUser] = useUpdateUserMutation();
 
   ////////////////////////////////////////////
   // Fonction de gestion du changement de valeur des champs du formulaire
@@ -66,34 +70,36 @@ export default function ResetPassword() {
     }
 
     // Créez une copie de l'objet formData
-    const updatedData = { ...formData };
+    const resetData = { ...formData };
 
     // Vérifiez si le champ 'password' est vide
-    if (!updatedData.password) {
+    if (!resetData.password) {
       // Si le champ 'password' est vide, supprimez les propriétés 'password' et 'passwordConfirm'
-      delete updatedData.password;
-      delete updatedData.passwordConfirm;
+      delete resetData.password;
+      delete resetData.passwordConfirm;
     }
 
     try {
-      dispatch(updateUserStart());
+      //dispatch(resetUserStart());
 
       // La mutation pour updateUser via RTK Query et ".unwrap();"
-      const res = await updateUser({
-        id: userId,
+      //const res = await updateUser({
+        //id: userId,
+       // token,
         // Mettre à jour les données à mettre à jour
-        data: updatedData,
-      }).unwrap();
+       // data: resetData,
+      //}).unwrap();
 
-      if (res.success === false) {
-        dispatch(updateUserFailure(res));
-        return;
-      }
-      dispatch(updateUserSuccess(res));
-      setUpdateSuccess(true);
+     // if (res.success === false) {
+     //   dispatch(resetUserFaillure,(res));
+     //   return;
+     // }
+     // dispatch(resetUserSuccess,(res));
+     // setresetUserSuccess,(true);
       navigate("/sign-in");
     } catch (error) {
-      dispatch(updateUserFailure(error));
+     // dispatch(resetUserFaillure,(error));
+      setLocalError("Erreur lors de la réinitialisation du mot de passe.");
     }
   };
 
@@ -190,8 +196,10 @@ export default function ResetPassword() {
             <p className="text-danger mt-5">
               {localError && "Quelque chose ne va pas !"}
             </p>
+
+            
             <p className="text-success mt-5">
-              {updateSuccess &&
+              {resetUserSuccess,
                 "Les modifications sont mises à jour avec succès !"}
             </p>
           </div>

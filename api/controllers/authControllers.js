@@ -114,7 +114,7 @@ export const signin = async (req, res, next) => {
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
-      .json({ ...userData, token });
+      .json({ ...userData, token  });
   } catch (error) {
     next(error);
   }
@@ -291,4 +291,60 @@ export const resetPasswordRequest = async (req, res) => {
     return res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email' });
   }
   
+};
+
+
+//@desc mofidifer le password perdu (resetPassword)
+// @route   POST /api/auth/resetPassword/USER_ID?token=XYZ
+// @access  Public (avec token temporaire sécurisé)
+
+export const resetPassword = async (req, res, next) => {
+  const { email, password } = req.body;
+  const { id } = req.params;
+  const token = req.query.token;
+
+  
+  console.log("🔧 resetPassword triggered");
+  console.log("📥 Params ID:", id);
+  console.log("📥 Query token:", token);
+  console.log("📥 Body:", req.body);
+
+  // Vérifier la présence des champs obligatoires
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email et mot de passe sont requis." });
+  }
+
+  try {
+    // Vérifie le token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("🔐 Token décodé :", decoded);
+    
+    if (decoded.id !== id) {
+      return res.status(401).json({ message: "Token invalide pour cet utilisateur." });
+    }
+
+    // Vérifier si l'utilisateur existe avec l'ID et l'email
+    const user = await User.findOne({ _id: id, email });
+
+    if (!user) {
+      return next(errorHandler(404, "Utilisateur non trouvé."));
+    }
+
+    // Hasher le nouveau mot de passe
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    // Mettre à jour le mot de passe de l'utilisateur
+    user.password = hashedPassword;
+    await user.save();
+
+    // Répondre sans renvoyer le mot de passe
+    const { password: _, ...userWithoutPassword } = user._doc;
+
+    return res.status(200).json({
+      message: "Mot de passe mis à jour avec succès.",
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    return next(error);
+  }
 };

@@ -76,17 +76,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // réinitialiser un mot de passe
-    // POST /api/users/resetPassword/:id
-    //Privé (token)
-    resetPassword: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `${USERS_URL}/resetPassword/${id}`,
-        method: "POST",
-        body: data,
-      }),
-    }),
-
     // envoie le mail avec lien pour resetPassword
     //  POST /api/auth/sendResetEmail
     //  Public
@@ -96,7 +85,20 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: {email}, // { email: "adbcd@email.com" }
       }),
-    })
+    }),
+    
+    // réinitialiser un mot de passe
+    // POST /api/auth/resetPassword/USER_ID?token=XYZ
+    // avec email et newPassword dans le body
+    //Public
+    resetPassword: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `${AUTH_URL}/resetPassword/{USER_ID}?${id}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
   }),
 });
 
