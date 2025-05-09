@@ -88,16 +88,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     
     // réinitialiser un mot de passe
+    // le lien du mail => `http://localhost:5173/resetPassword/${userId}?token=${token}`;
+    // le format Json attendu : {"email": "atigra.rios@gmail.com", "password": "NewPasswordInsomnia"}
     // POST /api/auth/resetPassword/USER_ID?token=XYZ
-    // avec email et newPassword dans le body
+    // avec email et password dans le body
     //Public
     resetPassword: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `${AUTH_URL}/resetPassword/{USER_ID}?${id}`,
+      query: ({ id, token, data }) => ({
+        url: `${AUTH_URL}/resetPassword/${id}?token=${token}`,
         method: "POST",
         body: data,
       }),
     }),
+    
 
   }),
 });
@@ -115,5 +118,5 @@ export const {
   useLazyGetUserByEmailQuery,
   useVerifyReponseSecretMutation,
   useResetPasswordRequestMutation,
-
+  useResetPasswordMutation,
 } = userApiSlice;

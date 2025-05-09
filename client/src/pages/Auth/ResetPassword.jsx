@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 //Composant réutilisable
@@ -16,8 +16,8 @@ import {
   resetUserSuccess,
   resetUserFailure,
 } from "../../redux/users/userSlice";
-// Importation de useSignInMutation:
-//import { useUpdateUserMutation } from "../../redux/users/usersApiSlice";
+
+import { useResetPasswordMutation } from "../../redux/users/usersApiSlice";
 import "../Profile/Profile.css";
 
 ///////////////////////////////////////////////////////////////////
@@ -25,20 +25,23 @@ import "../Profile/Profile.css";
 //////////////////////////////////////////////////////////////////
 
 export default function ResetPassword() {
-
+  const { id } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get('token');
+  const token = queryParams.get("token");
 
+  console.log("📩 Début de resetPassword")
+  // Initialisation de l'état pour les données du formulaire
   const [formData, setFormData] = useState({
-    password: "",
-    passwordConfirm: "",
+      email: "",
+      password: "",
+      passwordConfirm: "",
   });
 
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
   const [localError, setLocalError] = useState("");
- 
+  const [success, setSuccess] = useState(false);
 
   // hook de navigation
   const navigate = useNavigate();
@@ -46,8 +49,8 @@ export default function ResetPassword() {
   const { loading } = useSelector((state) => state.user);
   console.log("user info", loading);
 
-  // Déclaration RTK Query du hook useUpdateUserMutation pour updateUser
-  //const [updateUser] = useUpdateUserMutation();
+  // Déclaration RTK Query du hook useResetPasswordMutation pour updateUser
+  const [resetPassword] = useResetPasswordMutation();
 
   ////////////////////////////////////////////
   // Fonction de gestion du changement de valeur des champs du formulaire
@@ -69,36 +72,27 @@ export default function ResetPassword() {
       return;
     }
 
-    // Créez une copie de l'objet formData
-    const resetData = { ...formData };
-
-    // Vérifiez si le champ 'password' est vide
-    if (!resetData.password) {
-      // Si le champ 'password' est vide, supprimez les propriétés 'password' et 'passwordConfirm'
-      delete resetData.password;
-      delete resetData.passwordConfirm;
+    if (!formData.password) {
+      setLocalError("Le mot de passe est requis.");
+      return;
     }
 
     try {
-      //dispatch(resetUserStart());
+      dispatch(resetUserStart());
 
-      // La mutation pour updateUser via RTK Query et ".unwrap();"
-      //const res = await updateUser({
-        //id: userId,
-       // token,
-        // Mettre à jour les données à mettre à jour
-       // data: resetData,
-      //}).unwrap();
+      const res = await resetPassword({
+        id,
+        token,
+        data: {
+          email: formData.email,
+          password: formData.password,
+        },
+      }).unwrap();
 
-     // if (res.success === false) {
-     //   dispatch(resetUserFaillure,(res));
-     //   return;
-     // }
-     // dispatch(resetUserSuccess,(res));
-     // setresetUserSuccess,(true);
+      dispatch(resetUserSuccess(res));
       navigate("/sign-in");
     } catch (error) {
-     // dispatch(resetUserFaillure,(error));
+      dispatch(resetUserFailure(error));
       setLocalError("Erreur lors de la réinitialisation du mot de passe.");
     }
   };
@@ -110,7 +104,7 @@ export default function ResetPassword() {
       <div className=""></div>
       <FormContainer>
         <h1 className="d-flex justify-content-center text-dark">
-        Réinitialiser votre mot de passe
+          Réinitialiser votre mot de passe
         </h1>
 
         <Form onSubmit={handleSubmit}>
@@ -123,7 +117,7 @@ export default function ResetPassword() {
               placeholder="Email"
               value={email}
               autoComplete="email"
-              readOnly
+              onChange={handleChange}
             />
           </Form.Group>
           {/* Entrer votre nouveau mot de passe */}
@@ -193,15 +187,13 @@ export default function ResetPassword() {
           </Button>
 
           <div>
-            <p className="text-danger mt-5">
-              {localError && "Quelque chose ne va pas !"}
-            </p>
+            {localError && <p className="text-danger mt-5">{localError}</p>}
 
-            
-            <p className="text-success mt-5">
-              {resetUserSuccess,
-                "Les modifications sont mises à jour avec succès !"}
-            </p>
+            {success  && (
+              <p className="text-success mt-5">
+                Les modifications ont été mises à jour avec succès !
+              </p>
+            )}
           </div>
         </Form>
       </FormContainer>
