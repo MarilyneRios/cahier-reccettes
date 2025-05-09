@@ -30,8 +30,8 @@ export const sendResetEmail = async (userEmail, userId) => {
   const token = generateResetToken(userId);
 
   // Lien de réinitialisation avec le token inclus
-  //const resetLink = `https://mon-cahier-de-reccettes.onrender.com/resetPassword/${userId}?token=${token}`;
- const resetLink = `http://localhost:5173/resetPassword/${userId}?token=${token}`;
+  const resetLink = `https://mon-cahier-de-reccettes.onrender.com/resetPassword/${userId}?token=${token}`;
+ //const resetLink = `http://localhost:5173/resetPassword/${userId}?token=${token}`;
  //console.log("lien pour tester dans insomnia :", resetLink )
 
 
