@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { visualizer } from 'rollup-plugin-visualizer';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -15,7 +17,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    visualizer({ open: true })
+     ...(isProduction ? [] : [visualizer()]),
   ],
   optimizeDeps: {
     exclude: ['chunk-m324agam.js']
