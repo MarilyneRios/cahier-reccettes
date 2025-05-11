@@ -13,11 +13,11 @@ import "./ViewRecipes.css";
 export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {} }) {
   // Résultats de la barre de recherche
   const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || [] );
-  console.log("Search results from Redux store:", searchResults); // Log des résultats de recherche
+  //console.log("Search results from Redux store:", searchResults); // Log des résultats de recherche
 
   // Résultats des filtres
   const filteredResults = useSelector((state) => state.recipe.filteredResults || []);  
-  console.log("Filter results from Redux store:", filteredResults);
+  //console.log("Filter results from Redux store:", filteredResults);
 
   const {
     data: recipesData,
@@ -29,7 +29,7 @@ export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {}
     pageNumber: currentPage,
     pageSize: 6,
   });
-  console.log("Recipes Data ViewRecipe:", recipesData); 
+ // console.log("Recipes Data ViewRecipe:", recipesData); 
 
   useEffect(() => {
     refetch();
@@ -48,7 +48,7 @@ export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {}
     : searchResults.length > 0
     ? searchResults
     : recipesData?.recipes || [];
-  console.log("Displayed Recipes ViewRecipe:", displayedRecipes); 
+  //console.log("Displayed Recipes ViewRecipe:", displayedRecipes); 
 
   if (displayedRecipes.length === 0) {
     return (
@@ -76,7 +76,7 @@ export default function ViewRecipes({ currentPage, onTotalPagesChange = () => {}
     <div className="d-flex flex-wrap justify-content-center">
       <div
         className="row row-cols-1 row-cols-md-3 g-4 my-3"
-        style={{ width: "80%" }}
+        style={{ width: "90%" }}
       >
         {displayedRecipes.slice(0, 6).map((recipe) => (
           <div className="col d-flex justify-content-center" key={recipe._id}>

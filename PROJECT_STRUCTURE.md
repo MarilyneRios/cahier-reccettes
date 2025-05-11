@@ -5,7 +5,6 @@ CAHIER-RECETTE/
 │   ├── controllers/
 │   │   ├── authControllers.js
 │   │   ├── favoriteRecipeController.js
-│   │   ├── oldRecipeController.js
 │   │   ├── recipeController.js
 │   │   └── userController.js
 │   ├── models/
@@ -19,9 +18,11 @@ CAHIER-RECETTE/
 │   ├── utils/
 │   │   ├── error.js
 │   │   └── verifyUser.js
+│   │   └── emailConnexion.js
 │   │   └── emailService.js
 │   │   └── tokenService.js
 │   └── index.js
+│   └── readme.md
 │
 ├── client/
 │   ├── public/
