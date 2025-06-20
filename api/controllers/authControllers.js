@@ -2,7 +2,7 @@
 import User from "../models/userModel.js";
 //utils
 import { sendResetEmail } from "../utils/emailService.js";
-import {sendLoginNotificationEmail } from "../utils/emailConnexion.js";
+import { sendLoginNotificationEmail } from "../utils/emailConnexion.js";
 import { errorHandler } from "../utils/error.js";
 //crypt
 import jwt from "jsonwebtoken";
@@ -10,7 +10,7 @@ import bcryptjs from "bcryptjs";
 
 // test
 export const display = (req, res) => {
-  console.log("display request received");
+  // console.log("display request received");
   res.json({
     message: "hello world on api/authRoutes and authControllers",
   });
@@ -21,7 +21,7 @@ export const display = (req, res) => {
 // @access  Public
 export const signup = async (req, res, next) => {
   const { username, email, password, questionSecret, reponseSecret } = req.body;
-  console.log("req.body reçu :", req.body);
+  //console.log("req.body reçu :", req.body);
   try {
     // Vérifier la présence des champs obligatoires
     if (!password || !questionSecret || !reponseSecret) {
@@ -93,17 +93,17 @@ export const signin = async (req, res, next) => {
 
     // Génération du token avec expiration
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "4h",
+      expiresIn: "2h",
     });
 
     // Suppression du mot de passe des données utilisateur retournées
     const { password: hashedPassword, ...userData } = validUser._doc;
 
     // Définir une expiration pour le cookie
-    const expiryDate = new Date(Date.now() + 4 * 60 * 60 * 1000); // 4h en ms
+    const expiryDate = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2h en ms
 
     //envoyer un mail pour signifier qu'il y a eu une connexion
-    
+
     try {
       await sendLoginNotificationEmail(validUser.email, validUser._id);
     } catch (error) {
@@ -114,7 +114,7 @@ export const signin = async (req, res, next) => {
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
-      .json({ ...userData, token  });
+      .json({ ...userData, token });
   } catch (error) {
     next(error);
   }
@@ -123,16 +123,27 @@ export const signin = async (req, res, next) => {
 // @desc    Connexion d'un utilisateur via Google (avec création de compte si nécessaire)
 // @route   POST /api/auth/google
 // @access  Public
+// @desc    Connexion d'un utilisateur via Google (avec création de compte si nécessaire)
+// @route   POST /api/auth/google
+// @access  Public
 export const google = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const { name, email, photo } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email manquant." });
+    }
+
+    let user = await User.findOne({ email });
+
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "4h",
+        expiresIn: "2h",
       });
       const { password: hashedPassword, ...userData } = user._doc;
-      const expiryDate = new Date(Date.now() + 14400000); // 4 heures
-      res
+      const expiryDate = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 heures
+
+      return res
         .cookie("access_token", token, {
           httpOnly: true,
           expires: expiryDate,
@@ -144,24 +155,32 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+
       const newUser = new User({
         username:
-          req.body.name.split(" ").join("").toLowerCase() +
-          Math.random().toString(36).slice(-8),
-        email: req.body.email,
+          name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email,
         password: hashedPassword,
-        profilePicture: req.body.photo,
+        profilePicture: photo,
       });
+
       await newUser.save();
+
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "4h",
+        expiresIn: "2h", // ou TOKEN_EXPIRATION si défini
       });
-      const { password: hashedPassword2, ...userData } = newUser._doc;
-      const expiryDate = new Date(Date.now() + 14400000); // 4 heures
-      res
+
+      const expiryDate = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2h
+
+      const { password, ...userData } = newUser._doc;
+
+      return res
         .cookie("access_token", token, {
           httpOnly: true,
           expires: expiryDate,
+          sameSite: "Lax",
+          secure: process.env.NODE_ENV === "production",
         })
         .status(200)
         .json({ ...userData, token });
@@ -171,6 +190,7 @@ export const google = async (req, res, next) => {
   }
 };
 
+
 // @desc    Déconnexion d'un utilisateur
 // @route   GET /api/auth/signout
 // @access  Public
@@ -179,14 +199,14 @@ export const signout = (req, res) => {
   try {
     // Suppression du cookie access_token
     res.clearCookie("access_token");
-    console.log("Cookie access_token cleared");
+   // console.log("Cookie access_token cleared");
 
     // Vérification si le cookie est vraiment supprimé
     const cookiesAfterClear = req.cookies["access_token"];
     if (!cookiesAfterClear) {
-      console.log("Cookies successfully cleared");
+      //console.log("Cookies successfully cleared");
     } else {
-      console.log("Cookies not cleared:", cookiesAfterClear);
+     // console.log("Cookies not cleared:", cookiesAfterClear);
     }
 
     // Réponse de succès
@@ -203,40 +223,40 @@ export const signout = (req, res) => {
 // @access  Public
 export const getUserByEmail = async (req, res) => {
   const { email } = req.query;
-  console.log("👉 Requête reçue pour la récupération de la question secrète.");
-  console.log("📧 Email fourni :", email);
+  //console.log("👉 Requête reçue pour la récupération de la question secrète.");
+  //console.log("📧 Email fourni :", email);
   try {
-    const user = await User.findOne({ email }).select("email questionSecret"); 
-   
+    const user = await User.findOne({ email }).select("email questionSecret");
+
     if (!user) {
       console.warn("⚠️ Aucun utilisateur trouvé avec cet email :", email);
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
 
     res.status(200).json({ questionSecret: user.questionSecret });
-
   } catch (error) {
-    console.error("❌ Erreur lors de la récupération de l'utilisateur :", error);
+    console.error(
+      "❌ Erreur lors de la récupération de l'utilisateur :",
+      error
+    );
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
-
-
 
 // @desc    Vérifie la réponse secrète à une question
 // @route   POST /api/auth/verifyReponseSecret
 // @access  Public
 export const verifyReponseSecret = async (req, res) => {
-  console.log("📦 Corps reçu :", req.body);
+  //console.log("📦 Corps reçu :", req.body);
 
   //récupèr email et reponseSecret du body
   const { email,  reponseSecret } = req.body;
-  console.log("👉 Requête reçue pour vérifier la réponse secrète à une question.");
-  console.log("📧 Email + réponse fournie :", email, reponseSecret);
+  //console.log("👉 Requête reçue pour vérifier la réponse secrète à une question.");
+  //console.log("📧 Email + réponse fournie :", email, reponseSecret);
 
   try {
     //récupère email et reponseSecret de bdd
-    const user = await User.findOne({ email }).select("email reponseSecret"); 
+    const user = await User.findOne({ email }).select("email reponseSecret");
     // vérification user existe
     if (!user) {
       console.warn("❌ Utilisateur non trouvé pour email:", email);
@@ -245,15 +265,22 @@ export const verifyReponseSecret = async (req, res) => {
 
     // vérification reponseSecret existe
     if (!user.reponseSecret) {
-      console.warn("❌ La réponse secrète n'est pas définie pour l'utilisateur:", email);
-      return res.status(400).json({ message: "La réponse secrète n'est pas définie pour cet utilisateur" });
+      console.warn(
+        "❌ La réponse secrète n'est pas définie pour l'utilisateur:",
+        email
+      );
+      return res
+        .status(400)
+        .json({
+          message: "La réponse secrète n'est pas définie pour cet utilisateur",
+        });
     }
 
     // décrypter user.reponseSecret afin depouvoir comparer avec reponseSecret du body
     const isMatch = await bcryptjs.compare(reponseSecret, user.reponseSecret);
 
     if (isMatch) {
-      console.log("✅ Réponse secrète correcte pour", email);
+     // console.log("✅ Réponse secrète correcte pour", email);
       return res.status(200).json({ success: true });
     } else {
       console.warn("❌ Réponse secrète incorrecte pour", email);
@@ -265,34 +292,33 @@ export const verifyReponseSecret = async (req, res) => {
   }
 };
 
-
 //@desc envoie le mail avec lien pour resetPassword
 // @route   POST /api/auth/sendResetEmail
 // @access  Public
 
 export const resetPasswordRequest = async (req, res) => {
   const { email } = req.body;
-  console.log("email de resetPasswordRequest " , email)
+  //console.log("email de resetPasswordRequest " , email)
 
   // Logique pour récupérer l'utilisateur et envoyer l'email
   const user = await User.findOne({ email });
-  console.log("user de resetPasswordRequest", user)
+  //console.log("user de resetPasswordRequest", user)
 
 
   if (!user) {
-    return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    return res.status(404).json({ message: "Utilisateur non trouvé" });
   }
 
   try {
     await sendResetEmail(user.email, user._id);
-    return res.status(200).json({ message: 'Email envoyé avec succès' });
+    return res.status(200).json({ message: "Email envoyé avec succès" });
   } catch (err) {
     console.error("Erreur captée dans resetPasswordRequest :", err);
-    return res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email' });
+    return res
+      .status(500)
+      .json({ message: "Erreur lors de l'envoi de l'email" });
   }
-  
 };
-
 
 //@desc mofidifer le password perdu (resetPassword)
 // @route   POST /api/auth/resetPassword/USER_ID?token=XYZ
@@ -304,23 +330,27 @@ export const resetPassword = async (req, res, next) => {
   const token = req.query.token;
 
   
-  console.log("🔧 resetPassword triggered");
-  console.log("📥 Params ID:", id);
-  console.log("📥 Query token:", token);
-  console.log("📥 Body:", req.body);
+  //console.log("🔧 resetPassword triggered");
+  //console.log("📥 Params ID:", id);
+  //console.log("📥 Query token:", token);
+  //console.log("📥 Body:", req.body);
 
   // Vérifier la présence des champs obligatoires
   if (!email || !password) {
-    return res.status(400).json({ message: "Email et mot de passe sont requis." });
+    return res
+      .status(400)
+      .json({ message: "Email et mot de passe sont requis." });
   }
 
   try {
     // Vérifie le token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("🔐 Token décodé :", decoded);
+  //  console.log("🔐 Token décodé :", decoded);
     
     if (decoded.id !== id) {
-      return res.status(401).json({ message: "Token invalide pour cet utilisateur." });
+      return res
+        .status(401)
+        .json({ message: "Token invalide pour cet utilisateur." });
     }
 
     // Vérifier si l'utilisateur existe avec l'ID et l'email

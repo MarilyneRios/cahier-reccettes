@@ -10,7 +10,8 @@ import { useSearchFavoriteRecipeQuery } from "../../../redux/favorites/favoriteA
 import { useNavigate } from "react-router-dom";
 
 import { FaSearch } from "react-icons/fa";
-import "./SearchBar.css"; 
+import "./searchBar.styles.css"; 
+
 
 export default function SearchBarFavorite() {
   
@@ -31,18 +32,18 @@ const { data: searchResults, refetch } = useSearchFavoriteRecipeQuery(searchTerm
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (searchTerm) {
-    console.log("Search term for favorite submitted:", searchTerm); 
+ //   console.log("Search term for favorite submitted:", searchTerm); 
     const results = await refetch();
     
-    console.log("Search results for favorite:", results);
-    console.log(`Nombre de recettes trouvées : ${results.data?.length}`);
+ //   console.log("Search results for favorite:", results);
+ //   console.log(`Nombre de recettes trouvées : ${results.data?.length}`);
 
     if (results.data && results.data.length > 0) {
-      console.log("Dispatching search results for favorite:", results.data);
+ //     console.log("Dispatching search results for favorite:", results.data);
       dispatch(setFavoriteSearchResults(results.data));
       navigate("/allFavoriteRecipe");
     } else {
-      console.log("No data received from search query.");
+ //     console.log("No data received from search query.");
     }
     
   }

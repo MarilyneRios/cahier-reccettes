@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "./Header.css";
+import "./header.styles.css";
 
 // icons
 import { FaUserCircle, FaHome, FaInfoCircle } from "react-icons/fa";

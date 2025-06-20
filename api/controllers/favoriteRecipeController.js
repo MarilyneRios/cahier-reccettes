@@ -9,7 +9,7 @@ import { errorHandler } from "../utils/error.js";
 
 // Fonction utilitaire pour récupérer toutes les recettes favorites d'un utilisateur
 const getUserFavoriteRecipes = async (userId) => {
-  console.log(`Récupération des recettes favorites pour l'utilisateur ${userId}...`);
+  //console.log(`Récupération des recettes favorites pour l'utilisateur ${userId}...`);
 
   const user = await User.findById(userId).populate({
     path: 'savedRecipe',
@@ -18,13 +18,13 @@ const getUserFavoriteRecipes = async (userId) => {
   });
 
   if (!user) {
-    console.log("Utilisateur non trouvé");
+   // console.log("Utilisateur non trouvé");
     throw errorHandler(404, "Utilisateur non trouvé");
   }
 
   const userRecipes = await Recipe.find({ userRef: userId }).populate("userRef", "username profilePicture");
 
-  console.log(`Recettes favorites récupérées : ${user.savedRecipe.length}, Recettes créées par l'utilisateur : ${userRecipes.length}`);
+  //console.log(`Recettes favorites récupérées : ${user.savedRecipe.length}, Recettes créées par l'utilisateur : ${userRecipes.length}`);
 
   return user.savedRecipe.concat(userRecipes);
 };
@@ -41,7 +41,7 @@ export const addFavoriteRecipe = async (req, res) => {
 
     // 2. Récupérer l'ID de la recette depuis le body
     const { recipeId } = req.body;
-    console.log("1. Recipe ID received:", recipeId);
+    //console.log("1. Recipe ID received:", recipeId);
 
     // 3. Vérifier si `recipeId` est fourni et valide
     if (!recipeId || !mongoose.Types.ObjectId.isValid(recipeId)) {
@@ -53,14 +53,14 @@ export const addFavoriteRecipe = async (req, res) => {
     if (!recipe) {
       return res.status(404).json({ message: "Recette introuvable" });
     }
-    console.log("2. Recipe found:", recipe.title);
+   // console.log("2. Recipe found:", recipe.title);
 
     // 5. Récupérer l'utilisateur authentifié
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
-    console.log("3. User found:", user.username);
+   // console.log("3. User found:", user.username);
 
     // 6. Vérifier si la recette est déjà enregistrée
     if (user.savedRecipe.includes(recipeId)) {
@@ -70,7 +70,7 @@ export const addFavoriteRecipe = async (req, res) => {
     // 7. Ajouter la recette aux favoris
     user.savedRecipe.push(recipeId);
     await user.save();
-    console.log("4. Updated user saved recipes:", user.savedRecipe);
+    //console.log("4. Updated user saved recipes:", user.savedRecipe);
 
     // 8. Retourner la liste mise à jour des recettes favorites
     return res.status(200).json({ savedRecipes: user.savedRecipe });
@@ -87,7 +87,7 @@ export const removeFavoriteRecipe = async (req, res, next) => {
   try {
     // 1. Accéder à l'ID de la recette depuis les paramètres de l'URL
     const recipeId = req.params.id; 
-    console.log("1. recipeID", recipeId);
+   // console.log("1. recipeID", recipeId);
 
     // 2. Vérifier si l'ID de la recette est fourni
     if (!recipeId) {
@@ -96,7 +96,7 @@ export const removeFavoriteRecipe = async (req, res, next) => {
 
     // 3. Trouver la recette
     const recipe = await Recipe.findById(recipeId);
-    console.log("2. Recette trouvée :", recipe);
+   // console.log("2. Recette trouvée :", recipe);
 
     // 4. Vérifier si la recette existe
     if (!recipe) {
@@ -105,11 +105,11 @@ export const removeFavoriteRecipe = async (req, res, next) => {
 
     // 5. 'user' est un objet utilisateur authentifié
     const userId = req.user.id;
-    console.log("3. ID utilisateur depuis la requête :", userId);
+   // console.log("3. ID utilisateur depuis la requête :", userId);
 
     // 6. Trouver l'utilisateur
     const user = await User.findById(userId);
-    console.log("4. Utilisateur trouvé :", user);
+   // console.log("4. Utilisateur trouvé :", user);
 
     // 7. Vérifier si l'utilisateur est null
     if (!user) {
@@ -119,7 +119,7 @@ export const removeFavoriteRecipe = async (req, res, next) => {
     // 8. Supprimer le recipeId de la liste des recettes sauvegardées
     user.savedRecipe = user.savedRecipe.filter(id => id.toString() !== recipeId.toString()); // Suppression à l'aide de filter
     await user.save();
-    console.log("5. Recettes sauvegardées mises à jour :", user.savedRecipe);
+    //console.log("5. Recettes sauvegardées mises à jour :", user.savedRecipe);
 
     // 9. Retourner un message de succès
     return res.json({ message: 'Recette supprimée des favoris avec succès', savedRecipes: user.savedRecipe });
@@ -137,7 +137,7 @@ export const getAllFavoriteRecipes = async (req, res, next) => {
     const pageSize = 6;
     const page = Number(req.query.pageNumber) || 1;
 
-    console.log(`Pagination: page ${page}, pageSize ${pageSize}`);
+    //console.log(`Pagination: page ${page}, pageSize ${pageSize}`);
 
     // 1. Récupérer les recettes favorites de l'utilisateur
     const favoriteRecipes = await getUserFavoriteRecipes(req.user.id);
@@ -146,7 +146,7 @@ export const getAllFavoriteRecipes = async (req, res, next) => {
       return res.status(200).json({ message: "Aucune recette favorite trouvée" });
     }
 
-    console.log(`Nombre total de recettes favorites : ${favoriteRecipes.length}`);
+    //console.log(`Nombre total de recettes favorites : ${favoriteRecipes.length}`);
 
     // 2. Appliquer la pagination sur toutes les recettes
     const startIndex = (page - 1) * pageSize;
@@ -177,7 +177,7 @@ export const searchFavoriteRecipe = async (req, res, next) => {
       return next(errorHandler(400, "Une recherche query est requise!"));
     }
 
-    console.log(`Recherche de recettes avec le terme : ${query}`);
+   // console.log(`Recherche de recettes avec le terme : ${query}`);
 
     // Récupérer les recettes favorites de l'utilisateur
     const favoriteRecipes = await getUserFavoriteRecipes(req.user.id);
@@ -213,7 +213,7 @@ export const searchFavoriteRecipe = async (req, res, next) => {
       return nameMatch || usernameMatch || ingredientsMatch || countryMatch || modeCookMatch || regimeMatch || categoryMatch;
     });
 
-    console.log(`Recettes filtrées : ${filteredRecipes.length}`);
+   // console.log(`Recettes filtrées : ${filteredRecipes.length}`);
 
     if (filteredRecipes.length === 0) {
       return res.status(404).json({ message: "Aucune recette trouvée" });
@@ -235,7 +235,7 @@ export const filtreFavoriteRecipe = async (req, res, next) => {
   try {
     // Récupérer les critères de filtrage depuis les query parameters
     const { country, category, regime, modeCook } = req.query;
-    console.log(`Filtres reçus :`, { country, category, regime, modeCook });
+  //  console.log(`Filtres reçus :`, { country, category, regime, modeCook });
 
     // Récupérer les recettes favorites de l'utilisateur
     const favoriteRecipes = await getUserFavoriteRecipes(req.user.id);
@@ -260,7 +260,7 @@ export const filtreFavoriteRecipe = async (req, res, next) => {
       return countryMatch && categoryMatch && regimeMatch && modeCookMatch;
     });
 
-    console.log(`Recettes filtrées : ${filteredRecipes.length}`);
+  //  console.log(`Recettes filtrées : ${filteredRecipes.length}`);
 
    
 
@@ -272,5 +272,3 @@ export const filtreFavoriteRecipe = async (req, res, next) => {
     next(errorHandler(500, "Erreur serveur, veuillez réessayer plus tard"));
   }
 };
-
-

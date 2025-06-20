@@ -1,0 +1,38 @@
+/*viewRecipes.styles.css*/
+
+/* centrer les cards */
+#viewRecipes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#viewRecipes .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 20px;
+  justify-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* effet sur les cards du #viewRecipes  */
+#viewRecipes .card:hover {
+  transform: scale(1.50);
+  transition: transform 0.3s ease-in-out;
+}
+
+.row-cols-md-3 {
+  margin: 0 auto; /* Centre le contenu de la grille */
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
+  z-index:1;
+}
+
+

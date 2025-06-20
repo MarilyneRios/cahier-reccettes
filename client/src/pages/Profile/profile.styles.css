@@ -1,4 +1,4 @@
-/* Profile.css */
+/* profile.styles.css */
 
 .cursor-pointer:hover {
     cursor: pointer;
@@ -6,10 +6,7 @@
 }
   
 .btnProfil{
-    
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     transform-style: preserve-3d;
     box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
 }
-
-

@@ -48,7 +48,7 @@ export default function ForgotPassword() {
   // email  vérification
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
-    console.log("📤 Formulaire email soumis avec:", email);
+   // console.log("📤 Formulaire email soumis avec:", email);
     setError(null);
     setShowSecret(false);
 
@@ -78,7 +78,7 @@ export default function ForgotPassword() {
   // Query RTK
   const [verifyReponseSecret, { verifyReponseSecretData, isSuccess }] =
     useVerifyReponseSecretMutation();
-  console.log("👤 Résultat de verifyReponseSecret:", {
+    console.log("👤 Résultat de verifyReponseSecret:", {
     verifyReponseSecretData,
     isSuccess,
   });
@@ -90,7 +90,7 @@ export default function ForgotPassword() {
 
     try {
       const res = await verifyReponseSecret({ email, reponseSecret }).unwrap();
-      console.log("✅ Résultat complet de verifyReponseSecret:", res);
+      //console.log("✅ Résultat complet de verifyReponseSecret:", res);
     
       if (res.success) {
         toast.success("Un email vous a été envoyé !");
@@ -111,20 +111,17 @@ export default function ForgotPassword() {
   //envoyer le mail avec un lien pour resetPassword
   //////////////////////////////////////////////////////////////
   const [sendResetEmail, {dataSendResetEmail} ] = useResetPasswordRequestMutation();
-  console.log("👤 Résultat de sendResetEmail:", {
-    dataSendResetEmail,
-    isSuccess,
-  });
+  //console.log("👤 Résultat de sendResetEmail:", { dataSendResetEmail, isSuccess, });
 
   const handleSubmitSendResetEmail = async () => {
     try {
       const res = await sendResetEmail({ email }).unwrap();
-      console.log("✅ Résultat complet de handleSubmitSendResetEmail:", res);
+     // console.log("✅ Résultat complet de handleSubmitSendResetEmail:", res);
       setMessage(res.message); // "Email envoyé avec succès"
       return true;
     } catch (err) {
       setMessage(err?.data?.message || 'Erreur lors de l\'envoi de l\'email');
-      console.error("❌ Erreur lors de handleSubmitSendResetEmail :", err);
+     // console.error("❌ Erreur lors de handleSubmitSendResetEmail :", err);
       return false;
     }
   };

@@ -18,7 +18,7 @@ import {
 } from "../../redux/users/userSlice";
 
 import { useResetPasswordMutation } from "../../redux/users/usersApiSlice";
-import "../Profile/Profile.css";
+import "../Profile/profile.styles.css";
 
 ///////////////////////////////////////////////////////////////////
 //ResetPassword
@@ -30,7 +30,7 @@ export default function ResetPassword() {
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
 
-  console.log("📩 Début de resetPassword")
+ // console.log("📩 Début de resetPassword")
   // Initialisation de l'état pour les données du formulaire
   const [formData, setFormData] = useState({
       email: "",
@@ -47,7 +47,7 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);
-  console.log("user info", loading);
+  //console.log("user info", loading);
 
   // Déclaration RTK Query du hook useResetPasswordMutation pour updateUser
   const [resetPassword] = useResetPasswordMutation();
@@ -59,7 +59,7 @@ export default function ResetPassword() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setLocalError("");
   };
-  console.log(formData);
+ // console.log(formData);
 
   ////////////////////////////////////////////
   // Fonction de soumission du formulaire

@@ -55,14 +55,14 @@ export default function SignUp() {
       setShowPasswordConsigne(value.length > 0);
     }
   };
-  console.log("formData de sin-up",formData);
+//  console.log("formData de sin-up",formData);
   // Gestion de la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     // Log pour debug des données avant soumission
-    console.log("formData complet :", formData);
-    console.log("passwordConfirm :", passwordConfirm);
+   // console.log("formData complet :", formData);
+   // console.log("passwordConfirm :", passwordConfirm);
   
     // Vérification des champs obligatoires
     if (
@@ -96,7 +96,7 @@ export default function SignUp() {
       // Exécution de la mutation d'inscription
       const res = await signUp(formData).unwrap();
   
-      console.log("Réponse du back :", res);
+    //  console.log("Réponse du back :", res);
   
       setLoading(false);
   
@@ -111,7 +111,7 @@ export default function SignUp() {
   
     } catch (error) {
       setLoading(false);
-      console.error("Erreur lors de l'inscription :", error);
+    //  console.error("Erreur lors de l'inscription :", error);
       setError(
         error?.data?.message ||
           "Une erreur s'est produite lors de l'inscription."
@@ -211,7 +211,8 @@ export default function SignUp() {
       <option value="Quelle est votre ville de naissance ?">Quelle est votre ville de naissance ?</option>
       <option value="Quel est le nom de votre plat préféré ?">Quel est le nom de votre plat préféré ?</option>
       <option value="Quelle est votre couleur préférée ?">Quelle est votre couleur préférée ?</option>
-      <option value="Quel est le prénom de votre meilleur ami d'enfance ?">Quel est le prénom de votre meilleur ami d'enfance ?</option>
+      <option value="Quel est le deuxième prénom de votre mère ?">Quel est le deuxième prénom de votre mère ?</option>
+   
     </Form.Control>
   </Form.Group>
 

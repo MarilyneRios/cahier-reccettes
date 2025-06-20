@@ -1,0 +1,50 @@
+/* Conteneur principal de la barre de recherche */
+.search-bar {
+  width: 100%;
+  max-width: 600px; 
+  background: var(--bgcolor);
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.4); 
+  overflow: hidden; /* S'assure que rien ne dépasse des bords arrondis */
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  flex-grow: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.85);
+}
+
+/* Style de l'input */
+.search-input {
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Effet sur l'input au focus */
+.search-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* placeholder */
+.form-control::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+/* Pour Microsoft Edge */
+.form-control::-ms-input-placeholder {
+  color: white;
+}
+/* Style du bouton de recherche */
+.search-btn {
+  border: none;
+  padding: 0.5rem 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Style au survol pour le bouton */
+.search-btn:hover {
+  background-color: #155724; /* Vert plus foncé au survol */
+}
+

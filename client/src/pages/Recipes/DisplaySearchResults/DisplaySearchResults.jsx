@@ -8,8 +8,8 @@ const DisplaySearchResults = ({ onBack }) => {
   const searchResults = useSelector((state) => state.recipe.searchResults?.recipes || []);
   const filteredResults = useSelector((state) => state.recipe.filteredResults?.recipes || []);
 
-  console.log("Search results from Redux store:", searchResults);
-  console.log("Filter results from Redux store:", filteredResults);
+  //console.log("Search results from Redux store:", searchResults);
+  //console.log("Filter results from Redux store:", filteredResults);
 
   const displayedRecipes = filteredResults.length > 0 ? filteredResults : searchResults;
 

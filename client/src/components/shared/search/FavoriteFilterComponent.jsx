@@ -83,10 +83,10 @@ export default function FavoriteFilterComponent() {
     });
 
     if (Object.keys(filters).length > 0) {
-      console.log("Recherche avec filtres favorite :", filters);
+     // console.log("Recherche avec filtres favorite :", filters);
       triggerFilter(filters);
     } else {
-      console.log("Aucun filtre favorite n'a été appliqué.");
+     // console.log("Aucun filtre favorite n'a été appliqué.");
       dispatch(setFavoriteSearchResults([])); // Réinitialiser les résultats de la recherche
     }
   }, [
@@ -101,13 +101,13 @@ export default function FavoriteFilterComponent() {
   // Quand les données arrivent
   useEffect(() => {
     if (data) {
-      console.log("Données reçues :", data);
+     // console.log("Données reçues :", data);
       if (data.length > 0) {
-        console.log(`Nombre de recettes trouvées : ${data.length}`);
+     //   console.log(`Nombre de recettes trouvées : ${data.length}`);
         dispatch(setFavoriteSearchResults(data));
         navigate("/allFavoriteRecipe");
       } else {
-        console.log("Aucune recette trouvée.");
+      //  console.log("Aucune recette trouvée.");
         dispatch(setFavoriteSearchResults([]));
         toast.success("Aucune recette trouvée pour tous ces critères spécifiés !");
       }
@@ -144,8 +144,8 @@ export default function FavoriteFilterComponent() {
           value={selectedFavoriteCategory}
           onChange={(e) => {
             setSelectedFavoriteCategory(e.target.value);
-            console.log("Action setSelectedCategory :", setSelectedFavoriteCategory);
-            console.log("Selected category :", e.target.value);
+           // console.log("Action setSelectedCategory :", setSelectedFavoriteCategory);
+           // console.log("Selected category :", e.target.value);
           }}
           className="border border-3 border-success px-2 input-filter-Favorite"
         >
@@ -164,8 +164,8 @@ export default function FavoriteFilterComponent() {
     value={selectedFavoriteRegime}
     onChange={(e) => {
       setSelectedFavoriteRegime(e.target.value);
-      console.log("Action setSelectedFavoriteRegime :", setSelectedFavoriteRegime);
-      console.log("Selected regime :", e.target.value);
+    //  console.log("Action setSelectedFavoriteRegime :", setSelectedFavoriteRegime);
+    //  console.log("Selected regime :", e.target.value);
     }}
     className="border border-3 border-success px-2 input-filter-Favorite"
   >
@@ -185,8 +185,8 @@ export default function FavoriteFilterComponent() {
           value={selectedFavoriteModecook}
           onChange={(e) => {
             setSelectedFavoriteModecook(e.target.value);
-            console.log("Action setSelectedModecook :", setSelectedFavoriteModecook);
-            console.log("Selected ModeCook :", e.target.value);
+         //   console.log("Action setSelectedModecook :", setSelectedFavoriteModecook);
+         //   console.log("Selected ModeCook :", e.target.value);
           }}
           className="border border-3 border-success px-2 input-filter-Favorite"
         >
@@ -207,8 +207,8 @@ export default function FavoriteFilterComponent() {
           value={searchFavoriteTermCountry}
           onChange={(e) => {
             setSearchFavoriteTermCountry(e.target.value);
-            console.log("Action setSearchTermCountry :", setSearchFavoriteTermCountry);
-            console.log("Selected SearchTermCountry :", e.target.value);
+         //   console.log("Action setSearchTermCountry :", setSearchFavoriteTermCountry);
+         //   console.log("Selected SearchTermCountry :", e.target.value);
           }}
           className="border border-3 border-success px-2 input-filter-Favorite"
         />

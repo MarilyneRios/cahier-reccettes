@@ -158,7 +158,7 @@ export const displayOneRecipe = async (req, res, next) => {
 // @route   PATCH /api/recipes/:id
 // @access  Private (token)
 export const updateRecipe = async (req, res, next) => {
-  console.log('Received request to update recipeId:', req.params.id);
+//  console.log('Received request to update recipeId:', req.params.id);
   const recipeId = req.params.id;
 
   try {
@@ -167,7 +167,7 @@ export const updateRecipe = async (req, res, next) => {
       return res.status(401).json({ message: "Vous n'êtes pas authentifié" });
     }
 
-    console.log('Request body:', req.body);
+  //  console.log('Request body:', req.body);
 
     const recipe = await Recipe.findById(recipeId).populate('userRef', 'username profilePicture');
 
@@ -232,7 +232,7 @@ export const updateRecipe = async (req, res, next) => {
 // @route   DELETE /api/recipes/:id
 // @access  Private (token)
 export const deleteRecipe = async (req, res, next) => {
-  console.log('Received request to delete recipeId:', req.params.id);
+ // console.log('Received request to delete recipeId:', req.params.id);
 
   try {
       // 1. Trouver la recette par ID et populate 'userRef'
@@ -249,7 +249,7 @@ export const deleteRecipe = async (req, res, next) => {
           console.error('Unauthorized delete attempt. Recipe user ID:', recipe.userRef ? recipe.userRef._id : 'undefined', 'Request user ID:', req.user.id);
           return res.status(403).json({ message: "Vous n'avez pas l'autorisation de supprimer cette recette" });
       } else {
-          console.log('Authorized delete. User ID:', req.user.id);
+         // console.log('Authorized delete. User ID:', req.user.id);
       }
       
       // 4. Supprimer la recette
@@ -263,111 +263,9 @@ export const deleteRecipe = async (req, res, next) => {
   }
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Search et filtrer
-///////////////////////////////////////////////////////////////////////////
-/*
-export const searchRecipe = async (req, res, next) => {
-  try {
-    // Affiche la requête reçue avec les paramètres
-    console.log("🔍 Requête reçue avec query :", req.query);
-
-    // Récupération des critères de recherche
-    const { name, country, category, regime, ingredient, pseudo } = req.query;
-
-    // Vérification si aucun critère n'est fourni
-    if (!name && !country && !category && !regime && !ingredient && !pseudo) {
-      console.log("❌ Aucun critère de recherche fourni");
-      return res.status(400).json({
-        success: false,
-        message: "Aucun critère de recherche fourni.",
-        statusCode: 400,
-      });
-    }
-
-    // Initialisation de l'objet filter pour la recherche
-    let filter = {};
-
-    // Fonction pour générer une regex permettant la recherche avec plusieurs mots
-    const createMultiWordRegex = (query) => {
-      console.log(`📌 Création de regex pour "${query}"`);
-      const words = query.trim().split(/\s+/); // Sépare par espace
-      return new RegExp(words.join("&"), "i"); // Recherche "OU" entre les mots
-    };
-
-    // Application des filtres sur chaque critère fourni
-    if (name) {
-      filter.name = { $regex: createMultiWordRegex(name) };
-      console.log("📝 Filtre ajouté - name :", filter.name);
-    }
-    if (country) {
-      filter.country = { $regex: createMultiWordRegex(country) };
-      console.log("🌍 Filtre ajouté - country :", filter.country);
-    }
-    if (category) {
-      filter.category = { $regex: createMultiWordRegex(category) };
-      console.log("🍽️ Filtre ajouté - category :", filter.category);
-    }
-    if (regime) {
-      filter.regime = { $regex: createMultiWordRegex(regime) };
-      console.log("🥗 Filtre ajouté - regime :", filter.regime);
-    }
-    if (ingredient) {
-      filter["ingredients.name"] = { $regex: createMultiWordRegex(ingredient) };
-      console.log("🥕 Filtre ajouté - ingredient :", filter["ingredients.name"]);
-    }
-
-    // Recherche de l'utilisateur si le pseudo est spécifié
-    if (pseudo) {
-      console.log("👤 Recherche de l'auteur :", pseudo);
-      const user = await User.findOne({ username: { $regex: createMultiWordRegex(pseudo) } });
-      console.log("👤 Auteur trouvé :", user);
-      if (user) {
-        filter.userRef = user._id;
-        console.log("🔗 Filtre ajouté - userRef :", filter.userRef);
-      } else {
-        console.log("❌ Auteur non trouvé");
-      }
-    }
-
-    // Affiche le filtre final avant la recherche
-    console.log("🔍 Filtre final :", filter);
-
-    // Recherche des recettes avec les filtres dynamiques
-    const recipes = await Recipe.find(filter).populate("userRef", "username");
-
-    // Affiche le nombre de recettes trouvées
-    console.log("📜 Nombre de recettes trouvées :", recipes.length);
-
-    // Si aucune recette n'est trouvée, on renvoie un message d'erreur
-    if (recipes.length === 0) {
-      console.log("❌ Aucune recette trouvée");
-      return res.status(404).json({
-        success: false,
-        message: "Aucune recette trouvée pour les critères fournis.",
-        statusCode: 404,
-      });
-    }
-
-    // Retourner les résultats si des recettes sont trouvées
-    console.log("✅ Envoi des résultats :", recipes);
-    res.status(200).json({
-      success: true,
-      recipes,
-    });
-  } catch (error) {
-    // Si une erreur survient, on l'affiche dans la console
-    console.error("❌ Erreur dans la recherche :", error);
-    next(error);
-  }
-};
-
-*/
-
-
 
 ///////////////////////////////////////////////////////////////////////////
-//  old Search et filtrer
+//  Search et filtrer
 ///////////////////////////////////////////////////////////////////////////
 // @desc    Search recipes & display one recipe on homeScreen
 // @route   GET /api/recipes/search/:query
@@ -377,7 +275,7 @@ export const searchRecipe = async (req, res, next) => {
   try {
     // 1. Récupération du terme de recherche dans les paramètres
     const searchTerm = req.params.query;
-    console.log('searchTerm is', searchTerm);
+   // console.log('searchTerm is', searchTerm);
 
     // 2. Si aucun terme de recherche n'est fourni
     if (!searchTerm) {
@@ -396,7 +294,7 @@ export const searchRecipe = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(searchTerm)) {
       // Si le terme de recherche n'est pas un ObjectId, rechercher un utilisateur par nom
       user = await User.findOne({ username: { $regex: searchRegex } });
-      console.log('user found:', user);
+      //console.log('user found:', user);
     }
 
     // 5. Recherche des recettes par nom, pays, modeCook ou userRef (si user trouvé)
@@ -441,8 +339,8 @@ export const filtreRecipe = async (req, res, next) => {
     // 1️⃣ Récupérer les paramètres de la query string (dans l'URL)
     const { country, category, regime, pseudo, modeCook } = req.query;
 
-    console.log(country, category, regime, pseudo, modeCook);
-    console.log("Filtres reçus côté backend : ", req.query);
+   // console.log(country, category, regime, pseudo, modeCook);
+   // console.log("Filtres reçus côté backend : ", req.query);
 
     // 2️⃣ Créer un objet vide qui contiendra dynamiquement les critères de filtre pour MongoDB
     let filter = {};
@@ -487,7 +385,7 @@ export const filtreRecipe = async (req, res, next) => {
     }
 
     // 5️⃣ Recherche dans la base Recipe selon les filtres construits
-    console.log("Filtres avant recherche dans la base de données : ", filter);
+    //console.log("Filtres avant recherche dans la base de données : ", filter);
     const recipes = await Recipe.find(filter).populate("userRef", "username"); // populate pour inclure le username du user lié à chaque recette
 
     // 6️⃣ Si aucune recette trouvée : renvoyer un message d'erreur 404
@@ -512,50 +410,3 @@ export const filtreRecipe = async (req, res, next) => {
     next(error);
   }
 };
-
-
-
-
-/*
-// Par soucis de réduire les requêtes elles ne sont pas utilisées
-// Bien que fonctionnelles dans insomnia
-// @desc    Filter recipes by regime & diplay one recipe on homeScreen
-// @route   GET /api/recipes/regime/:regime
-// @access  Public
-export const filtreRegimeRecipe = async (req, res, next) => {
-  try {
-    // 1. Récupérer le paramètre de regime dans les query params
-    const regime = req.query.regime;
-    console.log(regime);
-    
-    // 2. Vérifier si le regime est fournie
-    if (!regime) {
-      return res.status(400).json({
-        success: false,
-        message: "Le paramètre 'regime' est requis.",
-        statusCode: 400,
-      });
-    }
-
-    //3. Filtrer les recettes par regime
-    const recipes = await Recipe.find({ regime: regime });
-
-    // Si aucune recette n'est trouvée
-    if (recipes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Aucune recette trouvée pour le regime spécifié.",
-        statusCode: 404,
-      });
-    }
-
-    //4. Retourner les recettes filtrées
-    res.status(200).json({
-      success: true,
-      recipes,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-*/

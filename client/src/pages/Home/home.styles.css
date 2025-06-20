@@ -1,0 +1,40 @@
+/* home.styles.css */
+
+#HeroHome {
+  min-height:90vh;
+  max-width: 100%;
+  position: relative;
+
+}
+
+.MiseEnFormeHome {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* section des cards de Viewrecipes*/
+#ViewRecipesHome {
+  max-width: 100%;
+  min-height: 90vh;
+  position: relative; 
+  z-index: 1;
+}
+.HeaderPlace{
+  height: 4rem;
+}
+
+
+.custom-text-shadow {
+  text-shadow: 5px 5px 8px rgba(0, 0, 0, 0.75);
+}
+
+/* Styles for tablets (e.g., screens smaller than 768px) */
+@media (max-width: 768px) {
+  .header{
+    
+    margin-top: 2.5rem;;
+  }
+}

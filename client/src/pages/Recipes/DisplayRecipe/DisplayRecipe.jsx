@@ -46,7 +46,6 @@ export default function DisplayRecipe() {
   const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.user);
-
   const [errorMessage, setErrorMessage] = useState("");
 
   // Utilisation du hook pour récupérer la recette
@@ -68,7 +67,11 @@ export default function DisplayRecipe() {
   }, [recipe, dispatch]);
 
   // Vérifier si la recette est déjà dans les favoris
-  const { data: favoriteData } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
+  const {
+    data: favoriteData,
+    isLoading: isLoadingFavorites,
+    isSuccess: isSuccessFavorites,
+  } = useGetAllFavoriteRecipesQuery({ pageNumber: 1, pageSize: 6 });
 
   // Vérification si l'utilisateur est le créateur de la recette
   const userId = currentUser?._id || null;
@@ -76,7 +79,7 @@ export default function DisplayRecipe() {
   const isCreator = userId === creatorId;
 
   // Vérifier si la recette est dans les favoris
-  const isFavorite = recipe && favoriteData?.recipes.some((fav) => fav._id === recipe._id);
+  const isFavorite = recipe && isSuccessFavorites && favoriteData?.recipes?.some((fav) => fav._id === recipe._id);
 
   // Mutations pour ajouter/supprimer des favoris
   const [addFavoriteRecipe] = useAddFavoriteRecipeMutation();
@@ -87,7 +90,6 @@ export default function DisplayRecipe() {
     e.stopPropagation(); // Empêcher la propagation du clic sur la carte
 
     try {
-      // Si la recette est déjà dans les favoris, on la supprime
       if (isFavorite) {
         await removeFavoriteRecipe(recipe._id);  // Supprimer des favoris sur le backend
       } else {
@@ -95,6 +97,7 @@ export default function DisplayRecipe() {
       }
     } catch (err) {
       console.error("Erreur lors de la gestion des favoris", err);
+      toast.error("Une erreur est survenue.");
     }
   };
 

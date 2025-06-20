@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDisplayAllRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
 import { Spinner } from "react-bootstrap";
 import CardRecipe from "../../../components/recipes/CardRecipe";
-import "./ViewRecipes.css";
+import "./viewRecipes.styles.css";
 
 /////////////////////////////////////////////////////////
 // ViewRecipes

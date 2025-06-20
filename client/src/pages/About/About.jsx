@@ -1,7 +1,7 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
-import './About.css';
+import './about.styles.css';
 
 export default function About() {
   return (

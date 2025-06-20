@@ -10,7 +10,7 @@ import { useSearchRecipesQuery, } from "../../../redux/recipes/recipesApiSlice";
 import { useNavigate } from "react-router-dom";
 
 import { FaSearch } from "react-icons/fa";
-import "./SearchBar.css"; 
+import "./searchBar.styles.css"; 
 
 export default function SearchBar() {
 
@@ -31,11 +31,11 @@ const [searchTerm, setSearchTerm] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (searchTerm) {
-      console.log("Search term submitted:", searchTerm); // Log du terme de recherche
+    // console.log("Search term submitted:", searchTerm); // Log du terme de recherche
       const results = await refetch();
-      console.log("Search results:", results); // Log des résultats de la recherche
+    //  console.log("Search results:", results); // Log des résultats de la recherche
       if (results.data) {
-       console.log("Dispatching search results:", results.data); // Log des résultats avant le dispatch
+    //   console.log("Dispatching search results:", results.data); // Log des résultats avant le dispatch
         dispatch(setSearchResults(results.data));
         navigate("/");
         setTimeout(() => {
@@ -46,7 +46,7 @@ const [searchTerm, setSearchTerm] = useState("");
         }, 100);
 
       }else {
-        console.log("No data received from search query.");
+     //   console.log("No data received from search query.");
       }
     }
   };

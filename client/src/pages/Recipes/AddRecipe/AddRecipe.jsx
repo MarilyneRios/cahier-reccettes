@@ -221,7 +221,7 @@ export default function AddRecipe() {
   ///////////////////////////////////////////////////////////////////////
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("👉 Données envoyées :", recipe);
+   // console.log("👉 Données envoyées :", recipe);
   
     if (
       !recipe.name ||
@@ -240,11 +240,11 @@ export default function AddRecipe() {
     try {
       setIsLoading(true);
       const createdRecipe = await addRecipe(recipe).unwrap();
-      console.log("✅ Recette créée :", createdRecipe);
+     // console.log("✅ Recette créée :", createdRecipe);
       toast.success("Recette créée avec succès !");
       navigate(`/displayRecipe/${createdRecipe.savedRecipe._id}`);
     } catch (error) {
-      console.error("❌ Erreur backend :", error);
+      //console.error("❌ Erreur backend :", error);
       toast.error("Erreur lors de la création !");
       setError("Erreur lors de la création de la recette.");
       setIsLoading(false);

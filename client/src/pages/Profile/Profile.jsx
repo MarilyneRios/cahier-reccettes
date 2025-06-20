@@ -33,7 +33,10 @@ import {
   useDeleteUserMutation,
   useUpdateUserMutation,
 } from "../../redux/users/usersApiSlice";
-import "./Profile.css";
+import "./profile.styles.css";
+
+import DeleteAccountButton from "../../components/shared/DeleteAcountButton";
+
 
 //////////////////////////////////////////////////////////////////
 // Profile
@@ -55,6 +58,8 @@ export default function Profile() {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
   const [localError, setLocalError] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
 
   // états pour upload images
   const [image, setImage] = useState(undefined);
@@ -131,7 +136,7 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setLocalError("");
   };
-  console.log(formData);
+ // console.log(formData);
 
   /////////////////////////////////////////////////
   // Fonction de validation de fichier (si erreur)
@@ -192,48 +197,7 @@ export default function Profile() {
     }
   };
 
-  ////////////////////////////////////////////
-  // Supprimer un compte User
-  /////////////////////////////////////////////
-  const handleDeleteAccount = async () => {
-    try {
-      dispatch(deleteUserStart());
 
-      // Savoir où cela commence dans la console
-      //console.log("Début de la suppression de l'utilisateur");
-
-      // Vérifier les datas envoyées à la mutation RTK Query
-      //console.log("ID de l'utilisateur :", currentUser._id);
-      //console.log("Token JWT :", currentUser.accessToken);
-
-      // La mutation pour deleteUser via RTK Query et ".unwrap();"
-      const res = await deleteUser({
-        id: currentUser._id,
-        // token JWT du user dans header sinon erreur 401 Unauthorized
-        headers: {
-          Authorization: `Bearer ${currentUser.accessToken}`,
-        },
-      }).unwrap();
-
-      // Voir la réponse de l'API
-      //console.log("Réponse de l'API après la suppression :", res);
-
-      // Vérification de la réponse
-      if (res.success === false) {
-        //console.log("Échec de la suppression de l'utilisateur :", res);
-        dispatch(deleteUserFailure(res));
-        return;
-      }
-
-      // Si tout est ok, succès de la suppression
-      //console.log("Suppression de l'utilisateur réussie :", res);
-      dispatch(deleteUserSuccess(res));
-      navigate("/");
-    } catch (error) {
-      // console.error("Erreur lors de la suppression de l'utilisateur :", error);
-      dispatch(deleteUserFailure(error));
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -245,9 +209,9 @@ export default function Profile() {
       // Log pour vérifier l'état des cookies après la déconnexion
       const cookies = document.cookie;
       if (cookies.includes("access_token")) {
-        console.log("Le cookie access_token est toujours présent:", cookies);
+       // console.log("Le cookie access_token est toujours présent:", cookies);
       } else {
-        console.log("Le cookie access_token a été supprimé avec succès.");
+       // console.log("Le cookie access_token a été supprimé avec succès.");
       }
 
       navigate("/");
@@ -429,13 +393,17 @@ export default function Profile() {
               <div className="d-flex justify-content-between mt-3">
                 <span
                   className="btn text-danger "
-                  onClick={handleDeleteAccount}
+                  onClick={() => setShowDeleteConfirm(true)}
                 >
                   <FaTrashAlt /> Supprimer le compte
                 </span>
                 <span className="btn text-danger " onClick={handleSignOut}>
                   <FaUnlock /> Déconnexion
                 </span>
+                {showDeleteConfirm && (
+  <DeleteAccountButton onClose={() => setShowDeleteConfirm(false)} />
+)}
+
               </div>
               <div>
                 <p className="text-danger mt-5">

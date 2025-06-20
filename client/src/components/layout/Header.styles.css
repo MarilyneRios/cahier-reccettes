@@ -7,6 +7,8 @@
 }
 
 /*********************************/
+
+/*********************************/
 /* side barre*/
 .headerD {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -26,17 +28,10 @@
   overflow-y: auto;
 }
 
-/*
-.custom-accordion-header {
-  height: 50px; 
-  display: flex;
-  align-items: center;
-  padding: 0 ; 
-}*/
- .custom-accordion-body{
+.custom-accordion-body{
   height: 40px; 
   align-items: center;
- }
+}
 
 /* Couleur des liens pdt survol */
 .custom-dropdown-menu .dropdown-item:hover {
@@ -71,6 +66,8 @@
   color: #155724;
 }
 /*********************************/
+
+/*********************************/
 /* Navbar.Brand*/
 .link-navbarBrand {
   color: white !important;
@@ -92,8 +89,6 @@
 }
 
 /*********************************/
-
-
 
 /*********************************/
 /*image de profil*/

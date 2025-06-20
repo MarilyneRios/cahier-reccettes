@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useLazyFilterRecipesQuery } from "../../../redux/recipes/recipesApiSlice";
 import { setFilteredResults, resetFilters, setSearchResults } from "../../../redux/recipes/recipeSlice";
 //css style
-import "../../layout/Header.css";
+import "../../layout/header.styles.css";
 
 // Mapping des valeurs affichées (UX) vers les valeurs attendues par l’API (backend)
 const categoryMapping = {
@@ -82,13 +82,13 @@ const FilterComponent = () => {
       }
     });
 
-    console.log("Filtres avant envoi :", filters);
+  //  console.log("Filtres avant envoi :", filters);
 
     if (Object.keys(filters).length > 0) {
-      console.log("Recherche avec filtres :", filters);
+    //  console.log("Recherche avec filtres :", filters);
       triggerFilter(filters);
     } else {
-      console.log("Aucun filtre appliqué.");
+     // console.log("Aucun filtre appliqué.");
       dispatch(setFilteredResults([])); // Réinitialiser les résultats de la recherche
     }
   }, [selectedCategory, selectedRegime, selectedModeCook, searchTermCountry, dispatch, triggerFilter]);
@@ -96,10 +96,10 @@ const FilterComponent = () => {
   // Quand les données arrivent
   useEffect(() => {
     if (data) {
-      console.log("Données reçues :", data);
+    //  console.log("Données reçues :", data);
       if (data.recipes && data.recipes.length > 0) {
-        console.log(`Nombre de recettes trouvées : ${data.recipes.length}`);
-        console.log("Dispatching setFilteredResults with:", data.recipes);
+     //   console.log(`Nombre de recettes trouvées : ${data.recipes.length}`);
+      //  console.log("Dispatching setFilteredResults with:", data.recipes);
         dispatch(setFilteredResults(data.recipes));
         navigate("/"); //viewRecipes partie
         setTimeout(() => {
@@ -109,7 +109,7 @@ const FilterComponent = () => {
           }
         }, 100);
       } else {
-        console.log("Aucune recette trouvée.");
+     //   console.log("Aucune recette trouvée.");
         dispatch(setFilteredResults([]));
         toast.success("Aucune recette trouvée pour ces critères !");
       }
@@ -149,7 +149,7 @@ const FilterComponent = () => {
               className={`accordionBody ${selectedCategory === category ? "bg-success text-white" : ""} custom-accordion-body `}
               onClick={() => {
                 setSelectedCategory(category);
-                console.log("Selected category :", category);
+              //  console.log("Selected category :", category);
               }}
             >
               {category}
@@ -171,7 +171,7 @@ const FilterComponent = () => {
               className={`accordionBody ${selectedRegime === regime ? "bg-success text-white" : ""}  custom-accordion-body`}
               onClick={() => {
                 setSelectedRegime(regime);
-                console.log("Selected Regime :", regime);
+             //   console.log("Selected Regime :", regime);
               }}
               
             >
@@ -194,7 +194,7 @@ const FilterComponent = () => {
               className={`accordion-body-scroll accordionBody ${selectedModeCook === modeCook ? "bg-success text-white" : ""}  custom-accordion-body`}
               onClick={() => {
                 setSelectedModeCook(modeCook);
-                console.log("Selected ModeCook :", modeCook);
+              //  console.log("Selected ModeCook :", modeCook);
               }}
             >
               {modeCook}

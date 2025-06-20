@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../../components/shared/FormContainer";
@@ -26,12 +26,24 @@ export default function SignIn() {
   // Accès à l'état de chargement et d'erreur depuis Redux
   const { loading, error } = useSelector((state) => state.user);
 
+  //1ere connexion google juste après création compte
+const { currentUser } = useSelector((state) => state.user); // déjà dans le store
+
+
   // hook de navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
+
   // Déclaration RTK Query du hook useSignInMutation pour sign-in
   const [signIn] = useSignInMutation();
+
+    useEffect(() => {
+  if (currentUser) {
+    navigate("/");
+  }
+}, [currentUser, navigate]);
 
   // Gérer les modifications d'entrée et mettre à jour l'état des données du formulaire
   const handleChange = (e) => {
@@ -52,14 +64,14 @@ export default function SignIn() {
       // Vérifie si signIn est une fonction avant de l'appeler
       if (typeof signIn === "function") {
         // Effectue la mutation de connexion à l'aide de la requête RTK
-        console.log("Envoi des données de connexion:", formData);
+        //console.log("Envoi des données de connexion:", formData);
         const res = await signIn(formData).unwrap();
-        console.log("Réponse de la mutation:", res);
+      //  console.log("Réponse de la mutation:", res);
 
         // Recherche d'erreurs dans la réponse
         if (res.success === false) {
           const errorMessage = translateErrorMessage(res.message);
-          console.log("Message d'erreur traduit:", errorMessage);
+        //  console.log("Message d'erreur traduit:", errorMessage);
           dispatch(signInFailure(errorMessage));
           return;
         }
@@ -70,11 +82,11 @@ export default function SignIn() {
         // Navigate to Home.jsx si connexion réussie avec sign-in
         navigate("/");
       } else {
-        console.log("signIn n'est pas une fonction:", signIn);
+       // console.log("signIn n'est pas une fonction:", signIn);
         dispatch(signInFailure("Erreur interne, veuillez réessayer."));
       }
     } catch (error) {
-      console.log("Erreur lors de la connexion:", error);
+     // console.log("Erreur lors de la connexion:", error);
       dispatch(
         signInFailure(
           "Le mot de passe ou l'email est incorrect, veuillez réessayer."

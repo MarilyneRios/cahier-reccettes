@@ -6,7 +6,7 @@ import Hero from "../../components/heros/Hero";
 import HeroConnect from "../../components/heros/HeroConnect";
 import Loader from "../../components/shared/Loader";
 import "../../App.css";
-import "./Home.css";
+import "./home.styles.css";
 
 export default function Home() {
   const { currentUser, loading } = useSelector((state) => state.user);

@@ -14,7 +14,7 @@ import {
 import CountryFlag from "../shared/flag/CountryFlag";
 
 import bookImage from "../../assets/homeBg2.png";
-import "./CardRecipe.css";
+import "./cardRecipes.styles.css";
 
 ///////////////////////////////////////////////////////////////////////////
 // Composant CardRecipe
@@ -34,7 +34,10 @@ function CardRecipe({ recipe }) {
   // Vérifier si la recette est dans les favoris 
   // Pour éviter bug à l'ajout de new user : Plutôt que de ne rien renvoyer ou null
   // ?. sans déclencher une erreur si l'objet est null ou undefined
-  const isFavorite = favoriteData?.recipes?.some((fav) => fav._id === recipe._id) || false;
+  //const isFavorite = favoriteData?.recipes?.some((fav) => fav._id === recipe._id) || false;
+  const isFavorite = Array.isArray(favoriteData?.recipes) && favoriteData.recipes.some((fav) => fav._id === recipe._id);
+  console.log("favoriteData:", favoriteData);
+
 
   // Vérifier si l'utilisateur est l'auteur de la recette
   const isOwner = userId === recipe?.userRef?._id;
