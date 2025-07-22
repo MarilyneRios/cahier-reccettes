@@ -81,7 +81,7 @@ function Header() {
           {/* Menu déroulant */}
           <Dropdown>
             <Dropdown.Toggle
-              variant="success"
+              variant="dark"
               id="dropdown-basic"
               className="ms-2 btnNav"
             >
@@ -300,7 +300,7 @@ function Header() {
           ) : (
             <>
               <Nav.Link as={Link} to="/sign-in" className="p-0">
-                <Button variant="success" className=" btn btn-success image3D">
+                <Button variant="dark" className=" btn btn-dark image3D">
                   <FaUserCircle
                     size={26}
                     aria-hidden="true"

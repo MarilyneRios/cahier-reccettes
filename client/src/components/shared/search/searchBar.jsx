@@ -84,7 +84,7 @@ const [searchTerm, setSearchTerm] = useState("");
       {/* Bouton de recherche */}
       <Button
         type="submit"
-        className="search-btn btn btn-success rounded-pill text-white  px-4 py-2 fw-bold"
+        className="search-btn btn btn-dark rounded-pill text-white  px-4 py-2 fw-bold"
       >
        <FaSearch />
       </Button>

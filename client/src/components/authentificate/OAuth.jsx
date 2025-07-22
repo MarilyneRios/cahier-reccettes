@@ -10,12 +10,11 @@ export default function OAuth({ label }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Déclaration RTK Query du hook useGoogleSignInMutation pour GoogleSignIn
   const [googleSignIn] = useGoogleSignInMutation();
 
   const handleGoogleClick = async () => {
     try {
-     // console.log('Début de l\'authentification Google');
+      console.log('Début de l\'authentification Google');
       
       // Création d'une instance de fournisseur d'authentification Google
       const provider = new GoogleAuthProvider();
@@ -24,15 +23,19 @@ export default function OAuth({ label }) {
 
       // Affichage de la fenêtre pop-up pour l'authentification Google
       const result = await signInWithPopup(auth, provider);
-      //console.log('Authentification Google réussie', result.user);
+      console.log('Authentification Google réussie', result.user);
 
       // Envoi des user data au serveur avec RTK Query
       const { displayName, email, photoURL } = result.user;
-      console.log('Données utilisateur à envoyer:', {
-        name: displayName,
-        email,
-        photo: photoURL,
-      });
+      
+      if (import.meta.NODE_ENV === 'development') {
+        console.log('Données utilisateur à envoyer:', {
+          name: displayName,
+          email,
+          photo: photoURL,
+        });
+      }
+ 
 
       const res = await googleSignIn({
         name: displayName,
@@ -40,20 +43,20 @@ export default function OAuth({ label }) {
         photo: photoURL,
       }).unwrap();
 
-      //console.log('Réponse du backend:', res);
+      console.log('Réponse du backend:', res);
 
       // Dispatch de l'action signInSuccess avec les données utilisateur
       dispatch(signInSuccess(res));
-      //console.log('Utilisateur connecté avec succès, redirection en cours');
+      console.log('Utilisateur connecté avec succès, redirection en cours');
 
       // Navigation vers la page home
-      navigate('/');
+      //navigate('/'); // bug quand création compte, bloque sur signiIn.jsx
     } catch (error) {
       console.error('Erreur lors de la connexion avec Google', error);
 
       // Vous pouvez également ajouter une vérification pour l'erreur 500
       if (error.status === 500) {
-      //  console.error('Erreur 500: Problème du côté serveur');
+       console.error('Erreur serveur lors de l\'authentification Google');
       }
     }
   };
